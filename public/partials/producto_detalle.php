@@ -67,7 +67,7 @@
                             <!-- Quantity Selector -->
                             <div class="mb-3">
                                 <label for="cantidad" class="form-label fw-semibold">Cantidad</label>
-                                <div class="input-group" style="max-width: 200px;">
+                                <div class="input-group">
                                     <button class="btn btn-outline-secondary" type="button" id="decreaseQty">
                                         <i class="bi bi-dash"></i>
                                     </button>
