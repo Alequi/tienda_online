@@ -87,49 +87,14 @@ require_once __DIR__ . '/../../config/conexion.php';
     </div>
   </div>
 </div>
-<!-- NAVBAR + CATEGORIES + CAROUSEL -->
+<!-- NAVBAR + RECUPERAR CONTRASEÑA -->
 
 <main class="flex-grow-1">
   <div class="container-xxl my-3">
     <div class="row g-3 align-items-start">
 
-      <!-- CATEGORÍAS (izquierda, desktop) -->
-      <div class="col-lg-3 d-none d-lg-block">
-        <button class="btn btn-primary w-100 d-flex align-items-center justify-content-between px-3"
-                style="height:56px;"
-                data-bs-toggle="collapse" data-bs-target="#verticalCats"
-                aria-expanded="true" aria-controls="verticalCats" type="button">
-          <span class="fw-semibold">Categorías</span>
-          <i class="bi bi-chevron-down"></i>
-        </button>
-
-        <div class="collapse show border border-top-0" id="verticalCats">
-          <div class="list-group list-group-flush" style="max-height: 410px; overflow:auto;">
-            <a href="#" class="list-group-item list-group-item-action">Novedades</a>
-            <a href="#" class="list-group-item list-group-item-action">Anillos</a>
-            <a href="#" class="list-group-item list-group-item-action">Colgantes</a>
-            <a href="#" class="list-group-item list-group-item-action">Pulseras</a>
-            <a href="#" class="list-group-item list-group-item-action">Pendientes</a>
-
-            <div class="list-group-item p-0">
-              <button class="btn w-100 text-start d-flex justify-content-between align-items-center px-3 py-2"
-                      data-bs-toggle="collapse" data-bs-target="#cat-material" type="button">
-                Material <i class="bi bi-chevron-down"></i>
-              </button>
-              <div class="collapse" id="cat-material">
-                <a class="list-group-item list-group-item-action ps-4" href="#">Plata 925</a>
-                <a class="list-group-item list-group-item-action ps-4" href="#">Acero inoxidable</a>
-                <a class="list-group-item list-group-item-action ps-4" href="#">Baño de oro</a>
-              </div>
-            </div>
-
-            <a href="#" class="list-group-item list-group-item-action">Regalos</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- ZONA DERECHA (navbar + recuperar contraseña) -->
-      <div class="col-lg-9">
+      <!-- ZONA COMPLETA (navbar + recuperar contraseña) -->
+      <div class="col-12">
 
         <!-- NAVBAR (derecha) -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light rounded-3 px-3">
@@ -239,7 +204,7 @@ require_once __DIR__ . '/../../config/conexion.php';
           </div>
         </div>
 
-      </div><!-- /col-lg-9 -->
+      </div><!-- /col-12 -->
 
     </div><!-- /row -->
   </div><!-- /container -->
