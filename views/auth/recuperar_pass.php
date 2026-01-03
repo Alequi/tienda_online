@@ -1,5 +1,7 @@
 <?php
 session_start();
+$error = $_SESSION['error_recuperar_pass'] ?? '';
+unset($_SESSION['error_recuperar_pass']);
 require_once __DIR__ . '/../../config/conexion.php';
 ?>
 
@@ -169,6 +171,13 @@ require_once __DIR__ . '/../../config/conexion.php';
                   Indica tu DNI y correo electrónico.<br>
             
                 </p>
+                
+                <?php if(!empty($error)): ?>
+                <div class="alert alert-danger mb-4" role="alert">
+                  <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                  <?php echo htmlspecialchars($error); ?>
+                </div>
+                <?php endif; ?>
                 
                 <div class="alert alert-info d-flex align-items-start mb-4" role="alert">
                   <i class="bi bi-info-circle-fill me-2 flex-shrink-0 mt-1"></i>

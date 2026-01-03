@@ -155,7 +155,7 @@ require_once __DIR__ . '/../../config/conexion.php';
         </nav>
 
         <!-- LOGIN CENTRADO en el espacio derecho -->
-        <div class="d-flex justify-content-center align-items-center py-4 py-lg-5">
+        <div class="d-flex justify-content-center align-items-center py-2 py-lg-2">
           <div class="w-100" style="max-width: 460px;">
             <div class="card border-0 shadow-sm">
               <div class="card-body p-4 p-md-5">
@@ -216,7 +216,7 @@ require_once __DIR__ . '/../../config/conexion.php';
                       <input class="form-check-input" type="checkbox" id="remember">
                       <label class="form-check-label" for="remember">Recuérdame</label>
                     </div>
-                    <a href="#" class="small text-primary">¿Olvidaste tu contraseña?</a>
+                    <a href="recuperar_pass.php" class="small text-primary">¿Olvidaste tu contraseña?</a>
                   </div>
 
                   <div class="d-grid">

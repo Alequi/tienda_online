@@ -2,6 +2,9 @@
 session_start();
 $success = $_SESSION['success'] ?? '';
 unset($_SESSION['success']);
+$recuperada_pass = $_SESSION['success_recuperar_pass'] ?? '';
+unset($_SESSION['success_recuperar_pass']);
+
 require_once __DIR__ . '/../../config/conexion.php';
 ?>
 
@@ -169,6 +172,13 @@ require_once __DIR__ . '/../../config/conexion.php';
                 <div class="alert alert-success mb-4" role="alert">
                   <i class="bi bi-check-circle-fill me-2"></i>
                   <?php echo htmlspecialchars($success); ?>
+                </div>
+                <?php endif; ?>
+
+                <?php if(!empty($recuperada_pass)): ?>
+                <div class="alert alert-success mb-4" role="alert">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  <?php echo htmlspecialchars($recuperada_pass); ?>
                 </div>
                 <?php endif; ?>
 
