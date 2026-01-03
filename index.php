@@ -1,5 +1,7 @@
 <?php
+session_start();
 require_once "helpers/auth.php";
+
 ?>
 
 <!DOCTYPE html>
@@ -147,10 +149,17 @@ require_once "helpers/auth.php";
             <li class="nav-item"><a class="nav-link" href="#">Contacto</a></li>
           </ul>
 
+          <?php if (isLoggedIn()): ?>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="#">Hola, <?php echo htmlspecialchars($_SESSION['user_name']); ?></a></li>
+            <li class="nav-item"><a class="nav-link" href="actions/logout_action.php">Cerrar sesión</a></li>
+          </ul>
+          <?php else: ?>
           <ul class="navbar-nav ms-auto">
             <li class="nav-item"><a class="nav-link" href="views/auth/login.php">Login</a></li>
             <li class="nav-item"><a class="nav-link" href="#">Registro</a></li>
           </ul>
+          <?php endif; ?>
         </div>
       </nav>
 

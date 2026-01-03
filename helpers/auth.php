@@ -1,13 +1,15 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 function isLoggedIn(){
-    return isset($_SESSION['email']);
+    return isset($_SESSION['user_id']) && isset($_SESSION['user_name']);
 }
 
 function requireLogin()
 {
-    if (!isset($_SESSION['email'])) {
+    if (!isset($_SESSION['user_id'])) {
         header("Location: ../views/auth/login.php");
         exit();
     };

@@ -1,11 +1,19 @@
 <?php
 session_start();
+require_once __DIR__ . '/../../helpers/auth.php';
 $success = $_SESSION['success'] ?? '';
 unset($_SESSION['success']);
 $recuperada_pass = $_SESSION['success_recuperar_pass'] ?? '';
 unset($_SESSION['success_recuperar_pass']);
 
-require_once __DIR__ . '/../../config/conexion.php';
+$error = $_SESSION['error'] ?? '';
+unset($_SESSION['error']);
+
+if (isLoggedIn()) {
+    header("Location: ../../index.php");
+    exit();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -168,6 +176,8 @@ require_once __DIR__ . '/../../config/conexion.php';
                 <h2 class="mb-2 text-center fw-bold">Accede a tu cuenta</h2>
                 <p class="text-center text-body-secondary mb-4">Gestiona tus pedidos y datos de envío</p>
                 
+                <!-- Mensajes de éxito o error -->
+
                 <?php if(!empty($success)): ?>
                 <div class="alert alert-success mb-4" role="alert">
                   <i class="bi bi-check-circle-fill me-2"></i>
@@ -181,6 +191,17 @@ require_once __DIR__ . '/../../config/conexion.php';
                   <?php echo htmlspecialchars($recuperada_pass); ?>
                 </div>
                 <?php endif; ?>
+
+                <?php if(!empty($error)): ?>
+                <div class="alert alert-danger mb-4" role="alert">
+                  <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                  <?php echo htmlspecialchars($error); ?>
+                </div>
+                <?php endif; ?>
+
+
+                <!-- Formulario de login -->
+
 
                 <form method="post" action="../../actions/login_action.php">
                   <div class="mb-3">
