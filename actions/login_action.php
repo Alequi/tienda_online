@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-require_once __DIR__ . '/../../config/conexion.php';
+require_once __DIR__ . '/../config/conexion.php';
 
 $con = conectar();
 
@@ -20,7 +20,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($user && password_verify($password, $user['clave'])) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['nombre'];
-            header("Location: ../../index.php");
+            header("Location: ../index.php");
             exit();
         } else {
             $_SESSION['error'] = "Correo electrónico o contraseña incorrectos.";
