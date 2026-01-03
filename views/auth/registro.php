@@ -91,49 +91,14 @@ if (isLoggedIn()) {
     </div>
   </div>
 </div>
-<!-- NAVBAR + CATEGORIES + CAROUSEL -->
+<!-- NAVBAR + REGISTRO -->
 
 <main class="flex-grow-1">
   <div class="container-xxl my-3">
     <div class="row g-3 align-items-start">
 
-      <!-- CATEGORÍAS (izquierda, desktop) -->
-      <div class="col-lg-3 d-none d-lg-block">
-        <button class="btn btn-primary w-100 d-flex align-items-center justify-content-between px-3"
-                style="height:56px;"
-                data-bs-toggle="collapse" data-bs-target="#verticalCats"
-                aria-expanded="true" aria-controls="verticalCats" type="button">
-          <span class="fw-semibold">Categorías</span>
-          <i class="bi bi-chevron-down"></i>
-        </button>
-
-        <div class="collapse show border border-top-0" id="verticalCats">
-          <div class="list-group list-group-flush" style="max-height: 410px; overflow:auto;">
-            <a href="#" class="list-group-item list-group-item-action">Novedades</a>
-            <a href="#" class="list-group-item list-group-item-action">Anillos</a>
-            <a href="#" class="list-group-item list-group-item-action">Colgantes</a>
-            <a href="#" class="list-group-item list-group-item-action">Pulseras</a>
-            <a href="#" class="list-group-item list-group-item-action">Pendientes</a>
-
-            <div class="list-group-item p-0">
-              <button class="btn w-100 text-start d-flex justify-content-between align-items-center px-3 py-2"
-                      data-bs-toggle="collapse" data-bs-target="#cat-material" type="button">
-                Material <i class="bi bi-chevron-down"></i>
-              </button>
-              <div class="collapse" id="cat-material">
-                <a class="list-group-item list-group-item-action ps-4" href="#">Plata 925</a>
-                <a class="list-group-item list-group-item-action ps-4" href="#">Acero inoxidable</a>
-                <a class="list-group-item list-group-item-action ps-4" href="#">Baño de oro</a>
-              </div>
-            </div>
-
-            <a href="#" class="list-group-item list-group-item-action">Regalos</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- ZONA DERECHA (navbar + login) -->
-      <div class="col-lg-9">
+      <!-- ZONA COMPLETA (navbar + registro) -->
+      <div class="col-12">
 
         <!-- NAVBAR (derecha) -->
         <nav class="navbar navbar-expand-lg navbar-light bg-light rounded-3 px-3">
@@ -160,90 +125,107 @@ if (isLoggedIn()) {
           </div>
         </nav>
 
-        <!-- LOGIN CENTRADO en el espacio derecho -->
-        <div class="d-flex justify-content-center align-items-center py-2 py-lg-2">
-          <div class="w-100" style="max-width: 460px;">
+        <!-- REGISTRO CENTRADO -->
+        <div class="d-flex justify-content-center align-items-center py-3 py-lg-4">
+          <div class="w-100" style="max-width: 900px;">
             <div class="card border-0 shadow-sm">
               <div class="card-body p-4 p-md-5">
 
-                <h2 class="mb-2 text-center fw-bold">Crea un cuenta</h2>
-                <p class="text-center text-body-secondary mb-4">Gestiona tus pedidos y datos de envío</p>
+                <h2 class="mb-2 text-center fw-bold">Crea una cuenta</h2>
+                <p class="text-center text-body-secondary mb-4">Únete y disfruta de todas nuestras ventajas</p>
 
                 <form method="post" action="../../actions/registro_action.php">
-                  <div class="mb-3">
-                    <label for="nombre" class="form-label">Nombre </label>
-                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Tu nombre" required>
+                  <div class="row g-3">
+                    
+                    <!-- Columna izquierda -->
+                    <div class="col-md-6">
+                      <label for="nombre" class="form-label">Nombre</label>
+                      <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Tu nombre" required>
                     </div>
-                    <div class="mb-3">
-                    <label for="apellidos" class="form-label">Apellidos </label>
-                    <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="Tu apellido" required>
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="dni" class="form-label">DNI</label>
-                    <input type="text" class="form-control" id="dni" name="dni" placeholder="Tu DNI" required>
-                    </div>
-
-                    <div class="mb-3">
-                    <label for="direccion" class="form-label">Direccion</label>
-                    <input type="text" class="form-control" id="direccion" name="direccion" placeholder="Tu dirección" required>
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="localidad" class="form-label">Localidad</label>
-                    <input type="text" class="form-control" id="localidad" name="localidad" placeholder="Tu ciudad" required>
+                    
+                    <div class="col-md-6">
+                      <label for="apellidos" class="form-label">Apellidos</label>
+                      <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="Tus apellidos" required>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="provincia" class="form-label">Provincia</label>
-                        <input type="text" class="form-control" id="provincia" name="provincia" placeholder="Tu provincia" required>
-                    </div>  
-
-
-
-                  <div class="mb-3">
-                    <label for="telefono" class="form-label">Teléfono</label>
-                    <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Tu teléfono" required>
+                    <div class="col-md-6">
+                      <label for="dni" class="form-label">DNI</label>
+                      <input type="text" class="form-control" id="dni" name="dni" placeholder="12345678A" required>
                     </div>
 
-
-                    <div class="mb-3">
-                    <label for="email" class="form-label">Correo electrónico</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="tucorreo@email.com" required>
-                  </div>
-
-                  <div class="mb-3">
-                    <label for="password" class="form-label">Contraseña</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
-                  </div>
-
-                  <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" id="remember">
-                      <label class="form-check-label" for="remember">Recuérdame</label>
+                    <div class="col-md-6">
+                      <label for="telefono" class="form-label">Teléfono</label>
+                      <input type="text" class="form-control" id="telefono" name="telefono" placeholder="600123456" required>
                     </div>
-                    <a href="recuperar_pass.php" class="small text-primary">¿Olvidaste tu contraseña?</a>
-                  </div>
 
-                  <div class="d-grid">
-                    <button type="submit" class="btn btn-primary btn-lg d-inline-flex justify-content-center align-items-center gap-2">
-                      Registrarme <i class="bi bi-box-arrow-in-right"></i>
-                    </button>
+                    <div class="col-12">
+                      <label for="email" class="form-label">Correo electrónico</label>
+                      <input type="email" class="form-control" id="email" name="email" placeholder="tucorreo@email.com" required>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label for="password" class="form-label">Contraseña</label>
+                      <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label for="password_confirm" class="form-label">Confirmar contraseña</label>
+                      <input type="password" class="form-control" id="password_confirm" name="password_confirm" placeholder="••••••••" required>
+                    </div>
+
+                    <div class="col-12">
+                      <hr class="my-2">
+                      <h6 class="text-muted mb-3"><i class="bi bi-geo-alt"></i> Dirección de envío</h6>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="direccion" class="form-label">Dirección</label>
+                      <input type="text" class="form-control" id="direccion" name="direccion" placeholder="Calle, número, piso..." required>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label for="localidad" class="form-label">Localidad</label>
+                      <input type="text" class="form-control" id="localidad" name="localidad" placeholder="Tu ciudad" required>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label for="provincia" class="form-label">Provincia</label>
+                      <input type="text" class="form-control" id="provincia" name="provincia" placeholder="Tu provincia" required>
+                    </div>
+
+                    <div class="col-12">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="terminos" required>
+                        <label class="form-check-label" for="terminos">
+                          Acepto los <a href="#" class="text-primary">términos y condiciones</a>
+                        </label>
+                      </div>
+                    </div>
+
+                    <div class="col-12">
+                      <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                          <i class="bi bi-person-plus"></i> Crear mi cuenta
+                        </button>
+                      </div>
+                    </div>
+
                   </div>
                 </form>
 
-                <p class="text-center mt-4 mb-0">
+                <hr class="my-4">
+
+                <p class="text-center mb-0">
                   ¿Ya tienes cuenta?
                   <a href="login.php" class="text-primary fw-semibold">Inicia sesión</a>
-
-            
+                </p>
 
               </div>
             </div>
           </div>
         </div>
 
-      </div><!-- /col-lg-9 -->
+      </div><!-- /col-12 -->
 
     </div><!-- /row -->
   </div><!-- /container -->

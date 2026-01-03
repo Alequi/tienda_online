@@ -151,13 +151,21 @@ require_once "helpers/auth.php";
 
           <?php if (isLoggedIn()): ?>
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="#">Hola, <?php echo htmlspecialchars($_SESSION['user_name']); ?></a></li>
-            <li class="nav-item"><a class="nav-link" href="actions/logout_action.php">Cerrar sesión</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle"></i> Hola, <?php echo htmlspecialchars($_SESSION['user_name']); ?>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                <li><a class="dropdown-item" href="views/user/panel.php"><i class="bi bi-person"></i> Panel de usuario</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="actions/logout_action.php"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a></li>
+              </ul>
+            </li>
           </ul>
           <?php else: ?>
           <ul class="navbar-nav ms-auto">
             <li class="nav-item"><a class="nav-link" href="views/auth/login.php">Login</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Registro</a></li>
+            <li class="nav-item"><a class="nav-link" href="views/auth/registro.php">Registro</a></li>
           </ul>
           <?php endif; ?>
         </div>

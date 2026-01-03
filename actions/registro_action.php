@@ -17,10 +17,19 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $telefono = trim($_POST['telefono'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+    $password_confirm = $_POST['password_confirm'] ?? '';
 
+    
     $validarDni = validarDNIcompleto($dni);
 
     $validarMail = validarMailCompleto($email);
+
+    if($password !== password_hash($password_confirm, PASSWORD_BCRYPT)){
+        $_SESSION['error'] = "Las contraseñas no coinciden.";
+        header('Location: ../views/error.php');
+        exit();
+    }
+
 
     if(!$validarDni){
         $_SESSION['error'] = "DNI no válido.";
