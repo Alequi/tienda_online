@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once "helpers/auth.php";
+require_once "actions/products_action.php";
 
 ?>
 
@@ -178,7 +179,23 @@ require_once "helpers/auth.php";
 
   <h1 class="text-center mb-2 mt-2"><i class="bi bi-stars  text-primary"></i> Lo último en llegar <i class="bi bi-stars  text-primary"></i></h1>
 
-  <?php include_once 'actions/products_action.php'; ?>
+ <div class="container-xxl mt-3 mb-5">
+    <div class="row g-4">
+      <?php foreach ($productos as $producto): ?>
+        <div class="col-6 col-md-4 col-lg-3">
+          <div class="card h-100">
+            <img src="public/assets/img/<?php echo $producto->imagen; ?>" class="card-img-top" alt="Producto <?php echo $producto->codigo; ?>">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title"> <?php echo $producto->nombre; ?></h5>
+              <p class="card-text text-muted mb-4">€<?php echo number_format($producto->precio, 2); ?></p>
+              <a href="views/tienda/producto.php?codigo=<?php echo $producto->codigo; ?>" class="btn btn-primary mt-auto">Ver más</a>
+
+            </div>
+          </div>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
 
   <!-- PRODUCTS GRID -->
 
