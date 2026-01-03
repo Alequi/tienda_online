@@ -169,7 +169,7 @@ CREATE TABLE usuarios (
 
 ## 👨‍💻 Autor
 
-**Alejandro Quiñones**
+**Alejandro Quivera**
 - Estudiante de 2º año - Desarrollo de Aplicaciones Web
 - GitHub: [@Alequi](https://github.com/Alequi)
 
