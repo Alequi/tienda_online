@@ -1,7 +1,5 @@
 <?php
 session_start();
-$success = $_SESSION['success'] ?? '';
-unset($_SESSION['success']);
 require_once __DIR__ . '/../../config/conexion.php';
 ?>
 
@@ -11,7 +9,7 @@ require_once __DIR__ . '/../../config/conexion.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Tienda online</title>
+    <title>Recuperar Contraseña | Tienda online</title>
     <link rel="icon" type="image/png" href="../../public/assets/img/logo-tienda.png"/>
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -128,7 +126,7 @@ require_once __DIR__ . '/../../config/conexion.php';
         </div>
       </div>
 
-      <!-- ZONA DERECHA (navbar + login) -->
+      <!-- ZONA DERECHA (navbar + recuperar contraseña) -->
       <div class="col-lg-9">
 
         <!-- NAVBAR (derecha) -->
@@ -150,60 +148,82 @@ require_once __DIR__ . '/../../config/conexion.php';
             </ul>
 
             <ul class="navbar-nav ms-auto">
-              <li class="nav-item"><a class="nav-link active" href="login.php">Login</a></li>
+              <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
               <li class="nav-item"><a class="nav-link" href="registro.php">Registro</a></li>
             </ul>
           </div>
         </nav>
 
-        <!-- LOGIN CENTRADO en el espacio derecho -->
-        <div class="d-flex justify-content-center align-items-center py-4 py-lg-5">
+        <!-- FORMULARIO RECUPERAR CONTRASEÑA CENTRADO en el espacio derecho -->
+        <div class="d-flex justify-content-center align-items-center py-2 py-lg-2">
           <div class="w-100" style="max-width: 460px;">
             <div class="card border-0 shadow-sm">
-              <div class="card-body p-4 p-md-5">
+              <div class="card-body p-2 p-md-5">
 
-                <h2 class="mb-2 text-center fw-bold">Accede a tu cuenta</h2>
-                <p class="text-center text-body-secondary mb-4">Gestiona tus pedidos y datos de envío</p>
-                
-                <?php if(!empty($success)): ?>
-                <div class="alert alert-success mb-4" role="alert">
-                  <i class="bi bi-check-circle-fill me-2"></i>
-                  <?php echo htmlspecialchars($success); ?>
+                <div class="text-center mb-1">
+                  <i class="bi bi-key-fill text-primary" style="font-size: 3rem;"></i>
                 </div>
-                <?php endif; ?>
 
-                <form method="post" action="../../actions/login_action.php">
-                  <div class="mb-3">
-                    <label for="email" class="form-label">Correo electrónico</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="tucorreo@email.com" required>
+                <h2 class="mb-2 text-center fw-bold">Recuperar Contraseña</h2>
+                <p class="text-center text-body-secondary mb-4">
+                  Indica tu DNI y correo electrónico.<br>
+            
+                </p>
+                
+                <div class="alert alert-info d-flex align-items-start mb-4" role="alert">
+                  <i class="bi bi-info-circle-fill me-2 flex-shrink-0 mt-1"></i>
+                  <div class="small">
+                    Recibiras  una contraseña temporal que podrás cambiar después de iniciar sesión.
                   </div>
+                </div>
 
+                <form method="POST" action="../../actions/recuperar_pass_action.php">
                   <div class="mb-3">
-                    <label for="password" class="form-label">Contraseña</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
-                  </div>
-
-                  <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" id="remember">
-                      <label class="form-check-label" for="remember">Recuérdame</label>
+                    <label for="dni" class="form-label">DNI</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+                      <input 
+                        type="text" 
+                        class="form-control" 
+                        id="dni" 
+                        name="dni" 
+                        placeholder="Ingresa tu DNI" 
+                        required
+                        pattern="[0-9]{8}[A-Za-z]?"
+                        title="Ingresa un DNI válido (8 dígitos)"
+                      >
                     </div>
-                    <a href="recuperar_pass.php" class="small text-primary">¿Olvidaste tu contraseña?</a>
+                  </div>
+
+                  <div class="mb-4">
+                    <label for="email" class="form-label">Correo Electrónico</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                      <input 
+                        type="email" 
+                        class="form-control" 
+                        id="email" 
+                        name="email" 
+                        placeholder="ejemplo@correo.com" 
+                        required
+                      >
+                    </div>
                   </div>
 
                   <div class="d-grid">
                     <button type="submit" class="btn btn-primary btn-lg d-inline-flex justify-content-center align-items-center gap-2">
-                      Iniciar sesión <i class="bi bi-box-arrow-in-right"></i>
+                      <i class="bi bi-send-fill"></i> Recuperar Contraseña
                     </button>
                   </div>
                 </form>
 
-                <p class="text-center mt-4 mb-0">
-                  ¿No tienes cuenta?
-                  <a href="registro.php" class="text-primary fw-semibold">Regístrate</a>
-                </p>
+                <hr class="my-4">
 
-            
+                <p class="text-center mb-0">
+                  <a href="login.php" class="text-primary fw-semibold text-decoration-none">
+                    <i class="bi bi-arrow-left"></i> Volver al inicio de sesión
+                  </a>
+                </p>
 
               </div>
             </div>
