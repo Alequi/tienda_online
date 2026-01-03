@@ -16,15 +16,16 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $provincia = trim($_POST['provincia'] ?? '');
     $telefono = trim($_POST['telefono'] ?? '');
     $email = trim($_POST['email'] ?? '');
-    $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-    $password_confirm = $_POST['password_confirm'] ?? '';
+    $password_plano = trim($_POST['password'] ?? '');
+    $password = password_hash($password_plano, PASSWORD_BCRYPT);
+    $password_confirm =trim($_POST['password_confirm'] ?? '');
 
     
     $validarDni = validarDNIcompleto($dni);
 
     $validarMail = validarMailCompleto($email);
 
-    if($password !== password_hash($password_confirm, PASSWORD_BCRYPT)){
+   if($password_plano !== $password_confirm){
         $_SESSION['error'] = "Las contraseñas no coinciden.";
         header('Location: ../views/error.php');
         exit();
