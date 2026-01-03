@@ -10,7 +10,7 @@ $stmt->execute();
 $productos = $stmt->fetchAll(PDO::FETCH_OBJ);
 ?>
 
- <div class="container-xxl mt-5 mb-5">
+ <div class="container-xxl mt-3 mb-5">
     <div class="row g-4">
       <?php foreach ($productos as $producto): ?>
         <div class="col-6 col-md-4 col-lg-3">
@@ -19,7 +19,7 @@ $productos = $stmt->fetchAll(PDO::FETCH_OBJ);
             <div class="card-body d-flex flex-column">
               <h5 class="card-title"> <?php echo $producto->nombre; ?></h5>
               <p class="card-text text-muted mb-4">€<?php echo number_format($producto->precio, 2); ?></p>
-              <a href="views/producto.php?id=<?php echo $producto->codigo; ?>" class="btn btn-primary mt-auto">Ver más</a>
+              <a href="views/tienda/producto.php?id=<?php echo $producto->codigo; ?>" class="btn btn-primary mt-auto">Ver más</a>
 
             </div>
           </div>

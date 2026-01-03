@@ -33,7 +33,7 @@ require_once "helpers/auth.php";
   <!-- BRAND + SEARCH + ICONS -->
 
   <?php include_once 'public/partials/searchbar.php'; ?>
-  
+
   <!-- SEARCH BAR -->
 
   <div class="col-lg-3 text-lg-end">
@@ -175,6 +175,8 @@ require_once "helpers/auth.php";
   </div>
 
   <!-- PRODUCTS GRID -->
+
+  <h1 class="text-center mb-2 mt-2"><i class="bi bi-stars  text-primary"></i> Lo último en llegar <i class="bi bi-stars  text-primary"></i></h1>
 
   <?php include_once 'actions/products_action.php'; ?>
 
