@@ -1,9 +1,5 @@
 <?php
 
-session_start();
-require_once __DIR__ . '/../../config/conexion.php';
-$con = conectar();
-
 // Obtener el carrito de la sesión
 
 $cart = $_SESSION['cart'] ?? [];
