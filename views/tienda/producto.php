@@ -176,6 +176,7 @@ require_once __DIR__ . '/../../actions/product_detail_action.php';
 
   <?php include_once __DIR__ . '/../../public/partials/footer.php'; ?>
 
+  <script src="../../public/assets/lib/scripts/quantity_selector.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

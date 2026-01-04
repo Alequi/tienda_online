@@ -78,6 +78,7 @@
                                            value="1" 
                                            min="1" 
                                            max="<?= $producto['stock'] ?>"
+                                           data-max-stock="<?= $producto['stock'] ?>"
                                            required>
                                     <button class="btn btn-outline-secondary" type="button" id="increaseQty">
                                         <i class="bi bi-plus"></i>
@@ -116,36 +117,3 @@
         </div>
     </div>
 </section>
-
-<!-- Quantity Controls Script -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const quantityInput = document.getElementById('cantidad');
-    const decreaseBtn = document.getElementById('decreaseQty');
-    const increaseBtn = document.getElementById('increaseQty');
-    const maxStock = <?= $producto['stock'] ?>;
-
-    decreaseBtn.addEventListener('click', function() {
-        const currentValue = parseInt(quantityInput.value);
-        if (currentValue > 1) {
-            quantityInput.value = currentValue - 1;
-        }
-    });
-
-    increaseBtn.addEventListener('click', function() {
-        const currentValue = parseInt(quantityInput.value);
-        if (currentValue < maxStock) {
-            quantityInput.value = currentValue + 1;
-        }
-    });
-
-    quantityInput.addEventListener('input', function() {
-        let value = parseInt(this.value);
-        if (isNaN(value) || value < 1) {
-            this.value = 1;
-        } else if (value > maxStock) {
-            this.value = maxStock;
-        }
-    });
-});
-</script>
