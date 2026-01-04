@@ -74,10 +74,7 @@ require_once __DIR__ . '/../../actions/product_detail_action.php';
 <!-- SEARCH BAR -->
 
       <div class="col-lg-3 text-lg-end">
-        <a href="#" class="btn btn-outline-primary btn-icon position-relative" aria-label="Carrito">
-  <i class="bi bi-bag"></i>
-  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
-</a>
+  <?php include_once __DIR__ . '/../../public/partials/cartbar.php'; ?>
 
       </div>
     </div>
@@ -177,6 +174,7 @@ require_once __DIR__ . '/../../actions/product_detail_action.php';
   <?php include_once __DIR__ . '/../../public/partials/footer.php'; ?>
 
   <script src="../../public/assets/lib/scripts/quantity_selector.js"></script>
+  <script src="../../public/assets/lib/scripts/cart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

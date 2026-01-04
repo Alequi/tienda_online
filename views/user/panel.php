@@ -87,10 +87,7 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 <!-- SEARCH BAR -->
 
       <div class="col-lg-3 text-lg-end">
-        <a href="#" class="btn btn-outline-primary btn-icon position-relative" aria-label="Carrito">
-          <i class="bi bi-bag"></i>
-          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
-        </a>
+        <?php include_once __DIR__ . '/../../public/partials/cartbar.php'; ?>
       </div>
     </div>
   </div>

@@ -61,7 +61,8 @@
 
                         <!-- Add to Cart Form -->
                         <?php if ($producto['stock'] > 0): ?>
-                        <form action="../../actions/add_to_cart.php" method="POST" class="mb-4">
+                        <form action="../../actions/cart/add.php" method="POST" class="mb-4" data-add-to-cart>
+
                             <input type="hidden" name="codigo_producto" value="<?= htmlspecialchars($producto['codigo']) ?>">
                             
                             <!-- Quantity Selector -->
