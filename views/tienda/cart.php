@@ -137,18 +137,29 @@ require_once __DIR__ . '/../../actions/cart/view.php';
 
                   <!-- Quantity -->
                   <div class="col-md-3">
-                    <form action="../../actions/cart/update.php" method="POST" class="d-inline">
-                      <input type="hidden" name="codigo_producto" value="<?= htmlspecialchars($item['codigo']) ?>">
-                      <div class="input-group input-group-sm">
-                        <button class="btn btn-outline-secondary" type="submit" name="action" value="decrease">
-                          <i class="bi bi-dash"></i>
-                        </button>
-                        <input type="text" class="form-control text-center" value="<?= $item['cantidad'] ?>" readonly style="max-width: 60px;">
-                        <button class="btn btn-outline-secondary" type="submit" name="action" value="increase">
-                          <i class="bi bi-plus"></i>
-                        </button>
-                      </div>
-                    </form>
+                    <div class="input-group input-group-sm">
+                      <button class="btn btn-outline-secondary" type="button" 
+                              data-action="decrease"
+                              data-codigo="<?= htmlspecialchars($item['codigo']) ?>"
+                              data-cantidad="<?= $item['cantidad'] ?>">
+                        <i class="bi bi-dash"></i>
+                      </button>
+                      <input type="number" 
+                             class="form-control text-center" 
+                             value="<?= $item['cantidad'] ?>" 
+                             min="1" 
+                             max="<?= $item['stock'] ?>"
+                             data-action="manual-update"
+                             data-codigo="<?= htmlspecialchars($item['codigo']) ?>"
+                             style="max-width: 60px;">
+                      <button class="btn btn-outline-secondary" type="button" 
+                              data-action="increase"
+                              data-codigo="<?= htmlspecialchars($item['codigo']) ?>"
+                              data-cantidad="<?= $item['cantidad'] ?>"
+                              data-stock="<?= $item['stock'] ?>">
+                        <i class="bi bi-plus"></i>
+                      </button>
+                    </div>
                     <?php if ($item['cantidad'] > $item['stock']): ?>
                       <small class="text-danger d-block mt-1">Stock: <?= $item['stock'] ?></small>
                     <?php endif; ?>
@@ -157,12 +168,12 @@ require_once __DIR__ . '/../../actions/cart/view.php';
                   <!-- Subtotal & Remove -->
                   <div class="col-md-3 text-end">
                     <p class="fw-bold mb-2"><?= number_format($item['subtotal'], 2) ?>€</p>
-                    <form action="../../actions/cart/update.php" method="POST" class="d-inline">
-                      <input type="hidden" name="codigo_producto" value="<?= htmlspecialchars($item['codigo']) ?>">
-                      <button type="submit" name="action" value="remove" class="btn btn-sm btn-outline-danger">
-                        <i class="bi bi-trash"></i> Eliminar
-                      </button>
-                    </form>
+                    <button type="button" 
+                            data-action="remove"
+                            data-codigo="<?= htmlspecialchars($item['codigo']) ?>" 
+                            class="btn btn-sm btn-outline-danger">
+                      <i class="bi bi-trash"></i> Eliminar
+                    </button>
                   </div>
                 </div>
               <?php endforeach; ?>
@@ -215,6 +226,7 @@ require_once __DIR__ . '/../../actions/cart/view.php';
 
   <?php include_once __DIR__ . '/../../public/partials/footer.php'; ?>
 
+  <script src="../../public/assets/lib/scripts/cart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

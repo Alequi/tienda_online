@@ -1,6 +1,5 @@
 <?php
 
-// Obtener el carrito de la sesión
 
 $cart = $_SESSION['cart'] ?? [];
 
