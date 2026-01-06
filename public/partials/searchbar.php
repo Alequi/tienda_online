@@ -1,9 +1,22 @@
+<?php
+// Determinar rutas según la ubicación del archivo
+$current_path = $_SERVER['PHP_SELF'];
+$is_root = (basename($current_path) === 'index.php' && strpos($current_path, '/views/') === false);
+
+if ($is_root) {
+    $logo_url = 'public/assets/img/logo-tienda.png';
+    $index_url = 'index.php';
+} else {
+    $logo_url = '../../public/assets/img/logo-tienda.png';
+    $index_url = '../../index.php';
+}
+?>
 <div class="bg-white">
   <div class="container-xxl py-3">
     <div class="row align-items-center g-3">
       <div class="col-lg-3">
-        <a href="#" class="text-decoration-none d-inline-flex align-items-center gap-2">
-          <img src="public/assets/img/logo-tienda.png" alt="Mystic Waves" class="img-fluid" style="max-width:200px; height:auto;">
+        <a href="<?= $index_url ?>" class="text-decoration-none d-inline-flex align-items-center gap-2">
+          <img src="<?= $logo_url ?>" alt="Mystic Waves" class="img-fluid" style="max-width:200px; height:auto;">
 
           
         </a>

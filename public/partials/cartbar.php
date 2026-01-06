@@ -1,7 +1,16 @@
 <?php
 // Determinar la ruta base según desde dónde se incluye
-$is_root = (basename($_SERVER['PHP_SELF']) === 'index.php' && strpos($_SERVER['PHP_SELF'], '/views/') === false);
-$cart_url = $is_root ? 'views/tienda/cart.php' : '../../views/tienda/cart.php';
+$current_path = $_SERVER['PHP_SELF'];
+$is_root = (basename($current_path) === 'index.php' && strpos($current_path, '/views/') === false);
+$in_tienda = (strpos($current_path, '/views/tienda/') !== false);
+
+if ($is_root) {
+    $cart_url = 'views/tienda/cart.php';
+} elseif ($in_tienda) {
+    $cart_url = 'cart.php';
+} else {
+    $cart_url = '../tienda/cart.php';
+}
 
 require_once __DIR__ . '/../../helpers/cart_helper.php';
 $cart_count = getCartCount();

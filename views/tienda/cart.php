@@ -69,7 +69,7 @@ require_once __DIR__ . '/../../actions/cart/view.php';
           <li class="nav-item"><a class="nav-link" href="#">Tienda</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Colecciones</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Sobre nosotros</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Contacto</a></li>
+          <li class="nav-item"><a class="nav-link" href="../tienda/contacto.php">Contacto</a></li>
         </ul>
 
         <?php if (isLoggedIn()): ?>
