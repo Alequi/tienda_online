@@ -13,6 +13,16 @@ $productos = $stmt->fetchAll(PDO::FETCH_OBJ);
 
 $total_productos = count($productos);
 
+$sql_categorias_count = "SELECT * FROM categoria";
+$stmt_categorias = $con->prepare($sql_categorias_count);
+$stmt_categorias->execute();
+$total_categorias = $stmt_categorias->fetchAll(PDO::FETCH_OBJ);
+
+$suma_categorias = count($total_categorias);
+
+
+
+
 if (isset($_GET['categoria'])) {
 
     $categoria = $_GET['categoria'];

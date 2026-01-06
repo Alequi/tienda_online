@@ -109,7 +109,7 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
           <div class="card border-0 shadow-sm text-center h-100">
             <div class="card-body">
               <i class="bi bi-tags text-warning" style="font-size: 3rem;"></i>
-              <h3 class="mt-3 mb-0">--</h3>
+              <h3 class="mt-3 mb-0"><?php echo $suma_categorias; ?></h3>
               <p class="text-muted mb-0">Categorías</p>
             </div>
           </div>
