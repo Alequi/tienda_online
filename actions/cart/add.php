@@ -7,10 +7,16 @@ $con = conectar();
 
 header('Content-Type: application/json; charset=utf-8');
 
+// Leer datos JSON de la solicitud
+
 $input = json_decode(file_get_contents('php://input'), true);
+
+// Validar datos de entrada
 
 $codigo_producto = isset($input['codigo_producto']) ? trim($input['codigo_producto']) : "";
 $cantidad = isset($input['cantidad']) ? (int)$input['cantidad'] : 1;
+
+// Validaciones básicas
 
 if (empty($codigo_producto) || $cantidad < 1) {
     http_response_code(400);
@@ -95,6 +101,8 @@ if(isLoggedIn()) {
     $_SESSION['cart'][$codigo_producto] = $cantidad;
 }
 
+
+// Calcular total de items en el carrito de sesión
 $cart_count = 0;
 foreach ($_SESSION['cart'] as $qty) {
     $cart_count += (int)$qty;
@@ -102,7 +110,7 @@ foreach ($_SESSION['cart'] as $qty) {
 
 }
 
-
+// Responder con éxito
 echo json_encode([
     'ok' => true,
     'message' => 'Producto agregado al carrito.',
