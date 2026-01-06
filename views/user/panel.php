@@ -156,7 +156,7 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
                   </div>
                   <h5 class="card-title fw-bold">Mis Pedidos</h5>
                   <p class="card-text text-muted">Consulta el estado de tus compras y el historial completo</p>
-                  <a href="#pedidos" class="btn btn-primary">Ver pedidos</a>
+                  <a href="#pedidos" class="btn btn-primary" id="btnVerPedidos">Ver pedidos</a>
                 </div>
               </div>
             </div>
@@ -169,13 +169,13 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
                   </div>
                   <h5 class="card-title fw-bold">Mis Datos</h5>
                   <p class="card-text text-muted">Actualiza tu información personal y dirección de envío</p>
-                  <a href="#datos" class="btn btn-primary">Modificar datos</a>
+                  <a href="#datos" class="btn btn-primary" id="btnVerDatos">Modificar datos</a>
                 </div>
               </div>
             </div>
 
             <!-- Mis Datos Personales -->
-            <div class="col-12 mb-3" id="datos">
+            <div class="col-12 mb-3" id="datos" style="display: none;">
               <div class="card border-0 shadow-sm">
                 <div class="card-header bg-primary text-white py-3">
                   <h5 class="mb-0"><i class="bi bi-person-lines-fill"></i> Mis Datos Personales</h5>
@@ -230,7 +230,7 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
             </div>
 
             <!-- Historial de Pedidos -->
-            <div class="col-12" id="pedidos">
+            <div class="col-12" id="pedidos" style="display: none;">
               <div class="card border-0 shadow-sm">
                 <div class="card-header bg-primary text-white py-3">
                   <h5 class="mb-0"><i class="bi bi-clock-history"></i> Historial de Pedidos</h5>
@@ -320,17 +320,7 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 <!-- FOOTER -->
 <?php include_once __DIR__ . '/../../public/partials/footer.php' ?>
 
-<style>
-.hover-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.hover-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
-}
-</style>
-
+<script src="../../public/assets/lib/scripts/panel.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
