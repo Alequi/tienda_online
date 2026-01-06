@@ -2,6 +2,7 @@
 
 session_start();
 require_once __DIR__ . '/../../config/conexion.php';
+require_once __DIR__ . '/../../helpers/auth.php';
 $con = conectar();
 
 header('Content-Type: application/json; charset=utf-8');
@@ -50,7 +51,45 @@ if(!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
 }
 
-if (isset($_SESSION['cart'][$codigo_producto])) {
+// Si el usuario está logueado, actualizar el carrito en la base de datos
+
+if(isLoggedIn()) {
+
+    $dni_usuario = $_SESSION['user_id'];
+    try{
+
+        // Insertar o actualizar el carrito en la base de datos
+
+        $sql = "INSERT INTO carrito (dni_usuario, codigo_producto, cantidad) 
+                VALUES (:dni_usuario, :codigo_producto, :cantidad)
+                ON DUPLICATE KEY UPDATE cantidad = cantidad + :cantidad";
+        $stmt = $con->prepare($sql);
+        $stmt->bindParam(':dni_usuario', $dni_usuario);
+        $stmt->bindParam(':codigo_producto', $codigo_producto);
+        $stmt->bindParam(':cantidad', $cantidad);
+        $stmt->execute();
+        
+        // Obtener el total de items en el carrito desde la base de datos
+        $sql_total = "SELECT SUM(cantidad) AS total_items FROM carrito WHERE dni_usuario = :dni_usuario";
+        $stmt_total = $con->prepare($sql_total);
+        $stmt_total->bindParam(':dni_usuario', $dni_usuario);
+        $stmt_total->execute();
+        $result = $stmt_total->fetch(PDO::FETCH_ASSOC);
+        $cart_count = $result['total_items'] ?? 0;
+
+
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(['ok' => false, 'message' => 'Error al actualizar el carrito en la base de datos.']);
+        exit();
+
+    } 
+
+
+}else{
+    // Usuario no logueado, actualizar carrito en sesión
+
+    if (isset($_SESSION['cart'][$codigo_producto])) {
     $_SESSION['cart'][$codigo_producto] += $cantidad;
 } else {
     $_SESSION['cart'][$codigo_producto] = $cantidad;
@@ -60,6 +99,9 @@ $cart_count = 0;
 foreach ($_SESSION['cart'] as $qty) {
     $cart_count += (int)$qty;
 }
+
+}
+
 
 echo json_encode([
     'ok' => true,
