@@ -119,8 +119,10 @@ async function updateCartItem(codigoProducto, nuevaCantidad) {
                 cantidad: parseInt(nuevaCantidad),
                 action: 'update'
             }), 
-        }); 
+        });
+        
         const result = await response.json();
+        
         if (response.ok && result.ok) {
             location.reload();
         } else {
@@ -150,7 +152,9 @@ async function removeCartItem(codigoProducto) {
                 action: 'remove'
             }), 
         });
+        
         const result = await response.json();
+        
         if (response.ok && result.ok) {
             location.reload();
         } else {

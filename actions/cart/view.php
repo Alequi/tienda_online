@@ -2,12 +2,50 @@
 <?php
 
 
-$cart = $_SESSION['cart'] ?? [];
-
 $cart_items = [];
 $total_price = 0.0;
 
-if(!empty($cart)){
+
+if (isLoggedIn()) {
+    // Usuario logeado: leer desde BD
+    $dni_usuario = $_SESSION['user_id'];
+    try {
+        $sql = "SELECT c.codigo_producto, c.cantidad, a.nombre, a.precio, a.imagen, a.stock 
+                FROM carrito c
+                INNER JOIN articulos a ON c.codigo_producto = a.codigo
+                WHERE c.dni_usuario = :dni_usuario AND a.activo = 1";
+        $stmt = $con->prepare($sql);
+        $stmt->bindParam(':dni_usuario', $dni_usuario);
+        $stmt->execute();
+        $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        foreach ($productos as $producto) {
+            $subtotal = $producto['precio'] * $producto['cantidad'];
+            
+            $cart_items[] = [
+                'codigo' => $producto['codigo_producto'],
+                'nombre' => $producto['nombre'],
+                'precio' => $producto['precio'],
+                'imagen' => $producto['imagen'],
+                'cantidad' => $producto['cantidad'],
+                'subtotal' => $subtotal,
+                'stock' => $producto['stock']
+            ];
+            
+            $total_price += $subtotal;
+        }
+        
+    } catch (PDOException $e) {
+        $_SESSION['error_cart'] = "Error al obtener el carrito: " . $e->getMessage();
+        header("Location: ../../views/error.php");
+        exit();
+    }
+    
+}else {
+    // Usuario no logeado: leer desde sesión
+    $cart = $_SESSION['cart'] ?? [];
+
+    if(!empty($cart)){
 
     // Obtener los codigos de los productos en el carrito
 
@@ -59,5 +97,9 @@ if(!empty($cart)){
     }
 
 
+
 }
+}
+
+
 

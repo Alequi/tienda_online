@@ -1,11 +1,9 @@
-// actions/cart/update.php
-// Actualizar o eliminar un ítem del carrito vía AJAX
-
 <?php
 
-session_start();
 
+session_start();
 require_once __DIR__ . '/../../config/conexion.php';
+require_once __DIR__ . '/../../helpers/auth.php';
 $con = conectar();
 
 header('Content-Type: application/json; charset=utf-8');
@@ -37,65 +35,138 @@ if ($action === 'update' && $cantidad <= 0) {
     exit();
 }
 
-// Inicializar carrito si no existe
-if (!isset($_SESSION['cart'])) {
-    $_SESSION['cart'] = [];
-}
-
-// Verificar que el producto existe en el carrito
-if (!isset($_SESSION['cart'][$codigo_producto])) {
-    http_response_code(404);
-    echo json_encode(['ok' => false, 'message' => 'Producto no encontrado en el carrito.']);
-    exit();
-}
-
-// Ejecutar acción
-switch ($action) {
-    case 'remove':
-        unset($_SESSION['cart'][$codigo_producto]);
-        $message = 'Producto eliminado del carrito.';
-        break;
+if (isLoggedIn()) {
+    // Usuario logeado: actualizar BD
+    $dni_usuario = $_SESSION['user_id'];
+    
+    try {
+        // Verificar que el producto existe en el carrito
+        $stmt = $con->prepare("SELECT cantidad FROM carrito WHERE dni_usuario = :dni AND codigo_producto = :codigo");
+        $stmt->bindParam(':dni', $dni_usuario);
+        $stmt->bindParam(':codigo', $codigo_producto);
+        $stmt->execute();
+        $producto_carrito = $stmt->fetch(PDO::FETCH_ASSOC);
         
-    case 'update':
-        // Verificar stock disponible
-        try {
-            $stmt = $con->prepare("SELECT stock FROM articulos WHERE codigo = :codigo AND activo = 1");
-            $stmt->bindParam(':codigo', $codigo_producto);
-            $stmt->execute();
-            $producto = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            if (!$producto) {
-                http_response_code(404);
-                echo json_encode(['ok' => false, 'message' => 'Producto no encontrado.']);
-                exit();
-            }
-            
-            if ($cantidad > $producto['stock']) {
-                http_response_code(400);
-                echo json_encode([
-                    'ok' => false, 
-                    'message' => "Stock insuficiente. Disponible: {$producto['stock']}"
-                ]);
-                exit();
-            }
-            
-            $_SESSION['cart'][$codigo_producto] = $cantidad;
-            $message = 'Carrito actualizado correctamente.';
-            
-        } catch (PDOException $e) {
-            http_response_code(500);
-            echo json_encode(['ok' => false, 'message' => 'Error al verificar el stock.']);
+        if (!$producto_carrito) {
+            http_response_code(404);
+            echo json_encode(['ok' => false, 'message' => 'Producto no encontrado en el carrito.']);
             exit();
         }
-        break;
-}
-
- 
-
-// Calcular total de items
-$cart_count = 0;
-foreach ($_SESSION['cart'] as $qty) {
-    $cart_count += (int)$qty;
+        
+        switch ($action) {
+            case 'remove':
+                $sql = "DELETE FROM carrito WHERE dni_usuario = :dni AND codigo_producto = :codigo";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(':dni', $dni_usuario);
+                $stmt->bindParam(':codigo', $codigo_producto);
+                $stmt->execute();
+                $message = 'Producto eliminado del carrito.';
+                break;
+                
+            case 'update':
+                // Verificar stock
+                $stmt = $con->prepare("SELECT stock FROM articulos WHERE codigo = :codigo AND activo = 1");
+                $stmt->bindParam(':codigo', $codigo_producto);
+                $stmt->execute();
+                $producto = $stmt->fetch(PDO::FETCH_ASSOC);
+                
+                if (!$producto) {
+                    http_response_code(404);
+                    echo json_encode(['ok' => false, 'message' => 'Producto no encontrado.']);
+                    exit();
+                }
+                
+                if ($cantidad > $producto['stock']) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'ok' => false, 
+                        'message' => "Stock insuficiente. Disponible: {$producto['stock']}"
+                    ]);
+                    exit();
+                }
+                
+                // Actualizar cantidad
+                $sql = "UPDATE carrito SET cantidad = :cantidad 
+                        WHERE dni_usuario = :dni AND codigo_producto = :codigo";
+                $stmt = $con->prepare($sql);
+                $stmt->bindParam(':cantidad', $cantidad);
+                $stmt->bindParam(':dni', $dni_usuario);
+                $stmt->bindParam(':codigo', $codigo_producto);
+                $stmt->execute();
+                $message = 'Carrito actualizado correctamente.';
+                break;
+        }
+        
+        // Calcular total desde BD
+        $stmt = $con->prepare("SELECT SUM(cantidad) as total FROM carrito WHERE dni_usuario = :dni");
+        $stmt->bindParam(':dni', $dni_usuario);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $cart_count = (int)$result['total'];
+        
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(['ok' => false, 'message' => 'Error al actualizar el carrito.']);
+        exit();
+    }
+    
+} else {
+    // Usuario no logeado: actualizar sesión
+    if (!isset($_SESSION['cart'])) {
+        $_SESSION['cart'] = [];
+    }
+    
+    if (!isset($_SESSION['cart'][$codigo_producto])) {
+        http_response_code(404);
+        echo json_encode(['ok' => false, 'message' => 'Producto no encontrado en el carrito.']);
+        exit();
+    }
+    
+    switch ($action) {
+        case 'remove':
+            unset($_SESSION['cart'][$codigo_producto]);
+            $message = 'Producto eliminado del carrito.';
+            break;
+            
+        case 'update':
+            // Verificar stock
+            try {
+                $stmt = $con->prepare("SELECT stock FROM articulos WHERE codigo = :codigo AND activo = 1");
+                $stmt->bindParam(':codigo', $codigo_producto);
+                $stmt->execute();
+                $producto = $stmt->fetch(PDO::FETCH_ASSOC);
+                
+                if (!$producto) {
+                    http_response_code(404);
+                    echo json_encode(['ok' => false, 'message' => 'Producto no encontrado.']);
+                    exit();
+                }
+                
+                if ($cantidad > $producto['stock']) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'ok' => false, 
+                        'message' => "Stock insuficiente. Disponible: {$producto['stock']}"
+                    ]);
+                    exit();
+                }
+                
+                $_SESSION['cart'][$codigo_producto] = $cantidad;
+                $message = 'Carrito actualizado correctamente.';
+                
+            } catch (PDOException $e) {
+                http_response_code(500);
+                echo json_encode(['ok' => false, 'message' => 'Error al verificar el stock.']);
+                exit();
+            }
+            break;
+    }
+    
+    // Calcular total desde sesión
+    $cart_count = 0;
+    foreach ($_SESSION['cart'] as $qty) {
+        $cart_count += (int)$qty;
+    }
 }
 
 echo json_encode([

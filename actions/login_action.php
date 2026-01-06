@@ -35,7 +35,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 try{
                     $dni_usuario = $_SESSION['user_id'];
                     foreach($_SESSION['cart'] as $codigo_producto => $cantidad) {
-                        $sql_cart = "INSERT INTO carritos (dni_usuario, codigo_producto, cantidad) 
+                        $sql_cart = "INSERT INTO carrito (dni_usuario, codigo_producto, cantidad) 
                                      VALUES (:dni_usuario, :codigo_producto, :cantidad)
                                      ON DUPLICATE KEY UPDATE cantidad = cantidad + :cantidad";
                         $stmt_cart = $con->prepare($sql_cart);

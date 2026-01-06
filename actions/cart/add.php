@@ -3,6 +3,7 @@
 session_start();
 require_once __DIR__ . '/../../config/conexion.php';
 require_once __DIR__ . '/../../helpers/auth.php';
+require_once __DIR__ . '/../../helpers/cart_helper.php';
 $con = conectar();
 
 header('Content-Type: application/json; charset=utf-8');
@@ -74,15 +75,6 @@ if(isLoggedIn()) {
         $stmt->bindParam(':codigo_producto', $codigo_producto);
         $stmt->bindParam(':cantidad', $cantidad);
         $stmt->execute();
-        
-        // Obtener el total de items en el carrito desde la base de datos
-        $sql_total = "SELECT SUM(cantidad) AS total_items FROM carrito WHERE dni_usuario = :dni_usuario";
-        $stmt_total = $con->prepare($sql_total);
-        $stmt_total->bindParam(':dni_usuario', $dni_usuario);
-        $stmt_total->execute();
-        $result = $stmt_total->fetch(PDO::FETCH_ASSOC);
-        $cart_count = $result['total_items'] ?? 0;
-
 
     } catch (PDOException $e) {
         http_response_code(500);
@@ -101,14 +93,10 @@ if(isLoggedIn()) {
     $_SESSION['cart'][$codigo_producto] = $cantidad;
 }
 
-
-// Calcular total de items en el carrito de sesión
-$cart_count = 0;
-foreach ($_SESSION['cart'] as $qty) {
-    $cart_count += (int)$qty;
 }
 
-}
+// Obtener contador actualizado usando el helper
+$cart_count = getCartCount();
 
 // Responder con éxito
 echo json_encode([

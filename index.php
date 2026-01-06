@@ -36,11 +36,8 @@ require_once "actions/products_action.php";
   <?php include_once 'public/partials/searchbar.php'; ?>
 
   <!-- SEARCH BAR -->
-
-  <div class="col-lg-3 text-lg-end">
+   <div class="col-lg-3 text-lg-end">
   <?php include_once 'public/partials/cartbar.php'; ?>
-
-  </div>
   </div>
   </div>
   </div>
