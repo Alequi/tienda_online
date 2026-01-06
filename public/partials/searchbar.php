@@ -2,10 +2,14 @@
 // Determinar rutas según la ubicación del archivo
 $current_path = $_SERVER['PHP_SELF'];
 $is_root = (basename($current_path) === 'index.php' && strpos($current_path, '/views/') === false);
+$in_categorias = (strpos($current_path, '/views/tienda/categorias/') !== false);
 
 if ($is_root) {
     $logo_url = 'public/assets/img/logo-tienda.png';
     $index_url = 'index.php';
+} elseif ($in_categorias) {
+    $logo_url = '../../../public/assets/img/logo-tienda.png';
+    $index_url = '../../../index.php';
 } else {
     $logo_url = '../../public/assets/img/logo-tienda.png';
     $index_url = '../../index.php';

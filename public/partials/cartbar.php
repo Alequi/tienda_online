@@ -2,10 +2,13 @@
 // Determinar la ruta base según desde dónde se incluye
 $current_path = $_SERVER['PHP_SELF'];
 $is_root = (basename($current_path) === 'index.php' && strpos($current_path, '/views/') === false);
-$in_tienda = (strpos($current_path, '/views/tienda/') !== false);
+$in_categorias = (strpos($current_path, '/views/tienda/categorias/') !== false);
+$in_tienda = (strpos($current_path, '/views/tienda/') !== false && !$in_categorias);
 
 if ($is_root) {
     $cart_url = 'views/tienda/cart.php';
+} elseif ($in_categorias) {
+    $cart_url = '../cart.php';
 } elseif ($in_tienda) {
     $cart_url = 'cart.php';
 } else {
