@@ -4,6 +4,7 @@
 session_start();
 require_once __DIR__ . '/../../config/conexion.php';
 require_once __DIR__ . '/../../helpers/auth.php';
+require_once __DIR__ . '/../../helpers/cart_helper.php';
 $con = conectar();
 
 header('Content-Type: application/json; charset=utf-8');
@@ -40,19 +41,6 @@ if (isLoggedIn()) {
     $dni_usuario = $_SESSION['user_id'];
     
     try {
-        // Verificar que el producto existe en el carrito
-        $stmt = $con->prepare("SELECT cantidad FROM carrito WHERE dni_usuario = :dni AND codigo_producto = :codigo");
-        $stmt->bindParam(':dni', $dni_usuario);
-        $stmt->bindParam(':codigo', $codigo_producto);
-        $stmt->execute();
-        $producto_carrito = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if (!$producto_carrito) {
-            http_response_code(404);
-            echo json_encode(['ok' => false, 'message' => 'Producto no encontrado en el carrito.']);
-            exit();
-        }
-        
         switch ($action) {
             case 'remove':
                 $sql = "DELETE FROM carrito WHERE dni_usuario = :dni AND codigo_producto = :codigo";
@@ -60,6 +48,13 @@ if (isLoggedIn()) {
                 $stmt->bindParam(':dni', $dni_usuario);
                 $stmt->bindParam(':codigo', $codigo_producto);
                 $stmt->execute();
+                
+                if ($stmt->rowCount() === 0) {
+                    http_response_code(404);
+                    echo json_encode(['ok' => false, 'message' => 'Producto no encontrado en el carrito.']);
+                    exit();
+                }
+                
                 $message = 'Producto eliminado del carrito.';
                 break;
                 
@@ -93,16 +88,19 @@ if (isLoggedIn()) {
                 $stmt->bindParam(':dni', $dni_usuario);
                 $stmt->bindParam(':codigo', $codigo_producto);
                 $stmt->execute();
+                
+                if ($stmt->rowCount() === 0) {
+                    http_response_code(404);
+                    echo json_encode(['ok' => false, 'message' => 'Producto no encontrado en el carrito.']);
+                    exit();
+                }
+                
                 $message = 'Carrito actualizado correctamente.';
                 break;
         }
         
-        // Calcular total desde BD
-        $stmt = $con->prepare("SELECT SUM(cantidad) as total FROM carrito WHERE dni_usuario = :dni");
-        $stmt->bindParam(':dni', $dni_usuario);
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $cart_count = (int)$result['total'];
+        // Calcular total usando helper (reutiliza conexión existente)
+        $cart_count = getCartCount($con);
         
     } catch (PDOException $e) {
         http_response_code(500);
