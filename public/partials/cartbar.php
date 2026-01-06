@@ -1,6 +1,6 @@
 <?php
 // Determinar la ruta base según desde dónde se incluye
-$is_root = (basename($_SERVER['PHP_SELF']) === 'index.php' && dirname($_SERVER['PHP_SELF']) === '/');
+$is_root = (basename($_SERVER['PHP_SELF']) === 'index.php' && strpos($_SERVER['PHP_SELF'], '/views/') === false);
 $cart_url = $is_root ? 'views/tienda/cart.php' : '../../views/tienda/cart.php';
 
 require_once __DIR__ . '/../../helpers/cart_helper.php';
