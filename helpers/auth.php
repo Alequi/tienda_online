@@ -23,3 +23,7 @@ function requireAdmin(){
     }
 }
 
+function isAdmin(){
+    return isset($_SESSION['rol']) && $_SESSION['rol'] === 'admin';
+}
+

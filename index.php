@@ -110,6 +110,19 @@ require_once "actions/products_action.php";
                   <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-person-circle"></i> Hola, <?php echo htmlspecialchars($_SESSION['user_name']); ?>
                   </a>
+                  <?php if (isAdmin()): ?>
+
+
+                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li><a class="dropdown-item" href="admin/adminPanel.php"><i class="bi bi-person"></i> Panel de Administrador</a></li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="actions/logout_action.php"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a></li>
+                  </ul>
+                </li>
+              </ul>
+                  <?php else: ?>
                   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                     <li><a class="dropdown-item" href="views/user/panel.php"><i class="bi bi-person"></i> Panel de usuario</a></li>
                     <li>
@@ -119,6 +132,7 @@ require_once "actions/products_action.php";
                   </ul>
                 </li>
               </ul>
+                  <?php endif; ?>
             <?php else: ?>
               <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link" href="views/auth/login.php">Login</a></li>

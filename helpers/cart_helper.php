@@ -1,5 +1,8 @@
 <?php
 
+// Asegurarse de que auth.php está incluido para usar isLoggedIn()
+require_once __DIR__ . '/auth.php';
+
 /**
  * Obtiene el número total de items en el carrito
  * Lee desde BD si el usuario está logeado, desde sesión si no
