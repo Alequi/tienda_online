@@ -1,9 +1,18 @@
+// Manejo de adición al carrito desde formularios con data-add-to-cart
+
+ 
+// Actualizar el badge del carrito y mostrar alertas
+
 document.addEventListener('DOMContentLoaded', () => {
     const cartBadge = document.getElementById('cartBadge');
+
+    // Escuchar envíos de formularios para añadir al carrito
 
     document.addEventListener('submit', async (event) => {
         if (event.target.matches('form[data-add-to-cart]')) {
             event.preventDefault(); 
+
+            // Obtener datos del formulario
 
             const codigoProducto = event.target.querySelector('input[name="codigo_producto"]').value;
             const cantidad = event.target.querySelector('input[name="cantidad"]').value;
@@ -12,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Cantidad inválida.');
                 return;
             } 
-
+            // Enviar solicitud para añadir al carrito
             try{
                 const response = await fetch('../../actions/cart/add.php', {
                     method: 'POST',
@@ -71,6 +80,8 @@ document.addEventListener('click', async (event) => {
     }
 });
 
+// Manejo de actualización manual de cantidad
+
 document.addEventListener('change', async (event) => {
     if (event.target.matches('[data-action="manual-update"]')) {
         const codigo = event.target.dataset.codigo;
@@ -87,6 +98,10 @@ document.addEventListener('change', async (event) => {
         await updateCartItem(codigo, cantidad);
     }
 });
+
+// Funciones para actualizar y eliminar ítems del carrito
+// Usan fetch para comunicarse con actions/cart/update.php
+// y recargar la página al completar.
 
 async function updateCartItem(codigoProducto, nuevaCantidad) {
     if (nuevaCantidad <= 0) {
@@ -118,6 +133,7 @@ async function updateCartItem(codigoProducto, nuevaCantidad) {
     }   
 }
 
+// Función para eliminar un ítem del carrito
 async function removeCartItem(codigoProducto) {
     if (!confirm('¿Estás seguro de eliminar este producto?')) {
         return;

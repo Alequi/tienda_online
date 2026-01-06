@@ -1,3 +1,6 @@
+// actions/cart/update.php
+// Actualizar o eliminar un ítem del carrito vía AJAX
+
 <?php
 
 session_start();
