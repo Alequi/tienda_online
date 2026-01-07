@@ -11,12 +11,15 @@
 - 🏠 **Página de inicio** con carrusel de imágenes destacadas
 - 📦 **Catálogo de productos** organizado por categorías
 - 🔐 **Sistema de autenticación** (registro, login, logout)
-- 👤 **Panel de usuario** personalizado
-- 🔍 **Búsqueda de productos** (interfaz preparada)
-- 🛒 **Carrito de compras** (interfaz preparada)
+- 👤 **Panel de usuario** personalizado con gestión de datos
+- 👨‍💼 **Panel de administración** para gestión de productos
+- 🔍 **Búsqueda de productos** por categorías
+- 🛒 **Carrito de compras** funcional con gestión de cantidades
 - 📱 **Diseño responsive** compatible con dispositivos móviles
 - 🔒 **Recuperación de contraseña**
+- 📧 **Página de contacto** con formulario
 - 🎨 **Interfaz moderna** y atractiva
+- 🔄 **Actualización dinámica** del carrito vía AJAX
 
 ## 🛠️ Tecnologías Utilizadas
 
@@ -32,8 +35,9 @@
 - **Google Fonts (Poppins)** - Tipografía personalizada
 
 ### Bibliotecas Adicionales
-- **Owl Carousel** - Carrusel de productos (preparado)
+- **Owl Carousel** - Carrusel de productos
 - **Easing.js** - Animaciones suaves
+- **JavaScript AJAX** - Actualización dinámica del carrito
 
 ## 📁 Estructura del Proyecto
 
@@ -44,33 +48,60 @@ tienda_online/
 │   ├── login_action.php         # Procesa el inicio de sesión
 │   ├── logout_action.php        # Cierra la sesión del usuario
 │   ├── registro_action.php      # Procesa el registro de usuarios
-│   └── recuperar_pass_action.php # Recuperación de contraseña
+│   ├── recuperar_pass_action.php # Recuperación de contraseña
+│   ├── products_action.php      # Procesa la carga de productos
+│   ├── product_detail_action.php # Detalle de productos
+│   └── cart/                    # Gestión del carrito
+│       ├── add.php              # Añadir al carrito
+│       ├── update.php           # Actualizar cantidades
+│       └── view.php             # Ver carrito
+│
+├── admin/                        # Panel de administración
+│   └── adminPanel.php           # Panel de administrador
 │
 ├── config/                       # Configuración
 │   └── conexion.php             # Configuración de base de datos
 │
 ├── helpers/                      # Funciones auxiliares
 │   ├── auth.php                 # Funciones de autenticación
+│   ├── cart_helper.php          # Funciones del carrito
 │   └── validaciones.php         # Validaciones de datos
 │
 ├── public/                       # Recursos públicos
 │   ├── assets/
 │   │   ├── css/                 # Hojas de estilo
 │   │   ├── img/                 # Imágenes del proyecto
-│   │   └── lib/                 # Bibliotecas externas
+│   │   └── lib/
+│   │       ├── scripts/         # JavaScript personalizado
+│   │       │   ├── cart.js      # Gestión del carrito
+│   │       │   ├── form.js      # Validación de formularios
+│   │       │   ├── panel.js     # Panel de usuario
+│   │       │   └── quantity_selector.js # Selector de cantidad
+│   │       └── ...              # Bibliotecas externas
 │   └── partials/
-│       └── footer.php           # Componente de footer
+│       ├── footer.php           # Componente de footer
+│       ├── topbar.php           # Barra superior
+│       ├── searchbar.php        # Barra de búsqueda
+│       ├── cartbar.php          # Icono del carrito
+│       └── producto_detalle.php # Detalle de producto
 │
 ├── views/                        # Vistas de la aplicación
 │   ├── auth/
 │   │   ├── login.php            # Vista de inicio de sesión
 │   │   ├── registro.php         # Vista de registro
 │   │   └── recuperar_pass.php   # Vista de recuperación
+│   ├── tienda/
+│   │   ├── cart.php             # Carrito de compras
+│   │   ├── producto.php         # Detalle de producto
+│   │   ├── contacto.php         # Página de contacto
+│   │   └── categorias/
+│   │       └── categoria.php    # Vista de categoría
 │   ├── user/
 │   │   └── panel.php            # Panel de usuario
 │   └── error.php                # Página de error
 │
-└── index.php                     # Página principal
+├── index.php                     # Página principal
+└── localhost_3308(1).sql        # Script de base de datos
 ```
 
 ## 🚀 Instalación
@@ -121,27 +152,29 @@ tienda_online/
 La base de datos incluye las siguientes tablas principales:
 
 - **usuarios** - Información de los usuarios registrados
-- **productos** - Catálogo de productos (en desarrollo)
-- **categorias** - Categorías de productos (en desarrollo)
+  - Campos: dni (PK), nombre, apellidos, email, telefono, direccion, localidad, provincia, password, rol
+- **productos** - Catálogo de productos de joyería
+  - Campos: codigo (PK), nombre, descripcion, precio, stock, imagen, categoria
+- **categorias** - Categorías de productos
+  - Campos: id, nombre, descripcion
+- **carrito** - Items del carrito de compras (sesión)
 - **pedidos** - Órdenes de compra (en desarrollo)
 
 ### Script SQL de Ejemplo
 
-```sql
-CREATE DATABASE IF NOT EXISTS tienda_online CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+El proyecto incluye el archivo `localhost_3308(1).sql` con la estructura completa de la base de datos. Para importarlo:
 
-USE tienda_online;
+1. Abre phpMyAdmin
+2. Crea una nueva base de datos llamada `tienda_online`
+3. Selecciona la base de datos
+4. Ve a la pestaña "Importar"
+5. Selecciona el archivo `localhost_3308(1).sql`
+6. Haz clic en "Continuar"
 
-CREATE TABLE usuarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    rol ENUM('user', 'admin') DEFAULT 'user',
-    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    INDEX idx_email (email)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-```
+La base de datos incluirá:
+- Tabla de usuarios con roles (user/admin)
+- Tabla de productos con stock y precios
+- Datos de ejemplo para pruebas
 
 ## 📖 Uso
 
@@ -154,14 +187,26 @@ CREATE TABLE usuarios (
 
 ### Funcionalidades Disponibles
 
-- ✅ Registro de nuevos usuarios
-- ✅ Inicio y cierre de sesión
-- ✅ Panel de usuario personalizado
+- ✅ Registro de nuevos usuarios con validación completa
+- ✅ Inicio y cierre de sesión seguro
+- ✅ Panel de usuario personalizado con gestión de datos
+- ✅ Panel de administración (solo para usuarios admin)
+  - ⏳ Añadir/eliminar productos
+  - ⏳ Añadir/eliminar categorias
+  - ⏳ Añadir/eliminar usuarios
+  - ⏳ Informes de venta basicos
 - ✅ Recuperación de contraseña
-- ✅ Navegación por categorías
-- ⏳ Búsqueda de productos (en desarrollo)
-- ⏳ Carrito de compras (en desarrollo)
-- ⏳ Proceso de checkout (en desarrollo)
+- ✅ Navegación por categorías (anillos, colgantes, pulseras, pendientes)
+- ✅ Visualización de productos con detalles
+- ✅ Carrito de compras funcional con:
+  - Añadir/eliminar productos
+  - Actualizar cantidades
+  - Cálculo automático de totales
+  - Actualización AJAX sin recargar página
+- ✅ Página de contacto con formulario
+- ✅ Control de stock en productos
+- ⏳ Proceso de checkout y pago (en desarrollo)
+- ⏳ Gestión de pedidos (en desarrollo)
 
 ## 🎨 Capturas de Pantalla
 
@@ -187,30 +232,45 @@ Este proyecto ha sido desarrollado como parte del programa de estudios del **Cic
 
 ## 🔒 Seguridad
 
-Este proyecto incluye medidas básicas de seguridad:
+Este proyecto incluye medidas de seguridad:
 
-- Contraseñas hasheadas con algoritmos seguros
-- Protección contra SQL Injection mediante PDO y consultas preparadas
-- Validación de datos de entrada
-- Gestión de sesiones segura
-- Protección de rutas mediante autenticación
+- ✅ Contraseñas hasheadas con `password_hash()` de PHP
+- ✅ Protección contra SQL Injection mediante PDO y consultas preparadas
+- ✅ Validación de datos de entrada en cliente y servidor
+- ✅ Gestión segura de sesiones PHP
+- ✅ Protección de rutas mediante autenticación (helpers/auth.php)
+- ✅ Sanitización de salida con `htmlspecialchars()`
+- ✅ Control de roles (usuario/administrador)
+- ✅ Validación de stock antes de añadir al carrito
 
-⚠️ **Nota**: Este es un proyecto educativo. Para uso en producción, se recomienda implementar medidas de seguridad adicionales.
+⚠️ **Nota**: Este es un proyecto educativo. Para uso en producción, se recomienda implementar medidas de seguridad adicionales como HTTPS, CSRF tokens, rate limiting, etc.
 
 ## 🚧 Estado del Proyecto
 
-El proyecto está actualmente en **desarrollo activo**. Algunas funcionalidades están en fase de implementación.
+El proyecto está actualmente en **desarrollo activo**. La mayoría de las funcionalidades principales están implementadas y funcionando.
 
-### Próximas Características
+### ✅ Funcionalidades Completadas
 
-- [ ] Sistema completo de gestión de productos (CRUD)
-- [ ] Carrito de compras funcional
-- [ ] Proceso de pago
-- [ ] Panel de administración
-- [ ] Gestión de pedidos
-- [ ] Sistema de búsqueda avanzada
+- [x] Sistema de autenticación completo (registro, login, logout)
+- [x] Panel de usuario con gestión de datos personales
+- [x] Panel de administración básico
+- [x] Catálogo de productos por categorías
+- [x] Vista de detalle de productos
+- [x] Carrito de compras funcional con AJAX
+- [x] Gestión de stock y cantidades
+- [x] Página de contacto
+- [x] Sistema de roles (usuario/admin)
+- [x] Diseño responsive completo
+
+### 🔄 Próximas Características
+
+- [ ] Proceso de checkout y pago
+- [ ] Gestión completa de pedidos
+- [ ] Panel de administración avanzado (CRUD completo de productos)
+- [ ] Sistema de búsqueda 
 - [ ] Wishlist / Lista de deseos
-- [ ] Valoraciones y reseñas de productos
+- [ ] Historial de pedidos en panel de usuario
+- [ ] Notificaciones por email
 
 ## 📄 Licencia
 
