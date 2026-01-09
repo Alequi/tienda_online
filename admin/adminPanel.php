@@ -144,7 +144,7 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
               </div>
               <h5 class="card-title fw-bold">Categorías</h5>
               <p class="card-text text-muted">Administrar categorías de productos</p>
-              <a href="#" class="btn btn-warning mt-2">
+              <a href="adminCategoria.php" class="btn btn-warning mt-2">
                 <i class="bi bi-arrow-right-circle"></i> Gestionar
               </a>
             </div>
