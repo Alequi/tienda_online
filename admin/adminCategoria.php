@@ -2,6 +2,7 @@
 session_start();
 require_once __DIR__ . '/../helpers/auth.php';
 require_once __DIR__. '/../actions/products_action.php';
+require_once __DIR__. '/../actions/categorias_action.php';
 
 // Verificar que el usuario esté logeado y sea administrador
 if (!isLoggedIn()) {
@@ -92,6 +93,45 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
                 <a href="adminCategoriaCrear.php" class="btn btn-success">
                   <i class="bi bi-plus-circle"></i> Nueva Categoría
                 </a>  
+              </div>
+              <div><table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Codigo</th>
+                    <th>Nombre</th>
+                    <th>Disponibilidad</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php foreach ($categorias as $categoria): ?>
+                  <tr>
+                    <td><?php echo htmlspecialchars($categoria->codigo); ?></td>
+                    <td><?php echo htmlspecialchars($categoria->nombre); ?></td>
+                    <td>
+                      <?php 
+                      if($categoria->activo == 1){
+                        echo '<span class="badge bg-success">Activa</span>';
+                      } else {
+                        echo '<span class="badge bg-secondary">Inactiva</span>';
+                      }
+                      ?>
+                    </td>
+                    <td>
+                      <a href="adminCategoriaEditar.php?id=<?php echo $categoria->id; ?>" class="btn btn-primary btn-sm">
+                        <i class="bi bi-pencil-square"></i> Editar
+                      </a>
+                      <a href="adminCategoriaEliminar.php?id=<?php echo $categoria->id; ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar esta categoría?');">
+                        <i class="bi bi-trash"></i> Eliminar
+                      </a>
+                    </td>
+                  </tr>
+                  <?php endforeach; ?>
+                </tbody>
+              </table>
+              
+
+
               </div>
               
   </main> 
