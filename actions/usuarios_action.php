@@ -1,4 +1,7 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 require_once __DIR__ . '/../config/conexion.php';
 require_once __DIR__ . '/../helpers/validaciones.php';
@@ -52,6 +55,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['act
         $stmt_update->execute();
         
         $_SESSION['success'] = "Usuario actualizado correctamente.";
+        header('Location: ../admin/adminUsuarios.php');
+        exit();
         
     } catch (PDOException $e) {
         $_SESSION['error'] = "Error al actualizar el usuario: " . $e->getMessage();
