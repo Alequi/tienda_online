@@ -2,6 +2,8 @@
 session_start();
 require_once __DIR__ . '/../helpers/auth.php';
 require_once __DIR__. '/../actions/products_action.php';
+require_once __DIR__. '/../actions/usuarios_action.php';
+require_once __DIR__. '/../actions/categorias_action.php';
 
 // Verificar que el usuario esté logeado y sea administrador
 if (!isLoggedIn()) {
@@ -99,7 +101,7 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
           <div class="card border-0 shadow-sm text-center h-100">
             <div class="card-body">
               <i class="bi bi-people text-info" style="font-size: 3rem;"></i>
-              <h3 class="mt-3 mb-0">--</h3>
+              <h3 class="mt-3 mb-0"><?php echo $cantidad_usuarios; ?></h3>
               <p class="text-muted mb-0">Usuarios</p>
             </div>
           </div>
@@ -176,7 +178,7 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
               </div>
               <h5 class="card-title fw-bold">Usuarios</h5>
               <p class="card-text text-muted">Gestión de clientes registrados</p>
-              <a href="#" class="btn btn-info mt-2">
+              <a href="adminUsuarios.php" class="btn btn-info mt-2">
                 <i class="bi bi-arrow-right-circle"></i> Gestionar
               </a>
             </div>
