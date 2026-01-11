@@ -3,6 +3,19 @@ session_start();
 require_once __DIR__ . '/../helpers/auth.php';
 require_once __DIR__. '/../actions/usuarios_action.php';
 
+$error = null;
+$success = null;
+
+if(isset($_SESSION['error'])){
+    $error = $_SESSION['error'];
+    unset($_SESSION['error']);
+}
+
+if(isset($_SESSION['success'])){
+    $success = $_SESSION['success'];
+    unset($_SESSION['success']);
+}
+
 // Verificar que el usuario esté logeado y sea administrador
 if (!isLoggedIn()) {
     header("Location: ../views/auth/login.php");
@@ -81,6 +94,21 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
           <p class="text-muted">Crea, edita y elimina usuarios para tu tienda</p>
         </div>
       </div>
+
+      <!-- Mensajes de error/éxito -->
+      <?php if($error): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <i class="bi bi-exclamation-triangle"></i> <?php echo htmlspecialchars($error); ?>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      <?php endif; ?>
+      
+      <?php if($success): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <i class="bi bi-check-circle"></i> <?php echo htmlspecialchars($success); ?>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      <?php endif; ?>
 
       <!-- Tabla de usuarios -->
       <div class="row">
@@ -212,15 +240,15 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
                   <div class="col-md-6">
                     <label for="editRolUsuario" class="form-label fw-semibold">Rol</label>
                     <select class="form-select" id="editRolUsuario" name="rol">
-                      <option value="cliente">admin</option>
-                      <option value="admin">editor</option>
-                      <option value="admin">registrado</option>
+                      <option value="registrado">Registrado</option>
+                      <option value="editor">Editor</option>
+                      <option value="admin">Administrador</option>
                     </select>
                   </div>
                   <div class="col-md-6">
                     <label for="editActivoUsuario" class="form-label fw-semibold">Estado</label>
                     <div class="form-check form-switch mt-2">
-                      <input class="form-check-input" type="checkbox" role="switch" id="editActivoUsuario" name="activo">
+                      <input class="form-check-input" type="checkbox" role="switch" id="editActivoUsuario" name="activoUsuario">
                       <label class="form-check-label" for="editActivoUsuario">
                         Usuario activo
                       </label>
