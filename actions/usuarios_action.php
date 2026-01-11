@@ -8,15 +8,6 @@ require_once __DIR__ . '/../helpers/validaciones.php';
 
 $con = conectar();
 
-//obtener todos los usuarios
-
-$sql_usuarios = "SELECT * FROM usuarios";
-$stmt_usuarios = $con->prepare($sql_usuarios);
-$stmt_usuarios->execute();
-$usuarios = $stmt_usuarios->fetchAll(PDO::FETCH_OBJ);
-
-$cantidad_usuarios = count($usuarios);
-
 //Edición de usuario
 if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'edit') {
     $id_usuario = $_POST['dni'];
@@ -153,4 +144,13 @@ if(isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id']))
         exit();
     }
 }
+
+// Obtener todos los usuarios
+$sql_usuarios = "SELECT * FROM usuarios";
+$stmt_usuarios = $con->prepare($sql_usuarios);
+$stmt_usuarios->execute();
+$usuarios = $stmt_usuarios->fetchAll(PDO::FETCH_OBJ);
+
+$cantidad_usuarios = count($usuarios);
+?>
 

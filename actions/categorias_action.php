@@ -55,18 +55,17 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action'])) {
 
 // Eliminación de categoría
 if(isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])) {
-    $id_categoria = $_GET['id'];
+    $id_usuario = $_GET['id'];
 
     $sql_delete = "DELETE FROM categoria WHERE codigo = :id";
     $stmt_delete = $con->prepare($sql_delete);
-    $stmt_delete->bindParam(':id', $id_categoria);
+    $stmt_delete->bindParam(':id', $id_usuario);
     $stmt_delete->execute();
 
     $_SESSION['success'] = "Categoría eliminada correctamente.";
     header('Location: ../admin/adminCategoria.php');
     exit();
-}else{
-    $_SESSION['error'] = "Acción no válida.";
-    header('Location: ../admin/adminCategoria.php');
-    exit();
 }
+
+$suma_categorias = count($categorias);
+?>
