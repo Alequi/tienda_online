@@ -1,5 +1,9 @@
 <?php
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 require_once __DIR__ . '/../config/conexion.php';
 
 $con = conectar();
@@ -26,6 +30,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['act
     $stmt_update->bindParam(':id', $id_categoria);
     $stmt_update->execute();
 
+    $_SESSION['success'] = "Categoría actualizada correctamente.";
     header('Location: ../admin/adminCategoria.php');
     exit();
 }
@@ -43,6 +48,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action'])) {
     $stmt_insert->bindParam(':descripcion', $descripcion);
     $stmt_insert->execute();
 
+    $_SESSION['success'] = "Categoría creada correctamente.";
     header('Location: ../admin/adminCategoria.php');
     exit();
 }
@@ -56,6 +62,11 @@ if(isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id']))
     $stmt_delete->bindParam(':id', $id_categoria);
     $stmt_delete->execute();
 
+    $_SESSION['success'] = "Categoría eliminada correctamente.";
+    header('Location: ../admin/adminCategoria.php');
+    exit();
+}else{
+    $_SESSION['error'] = "Acción no válida.";
     header('Location: ../admin/adminCategoria.php');
     exit();
 }

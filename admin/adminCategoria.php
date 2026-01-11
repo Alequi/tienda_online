@@ -4,6 +4,19 @@ require_once __DIR__ . '/../helpers/auth.php';
 require_once __DIR__. '/../actions/products_action.php';
 require_once __DIR__. '/../actions/categorias_action.php';
 
+$error = null;
+$success = null;
+
+if(isset($_SESSION['error'])){
+    $error = $_SESSION['error'];
+    unset($_SESSION['error']);
+}
+
+if(isset($_SESSION['success'])){
+    $success = $_SESSION['success'];
+    unset($_SESSION['success']);
+}
+
 // Verificar que el usuario esté logeado y sea administrador
 if (!isLoggedIn()) {
     header("Location: ../views/auth/login.php");
@@ -82,6 +95,21 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
           <p class="text-muted">Crea, edita y elimina categorías para organizar tus productos</p>
         </div>
       </div>
+
+      <!-- Mensajes de error/éxito -->
+      <?php if($error): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <i class="bi bi-exclamation-triangle"></i> <?php echo htmlspecialchars($error); ?>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      <?php endif; ?>
+      
+      <?php if($success): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <i class="bi bi-check-circle"></i> <?php echo htmlspecialchars($success); ?>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      <?php endif; ?>
 
       <!-- Tabla de categorías -->
       <div class="row">
