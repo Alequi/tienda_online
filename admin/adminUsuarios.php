@@ -282,7 +282,7 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
           </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
-        <form action="../actions/usarios_action.php" method="POST">
+        <form action="../actions/usuarios_action.php" method="POST">
           <div class="modal-body">
             <div class="row g-3">
               <div class="col-md-6">
@@ -354,7 +354,7 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
                   <i class="bi bi-toggle-on"></i> Estado
                 </label>
                 <div class="form-check form-switch mt-2">
-                  <input class="form-check-input" type="checkbox" role="switch" id="activoUsuario" name="activo" checked>
+                  <input class="form-check-input" type="checkbox" role="switch" id="activoUsuario" name="activoUsuario" checked>
                   <label class="form-check-label" for="activoUsuario">
                     Usuario activo
                   </label>
