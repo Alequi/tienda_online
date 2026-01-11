@@ -47,16 +47,16 @@ require_once "actions/products_action.php";
     <div class="row g-3">
 
       <!-- CATEGORIES (desktop) -->
-      <div class="col-lg-3 d-none d-lg-block">
+      <div class="col-lg-3">
         <button class="btn btn-primary w-100 d-flex align-items-center justify-content-between px-3"
           style="height:56px;"
           data-bs-toggle="collapse" data-bs-target="#verticalCats"
-          aria-expanded="true" aria-controls="verticalCats" type="button">
+          aria-expanded="false" aria-controls="verticalCats" type="button">
           <span class="fw-semibold">Categorías</span>
           <i class="bi bi-chevron-down"></i>
         </button>
 
-        <div class="collapse show border border-top-0" id="verticalCats">
+        <div class="collapse d-lg-block border border-top-0" id="verticalCats">
           <div class="list-group list-group-flush" style="max-height: 410px; overflow:auto;">
             <a href="views/tienda/categorias/categoria.php?categoria=novedades" class="list-group-item list-group-item-action">Novedades</a>
             <a href="views/tienda/categorias/categoria.php?categoria=anillos" class="list-group-item list-group-item-action" active primary>Anillos</a>
