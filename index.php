@@ -36,7 +36,7 @@ require_once "actions/products_action.php";
   <?php include_once 'public/partials/searchbar.php'; ?>
 
   <!-- SEARCH BAR -->
-   <div class="col-lg-3 text-lg-end">
+   <div class="col-3 col-lg-3 text-end">
   <?php include_once 'public/partials/cartbar.php'; ?>
   </div>
   </div>

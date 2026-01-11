@@ -34,7 +34,7 @@ $con = conectar();
   <?php include_once __DIR__ . '/../../public/partials/searchbar.php'; ?>
 
   <!-- SEARCH BAR -->
-   <div class="col-lg-3 text-lg-end">
+   <div class="col-3 col-lg-3 text-end">
   <?php include_once __DIR__ . '/../../public/partials/cartbar.php'; ?>
   </div>
   </div>
