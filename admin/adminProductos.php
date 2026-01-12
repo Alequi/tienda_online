@@ -190,6 +190,63 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
                   </tbody>
                 </table>
               </div>
+              
+              <!-- Paginación -->
+              <?php if ($total_paginas > 1): ?>
+              <nav aria-label="Navegación de productos" class="mt-4">
+                <ul class="pagination justify-content-center">
+                  
+                  <!-- Botón Anterior -->
+                  <li class="page-item <?php echo ($pagina_actual <= 1) ? 'disabled' : ''; ?>">
+                    <a class="page-link" href="?pagina=<?php echo $pagina_actual - 1; ?>" aria-label="Anterior">
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+
+                  <!-- Números de página -->
+                  <?php
+                  $rango = 2;
+                  $inicio = max(1, $pagina_actual - $rango);
+                  $fin = min($total_paginas, $pagina_actual + $rango);
+
+                  if ($inicio > 1) {
+                    echo '<li class="page-item"><a class="page-link" href="?pagina=1">1</a></li>';
+                    if ($inicio > 2) {
+                      echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                    }
+                  }
+
+                  for ($i = $inicio; $i <= $fin; $i++): ?>
+                    <li class="page-item <?php echo ($i == $pagina_actual) ? 'active' : ''; ?>">
+                      <a class="page-link" href="?pagina=<?php echo $i; ?>"><?php echo $i; ?></a>
+                    </li>
+                  <?php endfor;
+
+                  if ($fin < $total_paginas) {
+                    if ($fin < $total_paginas - 1) {
+                      echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                    }
+                    echo '<li class="page-item"><a class="page-link" href="?pagina=' . $total_paginas . '">' . $total_paginas . '</a></li>';
+                  }
+                  ?>
+
+                  <!-- Botón Siguiente -->
+                  <li class="page-item <?php echo ($pagina_actual >= $total_paginas) ? 'disabled' : ''; ?>">
+                    <a class="page-link" href="?pagina=<?php echo $pagina_actual + 1; ?>" aria-label="Siguiente">
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>
+                  
+                </ul>
+                
+                <!-- Info de paginación -->
+                <p class="text-center text-muted small">
+                  Mostrando <?php echo $offset + 1; ?> - <?php echo min($offset + $registros_por_pagina, $total_productos); ?> 
+                  de <?php echo $total_productos; ?> productos
+                </p>
+              </nav>
+              <?php endif; ?>
+
             </div>
           </div>
         </div>
