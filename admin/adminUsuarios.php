@@ -206,6 +206,7 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
             <div class="card-body">
               <form action="../actions/usuarios_action.php?action=edit" method="POST">
                 <input type="hidden" id="editDNI" name="dni">
+                <input type="hidden" name="redirect" value="admin">
                 
                 <div class="row g-3">
                   <div class="col-md-6">

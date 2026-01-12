@@ -18,13 +18,15 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['act
     $direccion = $_POST['direccion'] ?? '';
     $localidad = $_POST['localidad'] ?? '';
     $provincia = $_POST['provincia'] ?? '';
-    $rol = $_POST['rol'];
+    $rol = $_POST['rol'] ?? 'registrado';
     $activo = isset($_POST['activoUsuario']) ? 1 : 0;
+    $redirect = $_POST['redirect'] ?? 'admin';
 
     $validarMail = validarMailCompleto($email);
     if(!$validarMail){
         $_SESSION['error'] = "Email no válido.";
-        header('Location: ../admin/adminUsuarios.php');
+        $redirectUrl = ($redirect === 'panel') ? '../views/user/panel.php' : '../admin/adminUsuarios.php';
+        header('Location: ' . $redirectUrl);
         exit();
     }
 
@@ -46,17 +48,16 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['act
         $stmt_update->execute();
         
         $_SESSION['success'] = "Usuario actualizado correctamente.";
-        header('Location: ../admin/adminUsuarios.php');
+        $redirectUrl = ($redirect === 'panel') ? '../views/user/panel.php' : '../admin/adminUsuarios.php';
+        header('Location: ' . $redirectUrl);
         exit();
         
     } catch (PDOException $e) {
         $_SESSION['error'] = "Error al actualizar el usuario: " . $e->getMessage();
-        header('Location: ../admin/adminUsuarios.php');
+        $redirectUrl = ($redirect === 'panel') ? '../views/user/panel.php' : '../admin/adminUsuarios.php';
+        header('Location: ' . $redirectUrl);
         exit();
     }
-
-    header('Location: ../admin/adminUsuarios.php');
-    exit();
 }
 
 //Creación de usuario
@@ -141,6 +142,67 @@ if(isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id']))
     } catch (PDOException $e) {
         $_SESSION['error'] = "Error al eliminar el usuario: " . $e->getMessage();
         header('Location: ../admin/adminUsuarios.php');
+        exit();
+    }
+}
+
+//Camiar contraseña de usuario desde el panel de usuario
+if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'change_password') {
+    $id_usuario = $_POST['dni'];
+    $current_password = $_POST['current_password'];
+    $new_password = $_POST['new_password'];
+    $confirm_password = $_POST['confirm_password'];
+    $redirect = $_POST['redirect'] ?? 'panel';
+
+    // Verificar la contraseña actual
+    $sql_check_password = "SELECT clave FROM usuarios WHERE dni = :dni";
+    $stmt_check_password = $con->prepare($sql_check_password);
+    $stmt_check_password->bindParam(':dni', $id_usuario);
+    $stmt_check_password->execute();
+    $usuario = $stmt_check_password->fetch(PDO::FETCH_ASSOC);
+
+    if (!$usuario || !password_verify($current_password, $usuario['clave'])) {
+        $_SESSION['error'] = "La contraseña actual es incorrecta.";
+        $redirectUrl = ($redirect === 'admin') ? '../admin/adminUsuarios.php' : '../views/user/panel.php';
+        header('Location: ' . $redirectUrl);
+        exit();
+    }
+
+    
+
+    if($new_password !== $confirm_password){
+        $_SESSION['error'] = "Las contraseñas no coinciden.";
+        $redirectUrl = ($redirect === 'admin') ? '../admin/adminUsuarios.php' : '../views/user/panel.php';
+        header('Location: ' . $redirectUrl);
+        exit();
+    }
+
+    if(strlen($_POST['new_password']) < 6){
+        $_SESSION['error'] = "La contraseña debe tener al menos 6 caracteres.";
+        $redirectUrl = ($redirect === 'admin') ? '../admin/adminUsuarios.php' : '../views/user/panel.php';
+        header('Location: ' . $redirectUrl);
+        exit();
+    }
+
+    $new_password = password_hash($new_password, PASSWORD_BCRYPT);
+
+    
+    try {
+        $sql_update_password = "UPDATE usuarios SET clave = :new_password WHERE dni = :dni";
+        $stmt_update_password = $con->prepare($sql_update_password);
+        $stmt_update_password->bindParam(':new_password', $new_password);
+        $stmt_update_password->bindParam(':dni', $id_usuario);
+        $stmt_update_password->execute();
+        
+        $_SESSION['success'] = "Contraseña actualizada correctamente.";
+        $redirectUrl = ($redirect === 'admin') ? '../admin/adminUsuarios.php' : '../views/user/panel.php';
+        header('Location: ' . $redirectUrl);
+        exit();
+        
+    } catch (PDOException $e) {
+        $_SESSION['error'] = "Error al actualizar la contraseña: " . $e->getMessage();
+        $redirectUrl = ($redirect === 'admin') ? '../admin/adminUsuarios.php' : '../views/user/panel.php';
+        header('Location: ' . $redirectUrl);
         exit();
     }
 }
