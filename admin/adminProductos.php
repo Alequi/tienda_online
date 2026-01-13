@@ -252,48 +252,95 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
         </div>
       </div>
 
-      <!-- Formulario Editar categoría oculto -->
+      <!-- Formulario Editar producto oculto -->
       <div class="row mt-4" id="datos" style="display: none;">
         <div class="col-12">
           <div class="card border-warning shadow-sm">
             <div class="card-header bg-warning bg-opacity-10 border-bottom border-warning">
               <div class="d-flex justify-content-between align-items-center">
                 <h5 class="card-title mb-0 fw-bold">
-                  <i class="bi bi-pencil-square text-warning"></i> Editar categoría
+                  <i class="bi bi-pencil-square text-warning"></i> Editar producto
                 </h5>
                 <button type="button" class="btn-close" onclick="document.getElementById('datos').style.display='none';" aria-label="Cerrar"></button>
               </div>
             </div>
             <div class="card-body">
-              <form action="../actions/categorias_action.php?action=edit" method="POST">
+              <form action="../actions/products_action.php?action=edit" method="POST" enctype="multipart/form-data">
                 <input type="hidden" id="editCodigo" name="codigo">
 
                 <div class="row">
                   <div class="col-md-6 mb-3">
-                    <label for="editNombreCategoria" class="form-label fw-semibold">
-                      <i class="bi bi-tag"></i> Nombre de la Categoría
+                    <label for="editNombre" class="form-label fw-semibold">
+                      <i class="bi bi-tag"></i> Nombre del Producto
                     </label>
-                    <input type="text" class="form-control" id="editNombreCategoria" name="nombreCategoria" required>
+                    <input type="text" class="form-control" id="editNombre" name="nombre" required>
                   </div>
 
                   <div class="col-md-6 mb-3">
-                    <label for="editActivoCategoria" class="form-label fw-semibold">
-                      <i class="bi bi-toggle-on"></i> Estado
+                    <label for="editCategoria" class="form-label fw-semibold">
+                      <i class="bi bi-folder"></i> Categoría
                     </label>
-                    <div class="form-check form-switch mt-2">
-                      <input class="form-check-input" type="checkbox" role="switch" id="editActivoCategoria" name="activoCategoria">
-                      <label class="form-check-label" for="editActivoCategoria">
-                        Categoría activa
-                      </label>
-                    </div>
+                    <select class="form-select" id="editCategoria" name="categoria" required>
+                      <option value="">Seleccionar categoría</option>
+                      <?php foreach ($total_categorias as $categoria): ?>
+                        <option value="<?php echo htmlspecialchars($categoria->codigo); ?>">
+                          <?php echo htmlspecialchars($categoria->nombre); ?>
+                        </option>
+                      <?php endforeach; ?>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-4 mb-3">
+                    <label for="editPrecio" class="form-label fw-semibold">
+                      <i class="bi bi-currency-euro"></i> Precio
+                    </label>
+                    <input type="number" step="0.01" class="form-control" id="editPrecio" name="precio" required>
+                  </div>
+
+                  <div class="col-md-4 mb-3">
+                    <label for="editPrecioAnterior" class="form-label fw-semibold">
+                      <i class="bi bi-currency-euro"></i> Precio Anterior
+                    </label>
+                    <input type="number" step="0.01" class="form-control" id="editPrecioAnterior" name="precio_anterior">
+                  </div>
+
+                  <div class="col-md-4 mb-3">
+                    <label for="editStock" class="form-label fw-semibold">
+                      <i class="bi bi-box"></i> Stock
+                    </label>
+                    <input type="number" class="form-control" id="editStock" name="stock" required>
                   </div>
                 </div>
 
                 <div class="mb-3">
-                  <label for="editDescripcionCategoria" class="form-label fw-semibold">
+                  <label for="editDescripcion" class="form-label fw-semibold">
                     <i class="bi bi-text-paragraph"></i> Descripción
                   </label>
-                  <textarea class="form-control" id="editDescripcionCategoria" name="descripcionCategoria" rows="3" placeholder="Descripción opcional de la categoría"></textarea>
+                  <textarea class="form-control" id="editDescripcion" name="descripcion" rows="3" placeholder="Descripción del producto"></textarea>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-8 mb-3">
+                    <label for="editImagen" class="form-label fw-semibold">
+                      <i class="bi bi-image"></i> Imagen
+                    </label>
+                    <input type="file" class="form-control" id="editImagen" name="imagen" accept="image/*">
+                    <small class="text-muted" id="imagenActual"></small>
+                  </div>
+
+                  <div class="col-md-4 mb-3">
+                    <label for="editActivo" class="form-label fw-semibold">
+                      <i class="bi bi-toggle-on"></i> Estado
+                    </label>
+                    <div class="form-check form-switch mt-2">
+                      <input class="form-check-input" type="checkbox" role="switch" id="editActivo" name="activo">
+                      <label class="form-check-label" for="editActivo">
+                        Producto activo
+                      </label>
+                    </div>
+                  </div>
                 </div>
 
                 <div class="d-flex gap-2 justify-content-end">
@@ -313,37 +360,73 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
     </div>
   </main>
 
-  <!-- Modal Crear Categoría -->
-  <div class="modal fade" id="crearCategoriaModal" tabindex="-1" aria-labelledby="crearCategoriaModalLabel" aria-hidden="true">
-    <div class="modal-dialog border-warning shadow-sm">
+  <!-- Modal Crear Producto -->
+  <div class="modal fade" id="crearProductoModal" tabindex="-1" aria-labelledby="crearProductoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg border-warning shadow-sm">
       <div class="modal-content border-warning shadow-sm">
         <div class="modal-header bg-primary bg-opacity-10 border-bottom border-primary">
-          <h5 class="modal-title fw-semibold" id="crearCategoriaModalLabel">Crear nueva categoría</h5>
+          <h5 class="modal-title fw-semibold" id="crearProductoModalLabel">Crear nuevo producto</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
-        <form action="../actions/categorias_action.php" method="POST">
+        <form action="../actions/products_action.php" method="POST" enctype="multipart/form-data">
           <div class="modal-body">
-            <div class="mb-3">
-              <label for="nombreCategoria" class="form-label"><i class="bi bi-tag"></i>Nombre de la Categoría</label>
-              <input type="text" class="form-control" id="nombreCategoria" name="nombreCategoria" required>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="nombre" class="form-label"><i class="bi bi-tag"></i> Nombre del Producto</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="categoria" class="form-label"><i class="bi bi-folder"></i> Categoría</label>
+                <select class="form-select" id="categoria" name="categoria" required>
+                  <option value="">Seleccionar categoría</option>
+                  <?php foreach ($total_categorias as $categoria): ?>
+                    <option value="<?php echo htmlspecialchars($categoria->codigo); ?>">
+                      <?php echo htmlspecialchars($categoria->nombre); ?>
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
             </div>
-            <div class="mb-3">
-              <label for="descripcionCategoria" class="form-label"><i class="bi bi-text-paragraph"></i> Descripción</label>
-              <textarea class="form-control" id="descripcionCategoria" name="descripcionCategoria" rows="3"></textarea>
+            
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label for="precio" class="form-label"><i class="bi bi-currency-euro"></i> Precio</label>
+                <input type="number" step="0.01" class="form-control" id="precio" name="precio" required>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="precio_anterior" class="form-label"><i class="bi bi-currency-euro"></i> Precio Anterior</label>
+                <input type="number" step="0.01" class="form-control" id="precio_anterior" name="precio_anterior">
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="stock" class="form-label"><i class="bi bi-box"></i> Stock</label>
+                <input type="number" class="form-control" id="stock" name="stock" required>
+              </div>
             </div>
+
             <div class="mb-3">
-              <label class="form-label"><i class="bi bi-toggle-on"></i> Estado</label>
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="activoCategoria" name="activoCategoria" checked>
-                <label class="form-check-label" for="activoCategoria">
-                  Categoría activa
-                </label>
+              <label for="descripcion" class="form-label"><i class="bi bi-text-paragraph"></i> Descripción</label>
+              <textarea class="form-control" id="descripcion" name="descripcion" rows="3"></textarea>
+            </div>
+
+            <div class="row">
+              <div class="col-md-8 mb-3">
+                <label for="imagen" class="form-label"><i class="bi bi-image"></i> Imagen</label>
+                <input type="file" class="form-control" id="imagen" name="imagen" accept="image/*">
+              </div>
+              <div class="col-md-4 mb-3">
+                <label class="form-label"><i class="bi bi-toggle-on"></i> Estado</label>
+                <div class="form-check form-switch mt-2">
+                  <input class="form-check-input" type="checkbox" role="switch" id="activo" name="activo" checked>
+                  <label class="form-check-label" for="activo">
+                    Producto activo
+                  </label>
+                </div>
               </div>
             </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Crear </button>
+            <button type="submit" class="btn btn-primary">Crear</button>
           </div>
         </form>
       </div>
@@ -356,8 +439,8 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
       <p class="mb-0">© 2026 Mystic Waves - Panel de Administración</p>
     </div>
   </footer>
-  <script src="../public/assets/lib/scripts/categorie.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../public/assets/lib/scripts/product.js"></script>
 </body>
 
 </html>
