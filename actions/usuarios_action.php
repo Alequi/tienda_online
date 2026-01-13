@@ -18,9 +18,20 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['act
     $direccion = $_POST['direccion'] ?? '';
     $localidad = $_POST['localidad'] ?? '';
     $provincia = $_POST['provincia'] ?? '';
-    $rol = $_POST['rol'] ?? 'registrado';
     $activo = isset($_POST['activoUsuario']) ? 1 : 0;
     $redirect = $_POST['redirect'] ?? 'admin';
+
+    // Si no se proporciona rol, mantener el actual
+    if (!isset($_POST['rol'])) {
+        $sql_get_rol = "SELECT rol FROM usuarios WHERE dni = :dni";
+        $stmt_get_rol = $con->prepare($sql_get_rol);
+        $stmt_get_rol->bindParam(':dni', $id_usuario);
+        $stmt_get_rol->execute();
+        $usuario_actual = $stmt_get_rol->fetch(PDO::FETCH_ASSOC);
+        $rol = $usuario_actual['rol'];
+    } else {
+        $rol = $_POST['rol'];
+    }
 
     $validarMail = validarMailCompleto($email);
     if(!$validarMail){
