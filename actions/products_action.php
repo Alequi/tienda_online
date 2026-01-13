@@ -125,10 +125,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action'])) {
         header('Location: ../admin/adminProductos.php');
         exit();
     }
-
-    $_SESSION['success'] = "Producto creado correctamente.";
-    header('Location: ../admin/adminProductos.php');
-    exit();
 }
 
 
