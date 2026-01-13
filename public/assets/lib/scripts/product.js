@@ -27,10 +27,17 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('editCategoria').value = categoria;
             
             // Mostrar imagen actual
+            const previewContainer = document.getElementById('previewImageContainer');
+            const previewImage = document.getElementById('previewImage');
+            const imagenActual = document.getElementById('imagenActual');
+            
             if (imagen) {
-                document.getElementById('imagenActual').textContent = 'Imagen actual: ' + imagen;
+                imagenActual.textContent = 'Imagen actual: ' + imagen;
+                previewImage.src = '../public/assets/img/' + imagen;
+                previewContainer.style.display = 'block';
             } else {
-                document.getElementById('imagenActual').textContent = '';
+                imagenActual.textContent = '';
+                previewContainer.style.display = 'none';
             }
 
             // Mostrar el formulario de edición

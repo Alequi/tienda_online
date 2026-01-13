@@ -4,6 +4,7 @@ require_once __DIR__ . '/../helpers/auth.php';
 require_once __DIR__ . '/../actions/products_action.php';
 require_once __DIR__ . '/../actions/categorias_action.php';
 
+
 // Verificar que el usuario esté logeado y sea administrador
 if (!isLoggedIn()) {
   header("Location: ../views/auth/login.php");
@@ -11,6 +12,19 @@ if (!isLoggedIn()) {
 }
 
 requireAdmin();
+
+$error = null;
+$success = null;
+
+if(isset($_SESSION['error'])){
+    $error = $_SESSION['error'];
+    unset($_SESSION['error']);
+}
+
+if(isset($_SESSION['success'])){
+    $success = $_SESSION['success'];
+    unset($_SESSION['success']);
+}
 
 
 $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
@@ -84,6 +98,21 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
           <p class="text-muted">Crea, edita y elimina productos para tu tienda</p>
         </div>
       </div>
+
+       <!-- Mensajes de error/éxito -->
+      <?php if($error): ?>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <i class="bi bi-exclamation-triangle"></i> <?php echo htmlspecialchars($error); ?>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      <?php endif; ?>
+      
+      <?php if($success): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <i class="bi bi-check-circle"></i> <?php echo htmlspecialchars($success); ?>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      <?php endif; ?>
 
       <!-- Tabla de productos -->
       <div class="row">
@@ -327,7 +356,10 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
                       <i class="bi bi-image"></i> Imagen
                     </label>
                     <input type="file" class="form-control" id="editImagen" name="imagen" accept="image/*">
-                    <small class="text-muted" id="imagenActual"></small>
+                    <div class="mt-2" id="previewImageContainer" style="display: none;">
+                      <small class="text-muted d-block mb-1" id="imagenActual"></small>
+                      <img id="previewImage" src="" alt="Vista previa" class="img-thumbnail" style="max-width: 200px; height: auto;">
+                    </div>
                   </div>
 
                   <div class="col-md-4 mb-3">
@@ -371,11 +403,16 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
         <form action="../actions/products_action.php" method="POST" enctype="multipart/form-data">
           <div class="modal-body">
             <div class="row">
-              <div class="col-md-6 mb-3">
+                        <div class="col-md-2 mb-3">
+                <label for="codigo" class="form-label"><i class="bi bi-123"></i> Codigo</label>
+                <input type="text" class="form-control" id="codigo" name="codigo" required>
+              </div>
+
+              <div class="col-md-5 mb-3">
                 <label for="nombre" class="form-label"><i class="bi bi-tag"></i> Nombre del Producto</label>
                 <input type="text" class="form-control" id="nombre" name="nombre" required>
               </div>
-              <div class="col-md-6 mb-3">
+              <div class="col-md-5 mb-3">
                 <label for="categoria" class="form-label"><i class="bi bi-folder"></i> Categoría</label>
                 <select class="form-select" id="categoria" name="categoria" required>
                   <option value="">Seleccionar categoría</option>

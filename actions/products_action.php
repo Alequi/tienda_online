@@ -39,6 +39,98 @@ $total_categorias = $stmt_categorias->fetchAll(PDO::FETCH_OBJ);
 
 $suma_categorias = count($total_categorias);
 
+// Alta nuevo producto
+
+if($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action'])) {
+    $codigo = $_POST['codigo'];
+    $nombre = $_POST['nombre'];
+    $categoria = $_POST['categoria'];
+    $precio = $_POST['precio'];
+    $precio_anterior = $_POST['precio_anterior'] ?? null;
+    $stock = $_POST['stock'] ?? null;
+    $descripcion = $_POST['descripcion'] ?? '';
+    $activo = isset($_POST['activo']) ? 1 : 0;
+    $imagen = null;
+
+
+    //Subir imagen
+    if(isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+        $nombreArchivo = $_FILES['imagen']['name'];
+        $tipoArchivo = $_FILES['imagen']['type'];
+        $tamanioArchivo = $_FILES['imagen']['size'];
+        $rutaTemporal = $_FILES['imagen']['tmp_name'];
+        $carpetaDestino = __DIR__ . '/../public/assets/img/';
+
+        // Validaciones de la imagen
+
+        // Verificar que el archivo es una imagen válida
+        $infoImagen = getimagesize($rutaTemporal);
+        if($infoImagen === false) {
+            $_SESSION['error'] = "El archivo subido no es una imagen válida.";
+            header('Location: ../admin/adminProductos.php');
+            exit();
+        }
+        // Verificar tamaño máximo (10MB)
+        if ($tamanioArchivo > 10 * 1024 * 1024) { // 10MB
+            $_SESSION['error'] = "El tamaño de la imagen no debe exceder los 10MB.";
+            header('Location: ../admin/adminProductos.php');
+            exit();
+        }
+        // Verificar dimensiones máximas (1024x1024 píxeles)
+        $ancho = $infoImagen[0];
+        $alto = $infoImagen[1];
+        $mime = $infoImagen['mime'];
+
+        if ($ancho > 1024 || $alto > 1024) {
+            $_SESSION['error'] = "Las dimensiones de la imagen no deben exceder los 1024x1024 píxeles.";
+            header('Location: ../admin/adminProductos.php');
+            exit();
+        }
+        // Verificar tipo de archivo permitido
+        $mimesPermitidos = ['image/jpeg', 'image/png', 'image/gif'];
+        if (!in_array($mime, $mimesPermitidos)) {
+            $_SESSION['error'] = "Solo se permiten imágenes en formato JPEG, PNG o GIF.";
+            header('Location: ../admin/adminProductos.php');
+            exit();
+        }
+
+
+
+        // Mover el archivo a la carpeta destino
+        move_uploaded_file($rutaTemporal, $carpetaDestino . $nombreArchivo);
+        $imagen = $nombreArchivo;
+    }
+
+    try {
+        $sql_insert = "INSERT INTO articulos (codigo, nombre, descripcion, categoria, stock, precio, imagen, precio_anterior, activo) 
+                       VALUES (:codigo, :nombre, :descripcion, :categoria, :stock, :precio, :imagen, :precio_anterior, :activo)";
+        $stmt_insert = $con->prepare($sql_insert);
+        $stmt_insert->bindParam(':codigo', $codigo);
+        $stmt_insert->bindParam(':nombre', $nombre);
+        $stmt_insert->bindParam(':descripcion', $descripcion);
+        $stmt_insert->bindParam(':categoria', $categoria);
+        $stmt_insert->bindParam(':stock', $stock);
+        $stmt_insert->bindParam(':precio', $precio);
+        $stmt_insert->bindParam(':imagen', $imagen);
+        $stmt_insert->bindParam(':precio_anterior', $precio_anterior);
+        $stmt_insert->bindParam(':activo', $activo);
+        $stmt_insert->execute();
+        
+        $_SESSION['success'] = "Producto creado correctamente.";
+        header('Location: ../admin/adminProductos.php');
+        exit();
+        
+    } catch (PDOException $e) {
+        $_SESSION['error'] = "Error al crear el producto: " . $e->getMessage();
+        header('Location: ../admin/adminProductos.php');
+        exit();
+    }
+
+    $_SESSION['success'] = "Producto creado correctamente.";
+    header('Location: ../admin/adminProductos.php');
+    exit();
+}
+
 
 
 
