@@ -3,6 +3,7 @@ session_start();
 require_once __DIR__ . '/../../../helpers/auth.php';
 require_once __DIR__ . '/../../../actions/products_action.php';
 require_once __DIR__ . '/../../../helpers/cart_helper.php';
+require_once __DIR__ . '/../../../actions/categorias_action.php';
 if(!isset($_GET['categoria'])) {
     header("Location: ../../../index.php");
     exit();

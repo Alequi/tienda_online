@@ -1,8 +1,19 @@
 <?php
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 require_once __DIR__ . '/../config/conexion.php';
 
+
 $con = conectar();
+
+$sql_productos_index = "SELECT * FROM articulos WHERE activo = 1 order by fecha_creacion DESC LIMIT 10";
+$stmt_productos_index = $con->prepare($sql_productos_index);
+$stmt_productos_index->execute();
+$productos_index = $stmt_productos_index->fetchAll(PDO::FETCH_OBJ);
+
 
 // Obtener productos destacados (los 8 primeros activos)
 

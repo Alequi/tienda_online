@@ -190,7 +190,7 @@ require_once "actions/products_action.php";
 
  <div class="container-xxl mt-3 mb-5">
     <div class="row g-4">
-      <?php foreach ($productos as $producto): ?>
+      <?php foreach ($productos_index as $producto): ?>
         <div class="col-6 col-md-4 col-lg-3">
           <div class="card h-100">
             <img src="public/assets/img/<?php echo $producto->imagen; ?>" class="card-img-top" alt="Producto <?php echo $producto->codigo; ?>">

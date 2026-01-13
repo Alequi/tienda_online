@@ -68,4 +68,33 @@ if(isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id']))
 }
 
 $suma_categorias = count($categorias);
+
+// Obtener datos de categoría específica y sus productos
+if (isset($_GET['categoria'])) {
+    $nombre_categoria = $_GET['categoria'];
+    
+    // Buscar la categoría por nombre (case-insensitive)
+    $sql_cat = "SELECT * FROM categoria WHERE LOWER(nombre) = LOWER(:nombre) AND activo = 1";
+    $stmt_cat = $con->prepare($sql_cat);
+    $stmt_cat->bindParam(':nombre', $nombre_categoria);
+    $stmt_cat->execute();
+    $categoria_actual = $stmt_cat->fetch(PDO::FETCH_OBJ);
+    
+    if ($categoria_actual) {
+        $titulo_categoria = $categoria_actual->nombre;
+        $descripcion_categoria = $categoria_actual->descripcion ?? 'Descubre nuestra selección de productos';
+        
+        // Obtener productos de esta categoría
+        $sql_productos_cat = "SELECT * FROM articulos WHERE categoria = :categoria AND activo = 1";
+        $stmt_productos_cat = $con->prepare($sql_productos_cat);
+        $stmt_productos_cat->bindParam(':categoria', $categoria_actual->codigo);
+        $stmt_productos_cat->execute();
+        $productos_categoria = $stmt_productos_cat->fetchAll(PDO::FETCH_OBJ);
+    } else {
+        // Categoría no encontrada
+        $titulo_categoria = 'Categoría no encontrada';
+        $descripcion_categoria = 'La categoría que buscas no existe o no está disponible.';
+        $productos_categoria = [];
+    }
+}
 ?>
