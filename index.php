@@ -2,6 +2,8 @@
 session_start();
 require_once "helpers/auth.php";
 require_once "actions/products_action.php";
+require_once "actions/categorias_action.php";
+
 
 ?>
 
@@ -47,41 +49,8 @@ require_once "actions/products_action.php";
     <div class="row g-3">
 
       <!-- CATEGORIES (desktop) -->
-      <div class="col-lg-3">
-        <button class="btn btn-primary w-100 d-flex align-items-center justify-content-between px-3"
-          style="height:56px;"
-          data-bs-toggle="collapse" data-bs-target="#verticalCats"
-          aria-expanded="false" aria-controls="verticalCats" type="button">
-          <span class="fw-semibold">Categorías</span>
-          <i class="bi bi-chevron-down"></i>
-        </button>
-
-        <div class="collapse d-lg-block border border-top-0" id="verticalCats">
-          <div class="list-group list-group-flush" style="max-height: 410px; overflow:auto;">
-            <a href="views/tienda/categorias/categoria.php?categoria=novedades" class="list-group-item list-group-item-action">Novedades</a>
-            <a href="views/tienda/categorias/categoria.php?categoria=anillos" class="list-group-item list-group-item-action" active primary>Anillos</a>
-            <a href="views/tienda/categorias/categoria.php?categoria=colgantes" class="list-group-item list-group-item-action">Colgantes</a>
-            <a href="views/tienda/categorias/categoria.php?categoria=pulseras" class="list-group-item list-group-item-action">Pulseras</a>
-            <a href="views/tienda/categorias/categoria.php?categoria=pendientes" class="list-group-item list-group-item-action">Pendientes</a>
-            
-
-            <!-- Dropdown simple dentro de la lista -->
-            <div class="list-group-item p-0">
-              <button class="btn w-100 text-start d-flex justify-content-between align-items-center px-3 py-2"
-                data-bs-toggle="collapse" data-bs-target="#cat-material" type="button">
-                Material <i class="bi bi-chevron-down"></i>
-              </button>
-              <div class="collapse" id="cat-material">
-                <a class="list-group-item list-group-item-action ps-4" href="#">Plata 925</a>
-                <a class="list-group-item list-group-item-action ps-4" href="#">Acero inoxidable</a>
-                <a class="list-group-item list-group-item-action ps-4" href="#">Baño de oro</a>
-              </div>
-            </div>
-
-            <a href="views/tienda/categorias/categoria.php?categoria=regalos" class="list-group-item list-group-item-action">Regalos</a>
-          </div>
-        </div>
-      </div>
+      
+      <?php include_once 'public/partials/categories_navbar.php'; ?>
 
       <!-- MAIN (navbar + carousel) -->
       <div class="col-lg-9">
