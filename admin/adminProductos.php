@@ -61,8 +61,8 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
 
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link" href="javascript:history.back()">
-              <i class="bi bi-arrow-left-circle"></i> Volver
+            <a class="nav-link" href="adminPanel.php">
+              <i class="bi bi-arrow-left-circle"></i> Volver al panel
             </a>
           </li>
           <li class="nav-item">
@@ -94,7 +94,7 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
       <!-- Header -->
       <div class="row mb-4">
         <div class="col-12">
-          <h1 class="display-5 fw-bold"><i class="bi bi-box-seam text-primary"></i> Gestion de productos</h1>
+          <h1 class="display-5 fw-bold"><i class="bi bi-box-seam text-primary"></i> Gestión de productos</h1>
           <p class="text-muted">Crea, edita y elimina productos para tu tienda</p>
         </div>
       </div>

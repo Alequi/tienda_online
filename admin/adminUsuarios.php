@@ -58,8 +58,8 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
   
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link" href="javascript:history.back()">
-              <i class="bi bi-arrow-left-circle"></i> Volver
+            <a class="nav-link" href="adminPanel.php">
+              <i class="bi bi-arrow-left-circle"></i> Volver al panel
             </a>
           </li>
           <li class="nav-item">

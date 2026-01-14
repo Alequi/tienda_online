@@ -196,7 +196,12 @@ require_once "actions/products_action.php";
             <img src="public/assets/img/<?php echo $producto->imagen; ?>" class="card-img-top" alt="Producto <?php echo $producto->codigo; ?>">
             <div class="card-body d-flex flex-column">
               <h5 class="card-title"> <?php echo $producto->nombre; ?></h5>
-              <p class="card-text text-muted mb-4">€<?php echo number_format($producto->precio, 2); ?></p>
+              <p class="card-text text-muted mb-4">
+                <span class="fw-bold text-primary fs-5"><?php echo number_format($producto->precio, 2); ?>€</span>
+                <?php if ($producto->precio_anterior && $producto->precio_anterior > 0): ?>
+                  <s class="ms-2"><?php echo number_format($producto->precio_anterior, 2); ?>€</s>
+                    <?php endif; ?>
+              </p>
               <a href="views/tienda/producto.php?codigo=<?php echo $producto->codigo; ?>" class="btn btn-primary mt-auto">Ver más</a>
 
             </div>
