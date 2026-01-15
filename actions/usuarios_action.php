@@ -225,5 +225,14 @@ $stmt_usuarios->execute();
 $usuarios = $stmt_usuarios->fetchAll(PDO::FETCH_OBJ);
 
 $cantidad_usuarios = count($usuarios);
+
+// Obtener el usuario actual (para páginas de checkout/perfil)
+if (isset($_SESSION['user_id'])) {
+    $sql_usuario_actual = "SELECT * FROM usuarios WHERE dni = :dni";
+    $stmt_usuario_actual = $con->prepare($sql_usuario_actual);
+    $stmt_usuario_actual->bindParam(':dni', $_SESSION['user_id']);
+    $stmt_usuario_actual->execute();
+    $usuario_actual = $stmt_usuario_actual->fetch(PDO::FETCH_OBJ);
+}
 ?>
 
