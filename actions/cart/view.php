@@ -4,6 +4,7 @@
 
 $cart_items = [];
 $total_price = 0.0;
+$envio_gratis = 50.0;
 
 
 if (isLoggedIn()) {
@@ -33,6 +34,15 @@ if (isLoggedIn()) {
             ];
             
             $total_price += $subtotal;
+
+            if ($total_price >= $envio_gratis) {
+                $envio = 0.0;
+            } else {
+                $envio = 5.0;
+        }
+
+            $total_con_envio = $total_price + $envio;
+
         }
         
     } catch (PDOException $e) {
