@@ -227,7 +227,7 @@ require_once __DIR__ . '/../../actions/cart/view.php';
                 </div>
               <?php endif; ?>
 
-              <a href="#" class="btn btn-primary w-100 mb-2">
+              <a href="checkout_shipping.php" class="btn btn-primary w-100 mb-2">
                 <i class="bi bi-credit-card me-2"></i>Proceder al Pago
               </a>
               <a href="../../index.php" class="btn btn-outline-secondary w-100">
