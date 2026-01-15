@@ -175,7 +175,7 @@ require_once __DIR__ . '/../../actions/usuarios_action.php';
                   </div>
                 </label>
               </div>
-              <textarea name="comentarios" class="form-control d-none" rows="4"></textarea>
+                <textarea name="comentarios" class="form-control d-none" rows="4"></textarea>
             </form>
           </div>
         </div>
