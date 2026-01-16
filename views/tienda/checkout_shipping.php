@@ -146,7 +146,7 @@ require_once __DIR__ . '/../../actions/usuarios_action.php';
             <h5 class="mb-0"><i class="bi bi-truck"></i> Método de Envío</h5>
           </div>
           <div class="card-body">
-            <form method="POST" action="checkout_payment.php">
+            <form method="POST" action="view.php">
               <div class="form-check mb-3 p-3 bg-light rounded">
                 <input class="form-check-input" type="radio" name="metodoEnvio" id="envioEstandar" value="estandar" data-cost="<?php echo ($total_price > 50) ? '0' : '4.90'; ?>" checked>
                 <label class="form-check-label w-100" for="envioEstandar">
