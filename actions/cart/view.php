@@ -38,7 +38,7 @@ if (isLoggedIn()) {
             if ($total_price >= $envio_gratis) {
                 $envio = 0.0;
             } else {
-                $envio = 5.0;
+                $envio = 4.95;
         }
 
             $total_con_envio = $total_price + $envio;
