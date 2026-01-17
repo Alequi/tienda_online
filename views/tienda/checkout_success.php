@@ -1,3 +1,26 @@
+<?php
+
+session_start();
+require_once __DIR__ . '/../../config/conexion.php';
+require_once __DIR__ . '/../../helpers/auth.php';
+
+// Verificar que el usuario esté logeado
+if (!isLoggedIn()) {
+    header('Location: ../auth/login.php');
+    exit();
+}
+
+require_once __DIR__ . '/../../actions/pedidos_action.php';
+
+// Verificar que existe un pedido
+if (!$pedido || empty($lineas_pedido)) {
+    header('Location: cart.php');
+    exit();
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -59,31 +82,23 @@
                             </div>
 
                             <h1 class="h2 mb-3">¡Pedido Confirmado!</h1>
-                            <p class="text-muted mb-4">Gracias por tu compra. Tu pedido ha sido procesado exitosamente.</p>
+                            <p class="text-muted mb-4">Gracias por tu compra <?php echo htmlspecialchars($_SESSION['user_name']); ?>. Tu pedido ha sido procesado exitosamente.</p>
 
                             <div class="alert alert-light border mb-4">
                                 <p class="mb-1 text-muted small">Número de Pedido</p>
-                                <h4 class="mb-0 fw-bold">MW-20260117-2435</h4>
+                                <h4 class="mb-0 fw-bold"><?php echo htmlspecialchars($ultimo_pedido_id); ?></h4>
                             </div>
 
                             <div class="row text-start mb-4">
                                 <div class="col-6 mb-3">
                                     <p class="mb-1 text-muted small">Fecha</p>
-                                    <p class="mb-0 fw-semibold">17/01/2026</p>
+                                    <p class="mb-0 fw-semibold"><?php echo $pedido ? date('d/m/Y', strtotime($pedido['fecha'])) : date('d/m/Y'); ?></p>
                                 </div>
                                 <div class="col-6 mb-3">
                                     <p class="mb-1 text-muted small">Estado</p>
-                                    <p class="mb-0"><span class="badge bg-success">Confirmado</span></p>
+                                    <p class="mb-0"><span class="badge bg-success"><?php echo $pedido ? ucfirst($pedido['estado']) : 'Confirmado'; ?></span></p>
                                 </div>
-                                <div class="col-12">
-                                    <p class="mb-1 text-muted small">Email de Confirmación</p>
-                                    <p class="mb-0 fw-semibold">usuario@email.com</p>
-                                </div>
-                            </div>
-
-                            <div class="alert alert-info mb-4">
-                                <i class="bi bi-envelope-check me-2"></i>
-                                Recibirás un correo electrónico con los detalles de tu pedido.
+                        
                             </div>
 
                             <a href="../../index.php" class="btn btn-primary btn-lg px-5">
@@ -105,46 +120,33 @@
                             
                             <!-- Productos -->
                             <div class="mb-3">
+                                <?php foreach ($lineas_pedido as $linea): ?>
                                 <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
-                                    <img src="../../public/assets/img/producto1.jpg" alt="Producto" class="me-3" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                                    <img src="../../public/assets/img/<?php echo htmlspecialchars($linea['imagen_articulo']); ?>" alt="Producto" class="me-3" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
                                     <div class="flex-grow-1">
-                                        <h6 class="mb-1">Anillo de Plata 925</h6>
-                                        <small class="text-muted">Cantidad: 1</small>
+                                        <h6 class="mb-1"><?php echo htmlspecialchars($linea['nombre_articulo']); ?></h6>
+                                        <small class="text-muted">Cantidad: <?php echo htmlspecialchars($linea['cantidad']); ?></small>
                                     </div>
                                     <div class="text-end">
-                                        <p class="mb-0 fw-semibold">€45.00</p>
+                                        <p class="mb-0 fw-semibold">€<?php echo number_format($linea['precio'] * $linea['cantidad'], 2); ?></p>
                                     </div>
                                 </div>
-
-                                <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
-                                    <img src="../../public/assets/img/producto2.jpg" alt="Producto" class="me-3" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-1">Colgante Luna</h6>
-                                        <small class="text-muted">Cantidad: 2</small>
-                                    </div>
-                                    <div class="text-end">
-                                        <p class="mb-0 fw-semibold">€60.00</p>
-                                    </div>
-                                </div>
+                                <?php endforeach; ?>
                             </div>
 
                             <!-- Totales -->
                             <div class="border-top pt-3">
                                 <div class="d-flex justify-content-between mb-2">
                                     <span class="text-muted">Subtotal</span>
-                                    <span class="fw-semibold">€105.00</span>
-                                </div>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span class="text-muted">Envío</span>
-                                    <span class="fw-semibold">€5.00</span>
+                                    <span class="fw-semibold">€<?php echo number_format($subtotal_sin_iva, 2); ?></span>
                                 </div>
                                 <div class="d-flex justify-content-between mb-3 pb-3 border-bottom">
                                     <span class="text-muted">IVA (21%)</span>
-                                    <span class="fw-semibold">€22.05</span>
+                                    <span class="fw-semibold">€<?php echo number_format($iva, 2); ?></span>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <span class="h5 mb-0">Total</span>
-                                    <span class="h5 mb-0 text-primary">€132.05</span>
+                                    <span class="h5 mb-0 text-primary">€<?php echo number_format($total_iva, 2); ?></span>
                                 </div>
                             </div>
 
