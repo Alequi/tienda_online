@@ -3,6 +3,7 @@
 session_start();
 require_once __DIR__ . '/../../config/conexion.php';
 require_once __DIR__ . '/../../helpers/auth.php';
+require_once __DIR__ . '/../../actions/cart/view.php';
 
 // Verificar que el usuario esté logeado
 if (!isLoggedIn()) {
@@ -128,25 +129,31 @@ if (!$pedido || empty($lineas_pedido)) {
                                         <small class="text-muted">Cantidad: <?php echo htmlspecialchars($linea['cantidad']); ?></small>
                                     </div>
                                     <div class="text-end">
-                                        <p class="mb-0 fw-semibold">€<?php echo number_format($linea['precio'] * $linea['cantidad'], 2); ?></p>
+                                        <p class="mb-0 fw-semibold"><?php echo number_format($linea['precio'] * $linea['cantidad'], 2); ?> </p>
                                     </div>
                                 </div>
                                 <?php endforeach; ?>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted"><i class="bi bi-truck"></i> Envío</span>
+                                    <span class="fw-semibold"> <?php if ($envio == 0.0) echo 'Gratis'; else echo number_format($envio, 2) . '€'; ?> </span>
+                                </div>
                             </div>
 
                             <!-- Totales -->
                             <div class="border-top pt-3">
                                 <div class="d-flex justify-content-between mb-2">
                                     <span class="text-muted">Subtotal</span>
-                                    <span class="fw-semibold">€<?php echo number_format($subtotal_sin_iva, 2); ?></span>
+                                    <span class="fw-semibold"><?php echo number_format($subtotal_sin_iva, 2); ?> €</span>
                                 </div>
+                                 
                                 <div class="d-flex justify-content-between mb-3 pb-3 border-bottom">
                                     <span class="text-muted">IVA (21%)</span>
-                                    <span class="fw-semibold">€<?php echo number_format($iva, 2); ?></span>
+                                    <span class="fw-semibold"><?php echo number_format($iva, 2); ?> €</span>
                                 </div>
+                               
                                 <div class="d-flex justify-content-between">
                                     <span class="h5 mb-0">Total</span>
-                                    <span class="h5 mb-0 text-primary">€<?php echo number_format($total_iva, 2); ?></span>
+                                    <span class="h5 mb-0 text-primary"><?php echo number_format($total_iva, 2); ?> €</span>
                                 </div>
                             </div>
 
