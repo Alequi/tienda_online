@@ -7,6 +7,13 @@ require_once __DIR__ . '/../config/conexion.php';
 
 $con = conectar();
 
+//NUMERO TOTAL DE PEDIDOS REALIZADOS
+$stmt = "SELECT p.*, u.nombre FROM pedidos p JOIN usuarios u ON p.dniUsuario = u.dni ORDER BY p.fecha DESC";;
+$total_pedidos = $con->query($stmt)->rowCount();
+$pedidos = $con->query($stmt)->fetchAll(PDO::FETCH_ASSOC);
+
+
+
 //DATOS DE PEDIDO Y USUARIO
 $user_id = $_SESSION['user_id'];
 
@@ -15,9 +22,12 @@ $stmt->bindParam(':dni_usuario', $user_id);
 $stmt->execute();
 $pedido = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$subtotal_sin_iva = $pedido ? $pedido['total'] / 1.21 : 0;
-$iva = $pedido ? $pedido['total'] - $subtotal_sin_iva : 0;
-$total_iva = $pedido ? $pedido['total'] : 0;
+$envio = ($pedido['total'] >= 50.0) ? 0.0 : 4.95;
+$total_con_envio = $pedido['total'];
+$subtotal_sin_iva = $pedido ? $total_con_envio / 1.21 : 0;
+$iva = $pedido ? $total_con_envio - $subtotal_sin_iva : 0;
+$total_iva = $pedido ? $total_con_envio : 0;
+
 
 // Verificar que se encontró un pedido
 if ($pedido) {
@@ -36,3 +46,4 @@ if ($pedido) {
     $ultimo_pedido_id = 'N/A';
     $lineas_pedido = [];
 }
+?>
