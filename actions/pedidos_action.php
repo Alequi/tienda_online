@@ -4,6 +4,14 @@ if(session_status() == PHP_SESSION_NONE){
 }
 
 require_once __DIR__ . '/../config/conexion.php';
+require_once __DIR__ . '/../helpers/auth.php';
+
+
+if (!isLoggedIn() || !isAdmin()) {
+        $_SESSION['error'] = 'No tienes permisos para realizar esta acción';
+        header('Location: ../admin/adminPedidos.php');
+        exit();
+    }
 
 $con = conectar();
 
@@ -11,6 +19,22 @@ $con = conectar();
 $stmt = "SELECT p.*, u.nombre FROM pedidos p JOIN usuarios u ON p.dniUsuario = u.dni ORDER BY p.fecha DESC";;
 $total_pedidos = $con->query($stmt)->rowCount();
 $pedidos = $con->query($stmt)->fetchAll(PDO::FETCH_ASSOC);
+
+//VER DETALLES DE UN PEDIDO
+$stmt_detalles = "SELECT lp.numPedido, lp.cantidad, a.nombre, a.precio 
+                  FROM lineapedido lp 
+                  JOIN articulos a ON lp.codArticulo = a.codigo 
+                  ORDER BY lp.numPedido";
+$lineas_result = $con->query($stmt_detalles)->fetchAll(PDO::FETCH_ASSOC);
+
+$lineas_por_pedido = [];
+foreach ($lineas_result as $linea) {
+    $numPedido = $linea['numPedido'];
+    if (!isset($lineas_por_pedido[$numPedido])) {
+        $lineas_por_pedido[$numPedido] = [];
+    }
+    $lineas_por_pedido[$numPedido][] = $linea;
+}
 
 
 
@@ -45,5 +69,34 @@ if ($pedido) {
     $pedido = null;
     $ultimo_pedido_id = 'N/A';
     $lineas_pedido = [];
+}
+
+// PROCESAR ACTUALIZACIÓN DE ESTADO DEL PEDIDO (ADMIN)
+if (isset($_GET['action']) && $_GET['action'] === 'updateEstado' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+    
+    $idPedido = $_POST['idPedido'] ?? null;
+    $estadoPedido = $_POST['estadoPedido'] ?? null;
+    
+    if ($idPedido && $estadoPedido) {
+        try {
+            $stmt_update = $con->prepare("UPDATE pedidos SET estado = :estado WHERE idPedido = :id_pedido");
+            $stmt_update->bindParam(':estado', $estadoPedido);
+            $stmt_update->bindParam(':id_pedido', $idPedido);
+            
+            if ($stmt_update->execute()) {
+                $_SESSION['success'] = 'Estado del pedido actualizado correctamente';
+            } else {
+                $_SESSION['error'] = 'Error al actualizar el estado del pedido';
+            }
+        } catch (PDOException $e) {
+            $_SESSION['error'] = 'Error: ' . $e->getMessage();
+        }
+    } else {
+        $_SESSION['error'] = 'Datos incompletos para actualizar el pedido';
+    }
+    
+    header('Location: ../admin/adminPedidos.php');
+    exit();
 }
 ?>
