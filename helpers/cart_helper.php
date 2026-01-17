@@ -35,3 +35,33 @@ function getCartCount() {
     
     return $cart_count;
 }
+
+// Obtiene los items del carrito
+
+function  getCartItems() {
+    $items = [];
+    
+    if (isLoggedIn()) {
+        // Usuario logeado: obtener items desde BD
+        $dni_usuario = $_SESSION['user_id'];
+        try {
+            require_once __DIR__ . '/../config/conexion.php';
+            $con = conectar();
+            $stmt = $con->prepare("SELECT codigo_producto, cantidad FROM carrito WHERE dni_usuario = :dni");
+            $stmt->bindParam(':dni', $dni_usuario);
+            $stmt->execute();
+            $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            $items = [];
+        }
+    } else {
+        // Usuario no logeado: obtener items desde sesión
+        if (isset($_SESSION['cart'])) {
+            foreach ($_SESSION['cart'] as $product_id => $qty) {
+                $items[] = ['codigo_producto' => $product_id, 'cantidad' => $qty];
+            }
+        }
+    }
+    
+    return $items;
+}
