@@ -3,21 +3,42 @@ if(session_status() == PHP_SESSION_NONE){
     session_start();
 }
 
+// Evitar cualquier output antes del JSON
+ob_start();
+
 require_once __DIR__ . '/../../config/conexion.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../../helpers/auth.php';
 require_once __DIR__ .' /../cart/view.php';
-require_once __DIR__ . '/../cart/cart_helper.php';
+require_once __DIR__ . '/../../helpers/cart_helper.php';
 
+// Limpiar cualquier output generado
+ob_end_clean();
+
+// Asegurar que la respuesta sea JSON
+header('Content-Type: application/json');
 
 $con = conectar();
 
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = json_decode(file_get_contents('php://input'), true);
-    $payment_method_id = $data['payment_method_id'] ?? '';
-    $total_amount = $total_con_envio;
-    
-    if(empty($payment_method_id)) {
-        echo json_encode(['success' => false, 'error' => 'Método de pago inválido']);
+    try {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $payment_method_id = $data['payment_method_id'] ?? '';
+        
+        if(empty($payment_method_id)) {
+            echo json_encode(['success' => false, 'error' => 'Método de pago inválido']);
+            exit();
+        }
+        
+        // Validar que tengamos el total
+        if(!isset($total_con_envio) || $total_con_envio <= 0) {
+            echo json_encode(['success' => false, 'error' => 'Error al calcular el total del pedido']);
+            exit();
+        }
+        
+        $total_amount = $total_con_envio;
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'error' => 'Error en los datos: ' . $e->getMessage()]);
         exit();
     }
 
@@ -32,19 +53,12 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
             'return_url' => 'http://localhost/tienda_online/views/tienda/checkout_success.php',
         ]);
 
-
-
-        echo json_encode(['success' => true]);
-
-
-
-    //TRAER DATOS DEL CARRItO DE LA BASE DE DATOS Y CREAR PEDIDO
-
+        // CREAR PEDIDO EN LA BASE DE DATOS
         try{
-        $user_id = $_SESSION['user_id'];
-        $cart_items = getCartItems();
+            $user_id = $_SESSION['user_id'];
+            $cart_items = getCartItems();
 
-        $con->beginTransaction();
+            $con->beginTransaction();
 
         // Insertar en tabla pedidos
         $fecha_pedido = date('Y-m-d');
@@ -102,6 +116,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Confirmar transacción
         $con->commit();
 
+        // Respuesta exitosa
+        echo json_encode(['success' => true]);
+        exit();
+
     } catch (PDOException $e) {
         $con->rollBack();
         echo json_encode(['success' => false, 'error' => 'Error al procesar el pedido: ' . $e->getMessage()]);
@@ -110,5 +128,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     } catch (\Stripe\Exception\ApiErrorException $e) {
         echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+        exit();
     }
 }
