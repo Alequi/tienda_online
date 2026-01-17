@@ -130,27 +130,23 @@ if (empty($cart_items)) {
                         <h5 class="mb-0"><i class="bi bi-credit-card-2-back"></i> Metodo de pago - Tarjeta</h5>
                     </div>
                     <div class="card-body">
-                        <form action="../../actions/tienda/checkout_payment_action.php" method="POST">
+                        <form id="payment-form">
                             <div class="mb-3">
                                 <label for="cardName" class="form-label">Nombre en la tarjeta</label>
                                 <input type="text" class="form-control" id="cardName" name="cardName" required>
                             </div>
-                            <div class="mb-3">
-                                <label for="cardNumber" class="form-label">Número de tarjeta</label>
-                                <input type="text" class="form-control" id="cardNumber" name="cardNumber" required>
-                            </div>
-                    
 
                             <div class="mb-3">
-                                <label for="expiryDate" class="form-label">Fecha de expiración</label>
-                                <input type="text" class="form-control" id="expiryDate" name="expiryDate" placeholder="MM/AA" required>
+                                <label class="form-label">Información de la tarjeta</label>
+                                <div id="card-element" class="form-control" style="height: auto; padding: 10px;"></div>
+                                <div id="card-errors" class="text-danger mt-2"></div>
                             </div>
-                            <div class="mb-3">
-                                <label for="cvv" class="form-label">CVV</label>
-                                <input type="text" class="form-control" id="cvv" name="cvv" required>
-                            </div>
+
                             <button type="button" class="btn btn-secondary f-end me-2" onclick="window.location.href='checkout_shipping.php';"><i class="bi bi-arrow-left"></i> Volver</button>
-                            <button type="submit" class="btn btn-success  btn-lg px-5"><i class="bi bi-check2-square"></i> Pagar Ahora</button>
+                            <button type="submit" class="btn btn-success btn-lg px-5" id="submit-button">
+                                <span id="button-text"><i class="bi bi-check2-square"></i> Pagar Ahora</span>
+                                <span id="spinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -201,6 +197,9 @@ if (empty($cart_items)) {
 
     <?php include_once __DIR__ . '/../../public/partials/footer.php'; ?>
 
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="../../public/assets/lib/stripe/checkout.js"></script>
+    
     <script src="../../public/assets/lib/scripts/cart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
