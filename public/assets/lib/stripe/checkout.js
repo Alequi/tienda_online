@@ -46,21 +46,40 @@ form.addEventListener('submit', async (e) => {
         buttonText.classList.remove('d-none');
         spinner.classList.add('d-none');
     } else {
-        const response = await fetch('../../actions/checkout/checkout_payment_action.php', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                payment_method_id: paymentMethod.id,
-                card_name: cardName
-            })
-        });
+        try {
+            const response = await fetch('../../actions/checkout/checkout_payment_action.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    payment_method_id: paymentMethod.id,
+                    card_name: cardName
+                })
+            });
 
-        const result = await response.json();
+            // Debug: ver qué responde el servidor
+            const text = await response.text();
+            console.log('Server response:', text);
+            
+            let result;
+            try {
+                result = JSON.parse(text);
+            } catch (e) {
+                console.error('Error parsing JSON:', e);
+                console.error('Response was:', text);
+                throw new Error('Respuesta inválida del servidor');
+            }
 
-        if (result.success) {
-            window.location.href = 'checkout_success.php';
-        } else {
-            document.getElementById('card-errors').textContent = result.error || 'Error al procesar el pago';
+            if (result.success) {
+                window.location.href = 'checkout_success.php';
+            } else {
+                document.getElementById('card-errors').textContent = result.error || 'Error al procesar el pago';
+                submitButton.disabled = false;
+                buttonText.classList.remove('d-none');
+                spinner.classList.add('d-none');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('card-errors').textContent = 'Error de conexión: ' + error.message;
             submitButton.disabled = false;
             buttonText.classList.remove('d-none');
             spinner.classList.add('d-none');
