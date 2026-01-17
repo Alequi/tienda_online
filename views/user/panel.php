@@ -2,6 +2,7 @@
 session_start();
 require_once __DIR__ . '/../../helpers/auth.php';
 require_once __DIR__ . '/../../config/conexion.php';
+require_once __DIR__. '/../../actions/pedidos_action.php';
 
 
 $error = null;
@@ -290,45 +291,145 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
                     <h5 class="mb-0"><i class="bi bi-clock-history"></i> Historial de Pedidos</h5>
                   </div>
                   <div class="card-body p-4">
-                    <!-- Mensaje si no hay pedidos -->
-                    <div class="text-center py-5">
-                      <i class="bi bi-cart-x text-muted" style="font-size: 4rem;"></i>
-                      <h5 class="mt-3 text-muted">Aún no has realizado ningún pedido</h5>
-                      <p class="text-muted">Explora nuestra tienda y encuentra tus joyas favoritas</p>
-                      <a href="../../index.php" class="btn btn-primary mt-2">
-                        <i class="bi bi-shop"></i> Ir a la tienda
-                      </a>
-                    </div>
-
-                    <!-- Ejemplo de pedido (comentado para cuando haya pedidos reales)
-                  <div class="table-responsive">
-                    <table class="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>Pedido #</th>
-                          <th>Fecha</th>
-                          <th>Estado</th>
-                          <th>Total</th>
-                          <th>Acciones</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>#001234</td>
-                          <td>15/12/2025</td>
-                          <td><span class="badge bg-success">Entregado</span></td>
-                          <td>€45.99</td>
-                          <td>
-                            <button class="btn btn-sm btn-outline-primary">Ver detalles</button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  -->
+                    <?php if (empty($pedidos)): ?>
+                      <!-- Mensaje si NO hay pedidos -->
+                      <div class="text-center py-5">
+                        <i class="bi bi-cart-x text-muted" style="font-size: 4rem;"></i>
+                        <h5 class="mt-3 text-muted">Aún no has realizado ningún pedido</h5>
+                        <p class="text-muted">Explora nuestra tienda y encuentra tus joyas favoritas</p>
+                        <a href="../../index.php" class="btn btn-primary mt-2">
+                          <i class="bi bi-shop"></i> Ir a la tienda
+                        </a>
+                      </div>
+                    <?php else: ?>
+                      <!-- Tabla de pedidos -->
+                      <div class="table-responsive">
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th>Pedido #</th>
+                              <th>Fecha</th>
+                              <th>Estado</th>
+                              <th>Total</th>
+                              <th>Acciones</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <?php foreach($pedidos as $pedido_cliente): ?>
+                              <tr>
+                                <td>#<?php echo htmlspecialchars($pedido_cliente['idPedido']); ?></td>
+                                <td><?php echo htmlspecialchars($pedido_cliente['fecha']); ?></td>
+                                <td>
+                                  <?php
+                                  $estado = $pedido_cliente['estado'] ?? 'creado';
+                                  $badgeClass = 'bg-secondary';
+                                  if ($estado === 'preparado') $badgeClass = 'bg-primary';
+                                  elseif ($estado === 'enviado') $badgeClass = 'bg-success';
+                                  elseif ($estado === 'cancelado') $badgeClass = 'bg-danger';
+                                  ?>
+                                  <span class="badge <?php echo $badgeClass; ?>">
+                                    <?php echo ucfirst(htmlspecialchars($estado)); ?>
+                                  </span>
+                                </td>
+                                <td class="fw-bold">€<?php echo number_format($pedido_cliente['total'], 2); ?></td>
+                                <td>
+                                  <button 
+                                    type="button"
+                                    class="btn btn-sm btn-outline-primary" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#modalPedido<?php echo $pedido_cliente['idPedido']; ?>">
+                                    <i class="bi bi-eye"></i> Ver detalles
+                                  </button>
+                                </td>
+                              </tr>
+                            <?php endforeach; ?>
+                          </tbody>
+                        </table>
+                      </div>
+                    <?php endif; ?> 
                   </div>
                 </div>
               </div>
+
+              <!-- Modales de detalles de pedidos -->
+              <?php if (!empty($pedidos)): ?>
+                <?php foreach($pedidos as $pedido_cliente): ?>
+                  <div class="modal fade" id="modalPedido<?php echo $pedido_cliente['idPedido']; ?>" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">
+                            <i class="bi bi-receipt"></i> Detalles del Pedido #<?php echo $pedido_cliente['idPedido']; ?>
+                          </h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="row mb-3">
+                            <div class="col-md-6">
+                              <strong>Fecha:</strong> <?php echo htmlspecialchars($pedido_cliente['fecha']); ?>
+                            </div>
+                            <div class="col-md-6">
+                              <strong>Estado:</strong> 
+                              <?php
+                              $estado = $pedido_cliente['estado'] ?? 'creado';
+                              $badgeClass = 'bg-secondary';
+                              if ($estado === 'preparado') $badgeClass = 'bg-primary';
+                              elseif ($estado === 'enviado') $badgeClass = 'bg-success';
+                              elseif ($estado === 'cancelado') $badgeClass = 'bg-danger';
+                              ?>
+                              <span class="badge <?php echo $badgeClass; ?>">
+                                <?php echo ucfirst(htmlspecialchars($estado)); ?>
+                              </span>
+                            </div>
+                          </div>
+                          
+                          <h6 class="mt-4 mb-3">Productos del pedido:</h6>
+                          <div class="table-responsive">
+                            <table class="table table-sm table-striped">
+                              <thead>
+                                <tr>
+                                  <th>Producto</th>
+                                  <th class="text-center">Cantidad</th>
+                                  <th class="text-end">Precio</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <?php 
+                                $lineas_pedido_cliente = $lineas_por_pedido[$pedido_cliente['idPedido']] ?? [];
+                                if (!empty($lineas_pedido_cliente)): 
+                                ?>
+                                  <?php foreach ($lineas_pedido_cliente as $linea): ?>
+                                    <tr>
+                                      <td><?php echo htmlspecialchars($linea['nombre']); ?></td>
+                                      <td class="text-center">
+                                        <span class="badge bg-info"><?php echo $linea['cantidad']; ?></span>
+                                      </td>
+                                      <td class="text-end">€<?php echo number_format($linea['precio'], 2); ?></td>
+                                    </tr>
+                                  <?php endforeach; ?>
+                                <?php else: ?>
+                                  <tr>
+                                    <td colspan="3" class="text-center text-muted">No hay productos</td>
+                                  </tr>
+                                <?php endif; ?>
+                              </tbody>
+                              <tfoot>
+                                <tr class="fw-bold">
+                                  <td colspan="2" class="text-end">Total:</td>
+                                  <td class="text-end">€<?php echo number_format($pedido_cliente['total'], 2); ?></td>
+                                </tr>
+                              </tfoot>
+                            </table>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <?php endforeach; ?>
+              <?php endif; ?>
 
             </div>
           </div>
