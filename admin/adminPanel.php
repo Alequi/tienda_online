@@ -4,6 +4,7 @@ require_once __DIR__ . '/../helpers/auth.php';
 require_once __DIR__. '/../actions/products_action.php';
 require_once __DIR__. '/../actions/usuarios_action.php';
 require_once __DIR__. '/../actions/categorias_action.php';
+require_once __DIR__. '/../actions/pedidos_action.php';
 
 // Verificar que el usuario esté logeado y sea administrador
 if (!isLoggedIn()) {
@@ -91,7 +92,7 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
           <div class="card border-0 shadow-sm text-center h-100">
             <div class="card-body">
               <i class="bi bi-cart-check text-success" style="font-size: 3rem;"></i>
-              <h3 class="mt-3 mb-0">--</h3>
+              <h3 class="mt-3 mb-0"><?php echo $total_pedidos; ?></h3>
               <p class="text-muted mb-0">Pedidos</p>
             </div>
           </div>
@@ -162,7 +163,7 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
               </div>
               <h5 class="card-title fw-bold">Pedidos</h5>
               <p class="card-text text-muted">Ver y gestionar pedidos de clientes</p>
-              <a href="#" class="btn btn-success mt-2">
+              <a href="adminPedidos.php" class="btn btn-success mt-2">
                 <i class="bi bi-arrow-right-circle"></i> Gestionar
               </a>
             </div>
@@ -187,24 +188,7 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
 
       </div>
 
-      <!-- Sección de actividad reciente (opcional) -->
-      <div class="row mt-5">
-        <div class="col-12">
-          <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white py-3">
-              <h5 class="mb-0"><i class="bi bi-clock-history"></i> Actividad Reciente</h5>
-            </div>
-            <div class="card-body">
-              <div class="text-center py-4 text-muted">
-                <i class="bi bi-info-circle" style="font-size: 2rem;"></i>
-                <p class="mt-2">No hay actividad reciente para mostrar</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
+      
   </main>
 
   <!-- FOOTER -->
