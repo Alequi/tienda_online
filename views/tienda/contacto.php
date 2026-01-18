@@ -55,7 +55,7 @@ $con = conectar();
         <li class="nav-item"><a class="nav-link" href="../../index.php">Inicio</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Tienda</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Colecciones</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Sobre nosotros</a></li>
+        <li class="nav-item"><a class="nav-link" href="nosotros.php">Sobre nosotros</a></li>
         <li class="nav-item"><a class="nav-link active" href="contacto.php">Contacto</a></li>
       </ul>
 
