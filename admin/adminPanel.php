@@ -124,7 +124,7 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
       <div class="row g-4">
         
         <!-- Gestión de Productos -->
-        <div class="col-md-6 col-lg-3">
+        <div class="col-md-4 col-lg">
           <div class="card border-0 shadow-sm h-100 hover-card">
             <div class="card-body text-center p-4">
               <div class="mb-3">
@@ -140,7 +140,7 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
         </div>
 
         <!-- Gestión de Categorías -->
-        <div class="col-md-6 col-lg-3">
+        <div class="col-md-4 col-lg">
           <div class="card border-0 shadow-sm h-100 hover-card">
             <div class="card-body text-center p-4">
               <div class="mb-3">
@@ -156,7 +156,7 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
         </div>
 
         <!-- Gestión de Pedidos -->
-        <div class="col-md-6 col-lg-3">
+        <div class="col-md-4 col-lg">
           <div class="card border-0 shadow-sm h-100 hover-card">
             <div class="card-body text-center p-4">
               <div class="mb-3">
@@ -172,7 +172,7 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
         </div>
 
         <!-- Gestión de Usuarios -->
-        <div class="col-md-6 col-lg-3">
+        <div class="col-md-4 col-lg">
           <div class="card border-0 shadow-sm h-100 hover-card">
             <div class="card-body text-center p-4">
               <div class="mb-3">
@@ -182,6 +182,22 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
               <p class="card-text text-muted">Gestión de clientes registrados</p>
               <a href="adminUsuarios.php" class="btn btn-info mt-2">
                 <i class="bi bi-arrow-right-circle"></i> Gestionar
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Informes -->
+        <div class="col-md-4 col-lg">
+          <div class="card border-0 shadow-sm h-100 hover-card">
+            <div class="card-body text-center p-4">
+              <div class="mb-3">
+                <i class="bi bi-file-earmark-bar-graph text-danger" style="font-size: 4rem;"></i>
+              </div>
+              <h5 class="card-title fw-bold">Informes</h5>
+              <p class="card-text text-muted">Estadísticas y reportes de ventas</p>
+              <a href="adminInformes.php" class="btn btn-danger mt-2">
+                <i class="bi bi-arrow-right-circle"></i> Ver informes
               </a>
             </div>
           </div>

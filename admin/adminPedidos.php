@@ -231,6 +231,35 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
                     </div>
                   </div>
 
+                  <!-- Dirección de envío -->
+                  <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                      <i class="bi bi-geo-alt-fill text-primary"></i> Dirección de Envío
+                    </label>
+                    <div class="card bg-light border-0">
+                      <div class="card-body">
+                        <div class="row g-2">
+                          <div class="col-md-12">
+                            <small class="text-muted">Dirección:</small>
+                            <p class="mb-1 fw-medium"><?php echo htmlspecialchars($pedido['user_direccion'] ?? 'No especificada'); ?></p>
+                          </div>
+                          <div class="col-md-6">
+                            <small class="text-muted">Localidad:</small>
+                            <p class="mb-1"><?php echo htmlspecialchars($pedido['user_localidad'] ?? 'No especificada'); ?></p>
+                          </div>
+                          <div class="col-md-6">
+                            <small class="text-muted">Provincia:</small>
+                            <p class="mb-1"><?php echo htmlspecialchars($pedido['user_provincia'] ?? 'No especificada'); ?></p>
+                          </div>
+                          <div class="col-md-12">
+                            <small class="text-muted">Teléfono:</small>
+                            <p class="mb-0"><?php echo htmlspecialchars($pedido['user_telefono'] ?? 'No especificado'); ?></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="mb-3">
                     <label class="form-label fw-semibold">
                       <i class="bi bi-box-seam"></i> Productos del pedido

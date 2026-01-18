@@ -36,7 +36,10 @@ foreach ($lineas_result_user as $linea) {
 
 //NUMERO TOTAL DE PEDIDOS REALIZADOS (Solo para Admin/Editor)
 if (isAdmin() || isEditor()) {
-    $stmt = "SELECT p.*, u.nombre FROM pedidos p JOIN usuarios u ON p.dniUsuario = u.dni ORDER BY p.fecha DESC";
+    $stmt = "SELECT p.*, u.nombre, u.direccion AS user_direccion, u.localidad AS user_localidad, u.provincia AS user_provincia, u.telefono AS user_telefono 
+             FROM pedidos p 
+             JOIN usuarios u ON p.dniUsuario = u.dni 
+             ORDER BY p.fecha DESC";
     $total_pedidos = $con->query($stmt)->rowCount();
     $pedidos = $con->query($stmt)->fetchAll(PDO::FETCH_ASSOC);
 
