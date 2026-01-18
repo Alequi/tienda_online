@@ -83,13 +83,26 @@ if (isset($_GET['categoria'])) {
     if ($categoria_actual) {
         $titulo_categoria = $categoria_actual->nombre;
         $descripcion_categoria = $categoria_actual->descripcion ?? 'Descubre nuestra selección de productos';
+        $orden = $_GET['orden'] ?? '';
+
+        // Aplicar ordenamiento si se especifica
+        if ($orden === 'precio_asc') {
+            $sql_productos_cat = "SELECT * FROM articulos WHERE categoria = :categoria AND activo = 1 ORDER BY precio ASC";
+        } elseif ($orden === 'precio_desc') {
+            $sql_productos_cat = "SELECT * FROM articulos WHERE categoria = :categoria AND activo = 1 ORDER BY precio DESC";
+        } elseif ($orden === 'nuevo') {
+            $sql_productos_cat = "SELECT * FROM articulos WHERE categoria = :categoria AND activo = 1 ORDER BY fecha_creacion DESC";
+        } else {
+            $sql_productos_cat = "SELECT * FROM articulos WHERE categoria = :categoria AND activo = 1 ORDER BY fecha_creacion DESC";
+        }
+
         
         // Obtener productos de esta categoría
-        $sql_productos_cat = "SELECT * FROM articulos WHERE categoria = :categoria AND activo = 1";
         $stmt_productos_cat = $con->prepare($sql_productos_cat);
         $stmt_productos_cat->bindParam(':categoria', $categoria_actual->codigo);
         $stmt_productos_cat->execute();
         $productos_categoria = $stmt_productos_cat->fetchAll(PDO::FETCH_OBJ);
+
     } else {
         // Categoría no encontrada
         $titulo_categoria = 'Categoría no encontrada';

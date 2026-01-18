@@ -148,9 +148,9 @@ if(!isset($_GET['categoria'])) {
  <div class="container-xxl mt-3 mb-5">
   <div class="row g-4">
     <div class="col-12 d-flex justify-content-end flex-wrap gap-2">
-    <a href="../../../actions/categorias_action.php?categoria=<?php echo urlencode($_GET['categoria']); ?>&orden=precio_asc" class="btn btn-outline-primary mb-3 btn btn-sm"><i class="bi bi-sort-numeric-down"></i>Precio: Bajo a Alto</a>
-    <a href="../../../actions/categorias_action.php?categoria=<?php echo urlencode($_GET['categoria']); ?>&orden=precio_desc" class="btn btn-outline-primary mb-3 btn btn-sm"><i class="bi bi-sort-numeric-up"></i>Precio: Alto a Bajo</a>
-    <a href="../../../actions/categorias_action.php?categoria=<?php echo urlencode($_GET['categoria']); ?>&orden=nuevo" class="btn btn-outline-primary  mb-3 btn btn-sm"><i class="bi bi-star"></i> Novedades</a> 
+    <a href="categoria.php?categoria=<?php echo urlencode($_GET['categoria']); ?>&orden=precio_asc" class="btn btn-outline-primary mb-3 btn btn-sm"><i class="bi bi-sort-numeric-down"></i>Precio: Bajo a Alto</a>
+    <a href="categoria.php?categoria=<?php echo urlencode($_GET['categoria']); ?>&orden=precio_desc" class="btn btn-outline-primary mb-3 btn btn-sm"><i class="bi bi-sort-numeric-up"></i>Precio: Alto a Bajo</a>
+    <a href="categoria.php?categoria=<?php echo urlencode($_GET['categoria']); ?>&orden=nuevo" class="btn btn-outline-primary  mb-3 btn btn-sm"><i class="bi bi-star"></i> Novedades</a> 
     </div>
   </div>
   <?php if (isset($productos_categoria) && count($productos_categoria) > 0): ?>
@@ -191,6 +191,7 @@ if(!isset($_GET['categoria'])) {
   <!-- FOOTER -->
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
 
 </body>
 

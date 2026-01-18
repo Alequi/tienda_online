@@ -171,9 +171,58 @@ require_once "actions/categorias_action.php";
         </div>
       <?php endforeach; ?>
     </div>
+    <div class="col-12 mt-5">
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-light py-3">
+            <h5 class="mb-0"><i class="bi bi-question-circle"></i> Preguntas frecuentes</h5>
+          </div>
+          <div class="card-body p-4">
+            <div class="accordion" id="faqAccordion">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    ¿Cuál es el tiempo de entrega?
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body">
+                    El tiempo de entrega estándar es de 3-5 días laborables para España peninsular. Para envíos a Baleares, Canarias, Ceuta y Melilla el plazo es de 5-7 días laborables.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    ¿Puedo devolver un producto?
+                  </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body">
+                    Sí, aceptamos devoluciones durante los 14 días siguientes a la recepción del pedido. El producto debe estar en perfectas condiciones y con su embalaje original.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    ¿Los productos tienen garantía?
+                  </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body">
+                    Todas nuestras joyas cuentan con una garantía de 2 años contra defectos de fabricación. La garantía no cubre el desgaste natural por uso normal.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
   </div>
 
   <!-- PRODUCTS GRID -->
+
+  
 
 
   <!-- FOOTER -->
