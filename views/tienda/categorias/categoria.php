@@ -143,8 +143,16 @@ if(!isset($_GET['categoria'])) {
 
   <h1 class="text-center mb-2 mt-2"><i class="bi bi-stars  text-primary"></i> <?php echo htmlspecialchars($titulo_categoria); ?> <i class="bi bi-stars  text-primary"></i></h1>
   <p class="text-center mb-4 h4" ><?php echo htmlspecialchars($descripcion_categoria); ?></h2>
+  
 
  <div class="container-xxl mt-3 mb-5">
+  <div class="row g-4">
+    <div class="col-12 d-flex justify-content-end flex-wrap gap-2">
+    <a href="../../../actions/categorias_action.php?categoria=<?php echo urlencode($_GET['categoria']); ?>&orden=precio_asc" class="btn btn-outline-primary mb-3 btn btn-sm"><i class="bi bi-sort-numeric-down"></i>Precio: Bajo a Alto</a>
+    <a href="../../../actions/categorias_action.php?categoria=<?php echo urlencode($_GET['categoria']); ?>&orden=precio_desc" class="btn btn-outline-primary mb-3 btn btn-sm"><i class="bi bi-sort-numeric-up"></i>Precio: Alto a Bajo</a>
+    <a href="../../../actions/categorias_action.php?categoria=<?php echo urlencode($_GET['categoria']); ?>&orden=nuevo" class="btn btn-outline-primary  mb-3 btn btn-sm"><i class="bi bi-star"></i> Novedades</a> 
+    </div>
+  </div>
   <?php if (isset($productos_categoria) && count($productos_categoria) > 0): ?>
     <div class="row g-4">
       <?php foreach ($productos_categoria as $producto): ?>
