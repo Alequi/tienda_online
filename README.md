@@ -15,7 +15,11 @@
 - 👨‍💼 **Panel de administración** para gestión de productos
 - 🔍 **Búsqueda de productos** por categorías
 - 🛒 **Carrito de compras** funcional con gestión de cantidades
-- 📱 **Diseño responsive** compatible con dispositivos móviles
+- � **Sistema de pago integrado** con Stripe
+- 🚚 **Gestión completa de pedidos** con estados y seguimiento
+- 📊 **Panel de informes y estadísticas** para administradores
+- 👥 **Sistema de roles** avanzado (admin, editor, usuario)
+- �📱 **Diseño responsive** compatible con dispositivos móviles
 - 🔒 **Recuperación de contraseña**
 - 📧 **Página de contacto** con formulario
 - 🎨 **Interfaz moderna** y atractiva
@@ -38,6 +42,8 @@
 - **Owl Carousel** - Carrusel de productos
 - **Easing.js** - Animaciones suaves
 - **JavaScript AJAX** - Actualización dinámica del carrito
+- **Stripe.js** - Pasarela de pago segura
+- **Composer** - Gestor de dependencias PHP
 
 ## 📁 Estructura del Proyecto
 
@@ -51,13 +57,25 @@ tienda_online/
 │   ├── recuperar_pass_action.php # Recuperación de contraseña
 │   ├── products_action.php      # Procesa la carga de productos
 │   ├── product_detail_action.php # Detalle de productos
-│   └── cart/                    # Gestión del carrito
-│       ├── add.php              # Añadir al carrito
-│       ├── update.php           # Actualizar cantidades
-│       └── view.php             # Ver carrito
+│   ├── categorias_action.php    # Gestión de categorías
+│   ├── usuarios_action.php      # Gestión de usuarios
+│   ├── pedidos_action.php       # Gestión de pedidos
+│   ├── informes_action.php      # Estadísticas y reportes
+│   ├── busqueda_action.php      # Búsqueda de productos
+│   ├── cart/                    # Gestión del carrito
+│   │   ├── add.php              # Añadir al carrito
+│   │   ├── update.php           # Actualizar cantidades
+│   │   └── view.php             # Ver carrito
+│   └── checkout/                # Proceso de compra
+│       └── checkout_payment_action.php # Procesa el pago
 │
 ├── admin/                        # Panel de administración
-│   └── adminPanel.php           # Panel de administrador
+│   ├── adminPanel.php           # Panel principal de administrador
+│   ├── adminProductos.php       # Gestión de productos
+│   ├── adminCategoria.php       # Gestión de categorías
+│   ├── adminUsuarios.php        # Gestión de usuarios
+│   ├── adminPedidos.php         # Gestión de pedidos
+│   └── adminInformes.php        # Estadísticas y reportes
 │
 ├── config/                       # Configuración
 │   └── conexion.php             # Configuración de base de datos
@@ -76,7 +94,12 @@ tienda_online/
 │   │       │   ├── cart.js      # Gestión del carrito
 │   │       │   ├── form.js      # Validación de formularios
 │   │       │   ├── panel.js     # Panel de usuario
+│   │       │   ├── product.js   # Funciones de productos
+│   │       │   ├── users.js     # Gestión de usuarios
+│   │       │   ├── categorie.js # Gestión de categorías
 │   │       │   └── quantity_selector.js # Selector de cantidad
+│   │       ├── stripe/          # Integración de Stripe
+│   │       │   └── checkout.js  # Proceso de pago
 │   │       └── ...              # Bibliotecas externas
 │   └── partials/
 │       ├── footer.php           # Componente de footer
@@ -94,12 +117,19 @@ tienda_online/
 │   │   ├── cart.php             # Carrito de compras
 │   │   ├── producto.php         # Detalle de producto
 │   │   ├── contacto.php         # Página de contacto
+│   │   ├── checkout_shipping.php # Datos de envío
+│   │   ├── checkout_payment.php # Página de pago
+│   │   ├── checkout_success.php # Confirmación de pago
 │   │   └── categorias/
 │   │       └── categoria.php    # Vista de categoría
 │   ├── user/
 │   │   └── panel.php            # Panel de usuario
 │   └── error.php                # Página de error
 │
+├── vendor/                       # Dependencias de Composer
+│   └── stripe/                  # SDK de Stripe
+│
+├── composer.json                 # Archivo de configuración de Composer
 ├── index.php                     # Página principal
 └── localhost_3308(1).sql        # Script de base de datos
 ```
@@ -112,6 +142,8 @@ tienda_online/
   - PHP 7.4 o superior
   - MySQL 5.7 o superior
   - Apache
+- **Composer** (para gestión de dependencias)
+- **Cuenta de Stripe** (para pruebas de pago - opcional)
 
 ### Pasos de Instalación
 
@@ -141,7 +173,18 @@ tienda_online/
    ```
    - Ajusta el puerto si es necesario (por defecto: 3308)
 
-5. **Iniciar el servidor**
+5. **Instalar dependencias con Composer**
+   ```bash
+   composer install
+   ```
+   - Esto instalará Stripe PHP SDK y otras dependencias necesarias
+
+6. **Configurar Stripe (opcional, para pagos)**
+   - Crea una cuenta en [Stripe](https://stripe.com)
+   - Obtén tus claves de API de prueba (test mode)
+   - Configura las claves en el archivo correspondiente
+
+7. **Iniciar el servidor**
    - Inicia Apache y MySQL desde el panel de control de XAMPP/WAMP
    - Accede a `http://localhost/tienda_online` en tu navegador
 
@@ -153,12 +196,14 @@ La base de datos incluye las siguientes tablas principales:
 
 - **usuarios** - Información de los usuarios registrados
   - Campos: dni (PK), nombre, apellidos, email, telefono, direccion, localidad, provincia, password, rol
-- **productos** - Catálogo de productos de joyería
+- **articulos** - Catálogo de productos de joyería
   - Campos: codigo (PK), nombre, descripcion, precio, stock, imagen, categoria
 - **categorias** - Categorías de productos
   - Campos: id, nombre, descripcion
-- **carrito** - Items del carrito de compras (sesión)
-- **pedidos** - Órdenes de compra (en desarrollo)
+- **pedidos** - Órdenes de compra realizadas
+  - Campos: idPedido (PK), dniUsuario (FK), total, fecha, estado, direccion, localidad, provincia, telefono
+- **lineapedido** - Detalle de productos en cada pedido
+  - Campos: id (PK), numPedido (FK), codArticulo (FK), cantidad, precio
 
 ### Script SQL de Ejemplo
 
@@ -172,8 +217,10 @@ El proyecto incluye el archivo `localhost_3308(1).sql` con la estructura complet
 6. Haz clic en "Continuar"
 
 La base de datos incluirá:
-- Tabla de usuarios con roles (user/admin)
-- Tabla de productos con stock y precios
+- Tabla de usuarios con roles (user/admin/editor)
+- Tabla de artículos con stock y precios
+- Tabla de pedidos con estados de seguimiento
+- Tabla de líneas de pedido para detalles
 - Datos de ejemplo para pruebas
 
 ## 📖 Uso
@@ -190,11 +237,14 @@ La base de datos incluirá:
 - ✅ Registro de nuevos usuarios con validación completa
 - ✅ Inicio y cierre de sesión seguro
 - ✅ Panel de usuario personalizado con gestión de datos
-- ✅ Panel de administración (solo para usuarios admin)
-  - ⏳ Añadir/eliminar productos
-  - ⏳ Añadir/eliminar categorias
-  - ⏳ Añadir/eliminar usuarios
-  - ⏳ Informes de venta basicos
+- ✅ Visualización de historial de pedidos del usuario
+- ✅ Panel de administración (para usuarios admin y editor)
+  - ✅ Añadir/eliminar/editar productos
+  - ✅ Añadir/eliminar/editar categorías
+  - ✅ Gestión completa de usuarios
+  - ✅ Gestión de pedidos con cambio de estados
+  - ✅ Informes de ventas con estadísticas (7 días, 30 días, 12 meses)
+  - ✅ Ranking de productos más vendidos
 - ✅ Recuperación de contraseña
 - ✅ Navegación por categorías (anillos, colgantes, pulseras, pendientes)
 - ✅ Visualización de productos con detalles
@@ -203,10 +253,15 @@ La base de datos incluirá:
   - Actualizar cantidades
   - Cálculo automático de totales
   - Actualización AJAX sin recargar página
+  - Control de stock en tiempo real
+- ✅ Proceso completo de checkout:
+  - Formulario de datos de envío
+  - Integración con Stripe para pagos
+  - Página de confirmación
+  - Creación automática de pedidos
 - ✅ Página de contacto con formulario
 - ✅ Control de stock en productos
-- ⏳ Proceso de checkout y pago (en desarrollo)
-- ⏳ Gestión de pedidos (en desarrollo)
+- ✅ Búsqueda de productos
 
 ## 🎨 Capturas de Pantalla
 
@@ -240,37 +295,49 @@ Este proyecto incluye medidas de seguridad:
 - ✅ Gestión segura de sesiones PHP
 - ✅ Protección de rutas mediante autenticación (helpers/auth.php)
 - ✅ Sanitización de salida con `htmlspecialchars()`
-- ✅ Control de roles (usuario/administrador)
+- ✅ Control de roles (usuario/editor/administrador)
 - ✅ Validación de stock antes de añadir al carrito
+- ✅ Protección de rutas administrativas según rol
 
 ⚠️ **Nota**: Este es un proyecto educativo. Para uso en producción, se recomienda implementar medidas de seguridad adicionales como HTTPS, CSRF tokens, rate limiting, etc.
 
 ## 🚧 Estado del Proyecto
 
-El proyecto está actualmente en **desarrollo activo**. La mayoría de las funcionalidades principales están implementadas y funcionando.
+El proyecto está **completado** con todas las funcionalidades principales implementadas y funcionando correctamente.
 
 ### ✅ Funcionalidades Completadas
 
 - [x] Sistema de autenticación completo (registro, login, logout)
 - [x] Panel de usuario con gestión de datos personales
-- [x] Panel de administración básico
+- [x] Historial de pedidos del usuario
+- [x] Panel de administración completo con:
+  - [x] CRUD de productos
+  - [x] CRUD de categorías
+  - [x] CRUD de usuarios
+  - [x] Gestión de pedidos con estados
+  - [x] Panel de informes y estadísticas de ventas
 - [x] Catálogo de productos por categorías
 - [x] Vista de detalle de productos
 - [x] Carrito de compras funcional con AJAX
 - [x] Gestión de stock y cantidades
+- [x] Proceso completo de checkout y pago con Stripe
+- [x] Generación automática de pedidos
 - [x] Página de contacto
-- [x] Sistema de roles (usuario/admin)
+- [x] Sistema de roles (usuario/editor/admin)
+- [x] Búsqueda de productos
 - [x] Diseño responsive completo
 
-### 🔄 Próximas Características
+### 🔄 Mejoras Futuras Posibles
 
-- [ ] Proceso de checkout y pago
-- [ ] Gestión completa de pedidos
-- [ ] Panel de administración avanzado (CRUD completo de productos)
-- [ ] Sistema de búsqueda 
+- [ ] Sistema de valoraciones y reseñas de productos
 - [ ] Wishlist / Lista de deseos
-- [ ] Historial de pedidos en panel de usuario
-- [ ] Notificaciones por email
+- [ ] Notificaciones por email (confirmación de pedidos, cambios de estado)
+- [ ] Filtros avanzados de productos (precio, stock, etc.)
+- [ ] Galería de imágenes múltiples por producto
+- [ ] Sistema de cupones y descuentos
+- [ ] Exportación de informes en PDF/Excel
+- [ ] Integración con servicios de envío
+- [ ] Chat de soporte en vivo
 
 ## 📄 Licencia
 
