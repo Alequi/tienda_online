@@ -19,7 +19,7 @@ function requireAdmin(){
     requireLogin();
     if (!isset($_SESSION['rol']) || $_SESSION['rol'] != 'admin') {
         header("Location: ../views/error.php");
-        exit;
+        exit();
     }
 }
 
@@ -27,3 +27,15 @@ function isAdmin(){
     return isset($_SESSION['rol']) && $_SESSION['rol'] === 'admin';
 }
 
+function isEditor(){
+    return isset($_SESSION['rol']) && $_SESSION['rol'] === 'editor';
+}
+
+
+function requireEditorOrAdmin(){
+    requireLogin();
+    if (!isset($_SESSION['rol']) || ($_SESSION['rol'] != 'admin' && $_SESSION['rol'] != 'editor')) {
+        header("Location: ../views/error.php");
+        exit();
+    }
+}

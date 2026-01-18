@@ -6,34 +6,55 @@ if(session_status() == PHP_SESSION_NONE){
 require_once __DIR__ . '/../config/conexion.php';
 require_once __DIR__ . '/../helpers/auth.php';
 
-
-if (!isLoggedIn() || !isAdmin()) {
-        $_SESSION['error'] = 'No tienes permisos para realizar esta acción';
-        header('Location: ../admin/adminPedidos.php');
-        exit();
-    }
+// Verificar que el usuario esté logueado (todos los usuarios pueden ver sus propios pedidos)
+requireLogin();
 
 $con = conectar();
 
-//NUMERO TOTAL DE PEDIDOS REALIZADOS
-$stmt = "SELECT p.*, u.nombre FROM pedidos p JOIN usuarios u ON p.dniUsuario = u.dni ORDER BY p.fecha DESC";;
-$total_pedidos = $con->query($stmt)->rowCount();
-$pedidos = $con->query($stmt)->fetchAll(PDO::FETCH_ASSOC);
+//VER PEDIDOS DE USUARIO PARTICULAR EN PANEL DE USUARIO
+$dni = $_SESSION['user_id'];
+$stmt_user_pedidos = $con->prepare("SELECT * FROM pedidos WHERE dniUsuario = :dni_usuario ORDER BY fecha DESC");
+$stmt_user_pedidos->bindParam(':dni_usuario', $dni);
+$stmt_user_pedidos->execute();
+$pedidos_usuario = $stmt_user_pedidos->fetchAll(PDO::FETCH_ASSOC);
 
-//VER DETALLES DE UN PEDIDO
-$stmt_detalles = "SELECT lp.numPedido, lp.cantidad, a.nombre, a.precio 
+//DETALLES DE PEDIDOS DE USUARIO PARTICULAR
+$stmt_detalles_user = "SELECT lp.numPedido, lp.cantidad, a.nombre, a.precio 
                   FROM lineapedido lp 
                   JOIN articulos a ON lp.codArticulo = a.codigo 
                   ORDER BY lp.numPedido";
-$lineas_result = $con->query($stmt_detalles)->fetchAll(PDO::FETCH_ASSOC);
-
-$lineas_por_pedido = [];
-foreach ($lineas_result as $linea) {
+$lineas_result_user = $con->query($stmt_detalles_user)->fetchAll(PDO::FETCH_ASSOC); 
+$lineas_por_pedido_user = [];
+foreach ($lineas_result_user as $linea) {
     $numPedido = $linea['numPedido'];
-    if (!isset($lineas_por_pedido[$numPedido])) {
-        $lineas_por_pedido[$numPedido] = [];
+    if (!isset($lineas_por_pedido_user[$numPedido])) {
+        $lineas_por_pedido_user[$numPedido] = [];
     }
-    $lineas_por_pedido[$numPedido][] = $linea;
+    $lineas_por_pedido_user[$numPedido][] = $linea;
+}
+
+
+//NUMERO TOTAL DE PEDIDOS REALIZADOS (Solo para Admin/Editor)
+if (isAdmin() || isEditor()) {
+    $stmt = "SELECT p.*, u.nombre FROM pedidos p JOIN usuarios u ON p.dniUsuario = u.dni ORDER BY p.fecha DESC";
+    $total_pedidos = $con->query($stmt)->rowCount();
+    $pedidos = $con->query($stmt)->fetchAll(PDO::FETCH_ASSOC);
+
+    //VER DETALLES DE UN PEDIDO (para panel admin)
+    $stmt_detalles = "SELECT lp.numPedido, lp.cantidad, a.nombre, a.precio 
+                      FROM lineapedido lp 
+                      JOIN articulos a ON lp.codArticulo = a.codigo 
+                      ORDER BY lp.numPedido";
+    $lineas_result = $con->query($stmt_detalles)->fetchAll(PDO::FETCH_ASSOC);
+
+    $lineas_por_pedido = [];
+    foreach ($lineas_result as $linea) {
+        $numPedido = $linea['numPedido'];
+        if (!isset($lineas_por_pedido[$numPedido])) {
+            $lineas_por_pedido[$numPedido] = [];
+        }
+        $lineas_por_pedido[$numPedido][] = $linea;
+    }
 }
 
 
@@ -46,11 +67,20 @@ $stmt->bindParam(':dni_usuario', $user_id);
 $stmt->execute();
 $pedido = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$envio = ($pedido['total'] >= 50.0) ? 0.0 : 4.95;
-$total_con_envio = $pedido['total'];
-$subtotal_sin_iva = $pedido ? $total_con_envio / 1.21 : 0;
-$iva = $pedido ? $total_con_envio - $subtotal_sin_iva : 0;
-$total_iva = $pedido ? $total_con_envio : 0;
+// Inicializar variables solo si hay pedido
+if ($pedido) {
+    $envio = ($pedido['total'] >= 50.0) ? 0.0 : 4.95;
+    $total_con_envio = $pedido['total'];
+    $subtotal_sin_iva = $total_con_envio / 1.21;
+    $iva = $total_con_envio - $subtotal_sin_iva;
+    $total_iva = $total_con_envio;
+} else {
+    $envio = 0;
+    $total_con_envio = 0;
+    $subtotal_sin_iva = 0;
+    $iva = 0;
+    $total_iva = 0;
+}
 
 
 // Verificar que se encontró un pedido
@@ -71,9 +101,15 @@ if ($pedido) {
     $lineas_pedido = [];
 }
 
-// PROCESAR ACTUALIZACIÓN DE ESTADO DEL PEDIDO (ADMIN)
+// PROCESAR ACTUALIZACIÓN DE ESTADO DEL PEDIDO (Solo Admin/Editor)
 if (isset($_GET['action']) && $_GET['action'] === 'updateEstado' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     
+    // Verificar permisos de admin o editor
+    if (!isAdmin() && !isEditor()) {
+        $_SESSION['error'] = 'No tienes permisos para realizar esta acción';
+        header('Location: ../views/user/panel.php');
+        exit();
+    }
     
     $idPedido = $_POST['idPedido'] ?? null;
     $estadoPedido = $_POST['estadoPedido'] ?? null;

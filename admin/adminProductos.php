@@ -11,7 +11,7 @@ if (!isLoggedIn()) {
   exit();
 }
 
-requireAdmin();
+requireEditorOrAdmin();
 
 $error = null;
 $success = null;

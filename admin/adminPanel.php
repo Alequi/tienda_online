@@ -12,7 +12,8 @@ if (!isLoggedIn()) {
     exit();
 }
 
-requireAdmin();
+requireEditorOrAdmin();
+
 
 
 $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';

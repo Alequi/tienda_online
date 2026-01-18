@@ -114,6 +114,34 @@ require_once __DIR__ . '/../../actions/usuarios_action.php';
 
   <div class="container-xxl flex-grow-1 my-4">
     <div class="row g-4">
+
+    <?php if (!isLoggedIn()): ?>
+      <div class="col-12">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body text-center py-5">
+            <i class="bi bi-lock-fill text-primary" style="font-size: 4rem;"></i>
+            <h3 class="mt-4 mb-3">Inicia sesión para continuar</h3>
+            <p class="text-muted mb-4">
+              Para completar tu compra necesitas iniciar sesión o crear una cuenta.<br>
+              Es rápido, seguro y te permitirá hacer seguimiento de tus pedidos.
+            </p>
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+              <a href="../auth/login.php" class="btn btn-primary btn-lg px-5">
+                <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+              </a>
+              <a href="../auth/registro.php" class="btn btn-outline-primary btn-lg px-5">
+                <i class="bi bi-person-plus"></i> Crear Cuenta
+              </a>
+            </div>
+            <div class="mt-4 pt-4 border-top">
+              <p class="text-muted mb-0">
+                <i class="bi bi-shield-check text-success"></i> Tus datos están protegidos y seguros
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    <?php else: ?>
       <!-- Dirección de Envío -->
       <div class="col-12 col-md-6">
         <div class="card border-0 shadow-sm h-100">
@@ -181,33 +209,18 @@ require_once __DIR__ . '/../../actions/usuarios_action.php';
         </div>
       </div>
 
-      <!-- Comentarios -->
-      <div class="col-12">
-        <div class="card border-0 shadow-sm">
-          <div class="card-header bg-primary text-white py-3">
-            <h5 class="mb-0"><i class="bi bi-chat-dots-fill"></i> Comentarios del Pedido</h5>
-          </div>
-          <div class="card-body">
-            <textarea class="form-control" rows="4" placeholder="¿Alguna instrucción especial para la entrega? (opcional)"></textarea>
-          </div>
-        </div>
-      </div>
-
       <!-- Botón Continuar -->
       <div class="col-12 text-end">
         <a href="checkout_payment.php" class="btn btn-primary btn-lg px-5">
           Continuar con el Pago <i class="bi bi-arrow-right ms-2"></i>
         </a>
       </div>
+    <?php endif; ?>
+
     </div>
   </div>
 
-
-
-
-
-    <!-- FOOTER -->
-     
+  <!-- FOOTER -->
       
   <?php include_once __DIR__ . '/../../public/partials/footer.php'; ?>
 

@@ -241,7 +241,7 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
                     <h5 class="mb-0"><i class="bi bi-clock-history"></i> Historial de Pedidos</h5>
                   </div>
                   <div class="card-body p-4">
-                    <?php if (empty($pedidos)): ?>
+                    <?php if (empty($pedidos_usuario)): ?>
                       <!-- Mensaje si NO hay pedidos -->
                       <div class="text-center py-5">
                         <i class="bi bi-cart-x text-muted" style="font-size: 4rem;"></i>
@@ -265,7 +265,7 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
                             </tr>
                           </thead>
                           <tbody>
-                            <?php foreach($pedidos as $pedido_cliente): ?>
+                            <?php foreach($pedidos_usuario as $pedido_cliente): ?>
                               <tr>
                                 <td>#<?php echo htmlspecialchars($pedido_cliente['idPedido']); ?></td>
                                 <td><?php echo htmlspecialchars($pedido_cliente['fecha']); ?></td>
@@ -302,8 +302,8 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
               </div>
 
               <!-- Modales de detalles de pedidos -->
-              <?php if (!empty($pedidos)): ?>
-                <?php foreach($pedidos as $pedido_cliente): ?>
+              <?php if (!empty($pedidos_usuario)): ?>
+                <?php foreach($pedidos_usuario as $pedido_cliente): ?>
                   <div class="modal fade" id="modalPedido<?php echo $pedido_cliente['idPedido']; ?>" tabindex="-1">
                     <div class="modal-dialog modal-lg">
                       <div class="modal-content">
@@ -345,7 +345,7 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
                               </thead>
                               <tbody>
                                 <?php 
-                                $lineas_pedido_cliente = $lineas_por_pedido[$pedido_cliente['idPedido']] ?? [];
+                                $lineas_pedido_cliente = $lineas_por_pedido_user[$pedido_cliente['idPedido']] ?? [];
                                 if (!empty($lineas_pedido_cliente)): 
                                 ?>
                                   <?php foreach ($lineas_pedido_cliente as $linea): ?>

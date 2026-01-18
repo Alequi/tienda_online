@@ -53,7 +53,7 @@ require_once __DIR__ . '/../../actions/cart/view.php';
                   <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-person-circle"></i> Hola, <?php echo htmlspecialchars($_SESSION['user_name']); ?>
                   </a>
-                  <?php if (isAdmin()): ?>
+                  <?php if (isAdmin() || isEditor()): ?>
 
 
                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
