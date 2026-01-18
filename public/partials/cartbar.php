@@ -19,7 +19,7 @@ require_once __DIR__ . '/../../helpers/cart_helper.php';
 $cart_count = getCartCount();
 ?>
 
-<a href="<?= $cart_url ?>" class="btn btn-outline-primary btn-icon position-relative" aria-label="Carrito">
+<a href="<?= $cart_url ?>" class="btn btn-outline-primary btn-icon position-relative me-4" aria-label="Carrito">
   <i class="bi bi-bag"></i>
   <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cartBadge">
     <?= $cart_count ?>
