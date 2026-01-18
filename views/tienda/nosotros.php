@@ -108,7 +108,7 @@ require_once __DIR__ . '/../../actions/categorias_action.php';
               <p class="fs-5 text-muted">
                 Mystic Waves nace de la pasión por crear joyas únicas que cuenten historias. Desde nuestros inicios, 
                 nos hemos dedicado a diseñar piezas que combinan elegancia, calidad y un toque de misterio, 
-                inspiradas en las olas del océano y la energía de la naturaleza.
+                inspiradas en la energía de la naturaleza.
               </p>
               <p class="fs-5 text-muted">
                 Cada pieza es cuidadosamente elaborada en plata 925 de la más alta calidad, garantizando 
