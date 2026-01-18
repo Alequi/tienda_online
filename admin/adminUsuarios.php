@@ -109,6 +109,41 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
         </div>
       <?php endif; ?>
 
+
+
+      <!--TABLA USUARIO SI EDITOR -->
+
+      <?php if(isEditor()): ?>
+      <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+          <div class="card shadow-lg border-0">
+            <div class="card-body text-center p-5">
+              <div class="mb-4">
+                <i class="bi bi-shield-exclamation text-warning" style="font-size: 5rem;"></i>
+              </div>
+              <h3 class="fw-bold mb-3">Acceso Restringido</h3>
+              <p class="text-muted mb-4 fs-5">No tienes permisos para gestionar usuarios del sistema</p>
+              
+              <div class="alert alert-warning d-inline-block mb-4" role="alert">
+                <i class="bi bi-info-circle me-2"></i>
+                <strong>Rol actual:</strong> Editor
+              </div>
+              
+              <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center mt-4">
+                <a href="../views/user/panel.php" class="btn btn-primary btn-lg">
+                  <i class="bi bi-person-circle me-2"></i>Ver mi perfil
+                </a>
+                <a href="adminPanel.php" class="btn btn-outline-secondary btn-lg">
+                  <i class="bi bi-arrow-left me-2"></i>Volver al panel
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <?php else: ?>
       <!-- Tabla de usuarios -->
       <div class="row">
         <div class="col-12">
@@ -190,6 +225,7 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
           </div>
         </div>
       </div>
+      <?php endif; ?>
 
       <!-- Formulario Editar usuarios oculto -->
       <div class="row mt-4" id="datos" style="display: none;">

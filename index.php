@@ -76,8 +76,13 @@ require_once "actions/categorias_action.php";
 
 
                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                    <li><a class="dropdown-item" href="admin/adminPanel.php"><i class="bi bi-person"></i> Panel de Administrador</a></li>
+                    <li><a class="dropdown-item" href="admin/adminPanel.php"><i class="bi bi-wrench-adjustable-circle"></i> Panel de Administrador</a></li>
                     <li>
+                      <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                      <li><a class="dropdown-item" href="views/user/panel.php"><i class="bi bi-person"></i> Perfil Personal</a></li>
+                    
                       <hr class="dropdown-divider">
                     </li>
                     <li><a class="dropdown-item" href="actions/logout_action.php"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a></li>

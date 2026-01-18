@@ -84,27 +84,23 @@ if(!isset($_GET['categoria'])) {
                     <i class="bi bi-person-circle"></i> Hola, <?php echo htmlspecialchars($_SESSION['user_name']); ?>
                   </a>
                   <?php if (isAdmin() || isEditor()): ?>
-
-
-                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                    <li><a class="dropdown-item" href="../../../admin/adminPanel.php"><i class="bi bi-person"></i> Panel de Administrador</a></li>
-                    <li>
-                      <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" href="../../../actions/logout_action.php"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a></li>
-                  </ul>
-                </li>
-              </ul>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                      <li><a class="dropdown-item" href="../../../admin/adminPanel.php"><i class="bi bi-wrench-adjustable-circle"></i> Panel de Administrador</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="../../user/panel.php"><i class="bi bi-person"></i> Perfil Personal</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="../../../actions/logout_action.php"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a></li>
+                    </ul>
+                  </li>
+                </ul>
                   <?php else: ?>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                    <li><a class="dropdown-item" href="../../user/panel.php"><i class="bi bi-person"></i> Panel de usuario</a></li>
-                    <li>
-                      <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" href="../../../actions/logout_action.php"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a></li>
-                  </ul>
-                </li>
-              </ul>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                      <li><a class="dropdown-item" href="../../user/panel.php"><i class="bi bi-person"></i> Panel de usuario</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="../../../actions/logout_action.php"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a></li>
+                    </ul>
+                  </li>
+                </ul>
                   <?php endif; ?>
             <?php else: ?>
               <ul class="navbar-nav ms-auto">
