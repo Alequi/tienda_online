@@ -7,12 +7,15 @@ $in_categorias = (strpos($current_path, '/views/tienda/categorias/') !== false);
 if ($is_root) {
     $logo_url = 'public/assets/img/logo-tienda.png';
     $index_url = 'index.php';
+    $search_url = 'actions/busqueda_action.php';
 } elseif ($in_categorias) {
     $logo_url = '../../../public/assets/img/logo-tienda.png';
     $index_url = '../../../index.php';
+    $search_url = '../../../actions/busqueda_action.php';
 } else {
     $logo_url = '../../public/assets/img/logo-tienda.png';
     $index_url = '../../index.php';
+    $search_url = '../../actions/busqueda_action.php';
 }
 ?>
 <div class="bg-white">
@@ -28,12 +31,19 @@ if ($is_root) {
 
 
       <div class="col-9 col-lg-6">
-        <form action="#">
+        <form action="<?= $search_url ?>" method="GET" role="search">
           <div class="input-group">
-            <input type="search" class="form-control" placeholder="Buscar anillos, colgantes, plata 925..." aria-label="Buscar">
+            <input type="search" class="form-control" name="query" placeholder="Buscar anillos, colgantes, plata 925..." aria-label="Buscar">
             <button class="btn btn-outline-secondary" type="submit" aria-label="Buscar">
               <i class="bi bi-search"></i>
             </button>
           </div>
         </form>
       </div>
+      
+      <div class="col-3 col-lg-3 text-end">
+        <?php include_once dirname(__FILE__) . '/cartbar.php'; ?>
+      </div>
+    </div>
+  </div>
+</div>
