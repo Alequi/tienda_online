@@ -26,32 +26,7 @@ require_once __DIR__ . '/../../actions/cart/view.php';
   <?php include_once __DIR__ . '/../../public/partials/topbar.php'; ?>
   
   <!-- BRAND + SEARCH + CART -->
-  <div class="bg-white">
-    <div class="container-xxl py-3">
-      <div class="row align-items-center g-3">
-        <div class="col-12 col-lg-3 text-center text-lg-start">
-          <a href="../../index.php" class="text-decoration-none d-inline-flex align-items-center gap-2">
-            <img src="../../public/assets/img/logo-tienda.png" alt="Mystic Waves" class="img-fluid" style="max-width:200px; height:auto;">
-          </a>
-        </div>
-
-        <div class="col-9 col-lg-6">
-          <form action="#">
-            <div class="input-group">
-              <input type="search" class="form-control" placeholder="Buscar anillos, colgantes, plata 925..." aria-label="Buscar">
-              <button class="btn btn-outline-secondary" type="submit" aria-label="Buscar">
-                <i class="bi bi-search"></i>
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <div class="col-3 col-lg-3 text-end">
-          <?php include_once __DIR__ . '/../../public/partials/cartbar.php'; ?>
-        </div>
-      </div>
-    </div>
-  </div> 
+  <?php include_once __DIR__ . '/../../public/partials/searchbar.php'; ?>
 
   <!-- Navbar -->
   <div class="container-xxl my-3">

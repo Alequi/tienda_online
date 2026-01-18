@@ -23,63 +23,10 @@ require_once __DIR__ . '/../../actions/product_detail_action.php';
 <body class="d-flex flex-column min-vh-100">
 
 <!-- TOPBAR -->
-<div class="bg-light border-bottom mb-3">
-  <div class="container-xxl py-2">
-    <div class="row align-items-center">
-      <div class="col-lg-6 d-none d-lg-block">
-        <div class="d-inline-flex align-items-center">
-          <a class="text-decoration-none text-muted" href="#">FAQs</a>
-          <span class="text-muted px-2">|</span>
-          <a class="text-decoration-none text-muted" href="#">Ayuda</a>
-          <span class="text-muted px-2">|</span>
-          <a class="text-decoration-none text-muted" href="#">Soporte</a>
-        </div>
-      </div>
-
-      <div class="col-lg-6 text-center text-lg-end">
-        <div class="d-inline-flex align-items-center">
-          <a class="text-muted px-2" href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-          <a class="text-muted px-2" href="#" aria-label="TikTok"><i class="bi bi-tiktok"></i></a>
-          <a class="text-muted px-2" href="#" aria-label="Pinterest"><i class="bi bi-pinterest"></i></a>
-          <a class="text-muted px-2" href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<?php include_once __DIR__ . '/../../public/partials/topbar.php'; ?>
 
 <!-- BRAND + SEARCH + ICONS -->
-<div class="bg-white">
-  <div class="container-xxl py-3">
-    <div class="row align-items-center g-3">
-      <div class="col-12 col-lg-3 text-center text-lg-start">
-        <a href="#" class="text-decoration-none d-inline-flex align-items-center gap-2">
-          <img src="../../public/assets/img/logo-tienda.png" alt="Mystic Waves" class="img-fluid" style="max-width:200px; height:auto;">
-
-          
-        </a>
-      </div>
-
-<!-- SEARCH BAR -->
-      <div class="col-9 col-lg-6">
-        <form action="#">
-          <div class="input-group">
-            <input type="search" class="form-control" placeholder="Buscar anillos, colgantes, plata 925..." aria-label="Buscar">
-            <button class="btn btn-outline-secondary" type="submit" aria-label="Buscar">
-              <i class="bi bi-search"></i>
-            </button>
-          </div>
-        </form>
-      </div>
-<!-- SEARCH BAR -->
-
-      <div class="col-3 col-lg-3 text-end">
-  <?php include_once __DIR__ . '/../../public/partials/cartbar.php'; ?>
-
-      </div>
-    </div>
-  </div>
-</div>
+<?php include_once __DIR__ . '/../../public/partials/searchbar.php'; ?>
 
 <!-- NAVBAR + CATEGORIES + PRODUCT -->
   <div class="container-xxl my-3">
@@ -105,7 +52,7 @@ require_once __DIR__ . '/../../actions/product_detail_action.php';
               <li class="nav-item"><a class="nav-link" href="#">Tienda</a></li>
               <li class="nav-item"><a class="nav-link" href="#">Colecciones</a></li>
               <li class="nav-item"><a class="nav-link" href="#">Sobre nosotros</a></li>
-              <li class="nav-item"><a class="nav-link" href="#">Contacto</a></li>
+              <li class="nav-item"><a class="nav-link" href="contacto.php">Contacto</a></li>
             </ul>
 
             <?php if (isLoggedIn()): ?>

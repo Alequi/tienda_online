@@ -37,13 +37,6 @@ require_once "actions/categorias_action.php";
 
   <?php include_once 'public/partials/searchbar.php'; ?>
 
-  <!-- SEARCH BAR -->
-   <div class="col-3 col-lg-3 text-end">
-  <?php include_once 'public/partials/cartbar.php'; ?>
-  </div>
-  </div>
-  </div>
-
   <!-- NAVBAR + CATEGORIES + CAROUSEL -->
   <div class="container-xxl my-3">
     <div class="row g-3">
