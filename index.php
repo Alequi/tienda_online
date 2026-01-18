@@ -59,10 +59,10 @@ require_once "actions/categorias_action.php";
 
           <div class="collapse navbar-collapse" id="shopNavbar">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item"><a class="nav-link active" href="#">Inicio</a></li>
+              <li class="nav-item"><a class="nav-link active" href="index.php">Inicio</a></li>
               <li class="nav-item"><a class="nav-link" href="#">Tienda</a></li>
               <li class="nav-item"><a class="nav-link" href="#">Colecciones</a></li>
-              <li class="nav-item"><a class="nav-link" href="#">Sobre nosotros</a></li>
+              <li class="nav-item"><a class="nav-link" href="views/tienda/nosotros.php">Sobre nosotros</a></li>
               <li class="nav-item"><a class="nav-link" href="views/tienda/contacto.php">Contacto</a></li>
             </ul>
 
