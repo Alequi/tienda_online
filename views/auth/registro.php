@@ -172,22 +172,23 @@ if (isLoggedIn()) {
 
                     <div class="col-12">
                       <hr class="my-2">
-                      <h6 class="text-muted mb-3"><i class="bi bi-geo-alt"></i> Dirección de envío</h6>
+                      <h6 class="text-muted mb-3"><i class="bi bi-geo-alt"></i> Dirección de envío (opcional)</h6> 
+                     
                     </div>
 
                     <div class="col-12">
                       <label for="direccion" class="form-label">Dirección</label>
-                      <input type="text" class="form-control" id="direccion" name="direccion" placeholder="Calle, número, piso..." required>
+                      <input type="text" class="form-control" id="direccion" name="direccion" placeholder="Calle, número, piso..." >
                     </div>
 
                     <div class="col-md-6">
                       <label for="localidad" class="form-label">Localidad</label>
-                      <input type="text" class="form-control" id="localidad" name="localidad" placeholder="Tu ciudad" required>
+                      <input type="text" class="form-control" id="localidad" name="localidad" placeholder="Tu ciudad" >
                     </div>
 
                     <div class="col-md-6">
                       <label for="provincia" class="form-label">Provincia</label>
-                      <input type="text" class="form-control" id="provincia" name="provincia" placeholder="Tu provincia" required>
+                      <input type="text" class="form-control" id="provincia" name="provincia" placeholder="Tu provincia" >
                     </div>
 
                     <div class="col-12">
