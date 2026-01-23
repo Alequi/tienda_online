@@ -5,6 +5,12 @@ require_once __DIR__ . '/../../config/conexion.php';
 $con = conectar();
 require_once __DIR__ . '/../../actions/cart/view.php';
 require_once __DIR__ . '/../../actions/usuarios_action.php';
+
+// Verificar si los campos requeridos están completos
+$direccion_completa = false;
+if (isLoggedIn() && isset($usuario_actual)) {
+  $direccion_completa = !empty($usuario_actual->direccion) && !empty($usuario_actual->localidad) && !empty($usuario_actual->provincia);
+}
 ?>
 
 <!DOCTYPE html>
@@ -206,10 +212,23 @@ require_once __DIR__ . '/../../actions/usuarios_action.php';
       </div>
 
       <!-- Botón Continuar -->
-      <div class="col-12 text-end">
-        <a href="checkout_payment.php" class="btn btn-primary btn-lg px-5">
-          Continuar con el Pago <i class="bi bi-arrow-right ms-2"></i>
-        </a>
+      <div class="col-12">
+        <?php if (!$direccion_completa): ?>
+          <div class="alert alert-warning mb-3">
+            <i class="bi bi-exclamation-triangle-fill"></i> <strong>Dirección incompleta:</strong> Por favor, completa tu dirección de envío (dirección, localidad y provincia) antes de continuar.
+          </div>
+          <div class="text-end">
+            <a href="../user/panel.php" class="btn btn-warning btn-lg px-5">
+              <i class="bi bi-pencil"></i> Completar Dirección
+            </a>
+          </div>
+        <?php else: ?>
+          <div class="text-end">
+            <a href="checkout_payment.php" class="btn btn-primary btn-lg px-5">
+              Continuar con el Pago <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+          </div>
+        <?php endif; ?>
       </div>
     <?php endif; ?>
 
