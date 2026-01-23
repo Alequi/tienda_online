@@ -110,7 +110,7 @@ $con = conectar();
       <div class="col-lg-8 mb-4">
         <div class="card border-0 shadow-sm">
           <div class="card-header bg-primary text-white py-3">
-            <h5 class="mb-0"><i class="bi bi-envelope"></i> Envíanos un mensaje</h5>
+            <h5 class="mb-0">Envíanos un mensaje <i class="bi bi-envelope"></i></h5>
           </div>
           <div class="card-body p-4">
             <form id="contactForm">
@@ -191,7 +191,7 @@ $con = conectar();
 
         <div class="card border-0 shadow-sm">
           <div class="card-body p-4">
-            <h5 class="card-title fw-bold mb-3"><i class="bi bi-share text-primary"></i> Síguenos</h5>
+            <h5 class="card-title fw-bold mb-3">Síguenos <i class="bi bi-share text-primary"></i> </h5>
             <div class="d-flex gap-3">
               <a href="#" class="btn btn-outline-primary btn-sm" aria-label="Instagram">
                 <i class="bi bi-instagram"></i>
