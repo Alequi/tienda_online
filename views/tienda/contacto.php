@@ -110,7 +110,7 @@ $con = conectar();
       <div class="col-lg-8 mb-4">
         <div class="card border-0 shadow-sm">
           <div class="card-header bg-primary text-white py-3">
-            <h5 class="mb-0">Envíanos un mensaje <i class="bi bi-envelope"></i></h5>
+            <h5 class="mb-0"><i class="bi bi-envelope"></i> Envíanos un mensaje</h5>
           </div>
           <div class="card-body p-4">
             <form id="contactForm">
@@ -147,7 +147,7 @@ $con = conectar();
                     
                   </div>
                   <button type="submit" class="btn btn-primary btn-lg">
-                    <i class="bi bi-send"></i> Enviar mensaje
+                     Enviar mensaje <i class="bi bi-send"></i>
                   </button>
                 </div>
               </div>
