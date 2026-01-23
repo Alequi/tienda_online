@@ -19,7 +19,7 @@ require_once __DIR__ . "/../../actions/categorias_action.php";
 
             <?php foreach ($categorias as $categoria): ?>
                 <?php if (!$categoria->activo) continue; ?>
-              <a href="/tienda_online/views/tienda/categorias/categoria.php?categoria=<?php echo strtolower($categoria->nombre); ?>" class="list-group-item list-group-item-action "><?php echo htmlspecialchars($categoria->nombre); ?></a>
+              <a href="/views/tienda/categorias/categoria.php?categoria=<?php echo strtolower($categoria->nombre); ?>" class="list-group-item list-group-item-action "><?php echo htmlspecialchars($categoria->nombre); ?></a>
             <?php endforeach; ?>
 
         
