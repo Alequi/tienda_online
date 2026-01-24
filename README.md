@@ -19,7 +19,7 @@
 - 🚚 **Gestión completa de pedidos** con estados y seguimiento
 - 📊 **Panel de informes y estadísticas** para administradores
 - 👥 **Sistema de roles** avanzado (admin, editor, usuario)
-- �📱 **Diseño responsive** compatible con dispositivos móviles
+- 📱 **Diseño responsive** compatible con dispositivos móviles
 - 🔒 **Recuperación de contraseña**
 - 📧 **Página de contacto** con formulario
 - 🎨 **Interfaz moderna** y atractiva
