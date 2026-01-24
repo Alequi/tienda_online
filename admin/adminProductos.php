@@ -121,13 +121,17 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="card-title fw-bold">Productos existentes</h5>
+                <div class="input-group" style="max-width: 300px;">
+                  <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                  <input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre o categoria...">
+                </div>
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearProductoModal">
                   <i class="bi bi-plus-circle"></i> Nuevo producto
                 </button>
 
               </div>
               <div class="table-responsive">
-                <table class="table table-hover align-middle">
+                <table class="table table-hover align-middle" id="table">
                   <thead class="table-light">
                     <tr>
                       <th>Código</th>
@@ -478,6 +482,7 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../public/assets/lib/scripts/product.js"></script>
+  <script src="../public/assets/lib/scripts/filter.js"></script>
 </body>
 
 </html>
