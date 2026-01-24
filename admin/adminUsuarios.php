@@ -151,13 +151,17 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="card-title fw-bold">Usuarios existentes</h5>
+                <div class="input-group" style="max-width: 300px;">
+                  <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                  <input type="text" id="searchInput" class="form-control" placeholder="Buscar usuario...">
+                </div>
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearUsuarioModal">
                   <i class="bi bi-plus-circle"></i> Nuevo usuario 
                 </button>
                 
               </div>
               <div class="table-responsive">
-                <table class="table table-hover align-middle">
+                <table class="table table-hover align-middle" id="table">
                   <thead class="table-light">
                     <tr>
                       <th>Dni</th>
@@ -420,6 +424,7 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
   </footer>
   <script src="../public/assets/lib/scripts/users.js"></script>                    
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../public/assets/lib/scripts/filter.js"></script>
 </body>
 </html>
 
