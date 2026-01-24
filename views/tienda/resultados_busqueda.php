@@ -61,7 +61,7 @@ $resultados = $_SESSION['search_results'] ?? [];
 
           <div class="collapse navbar-collapse" id="shopNavbar">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item"><a class="nav-link active" href="#">Inicio</a></li>
+              <li class="nav-item"><a class="nav-link active" href="../../index.php">Inicio</a></li>
               <li class="nav-item"><a class="nav-link" href="#">Tienda</a></li>
               <li class="nav-item"><a class="nav-link" href="#">Colecciones</a></li>
               <li class="nav-item"><a class="nav-link" href="nosotros.php">Sobre nosotros</a></li>
