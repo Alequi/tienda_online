@@ -20,6 +20,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        //Verificar si el usuario está activo
+        if ($user && $user['activo'] != 1) {
+            $_SESSION['error'] = "Tu cuenta está inactiva. Por favor, contacta al administrador.";
+            header("Location: ../views/auth/login.php");
+            exit();
+        }
+
         // Verificar contraseña
 
         if ($user && password_verify($password, $user['clave'])) {
