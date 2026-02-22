@@ -20,7 +20,7 @@ if (isset($_SESSION['success'])) {
 
 // Verificar que el usuario esté autenticado
 if (!isLoggedIn()) {
-  header("Location: ../auth/login.php");
+  header("Location: /views/auth/login.php");
   exit();
 }
 
