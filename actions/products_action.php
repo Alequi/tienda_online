@@ -104,12 +104,16 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action'])) {
             header('Location: ../admin/adminProductos.php');
             exit();
         }
-
-
-
         // Mover el archivo a la carpeta destino
         move_uploaded_file($rutaTemporal, $carpetaDestino . $nombreArchivo);
         $imagen = $nombreArchivo;
+    }
+
+    // Validar que se haya subido una imagen (la imagen es obligatoria para crear un producto)
+    if(empty($imagen)) {
+        $_SESSION['error'] = "Debe seleccionar una imagen para el producto.";
+        header('Location: ../admin/adminProductos.php');
+        exit();
     }
 
     try {
@@ -194,6 +198,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['act
         // Mover el archivo a la carpeta destino
         move_uploaded_file($rutaTemporal, $carpetaDestino . $nombreArchivo);
         $imagen = $nombreArchivo;
+
+        
     }
 
     try {
@@ -252,7 +258,7 @@ if(isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id']))
         header('Location: ../admin/adminProductos.php');
         exit();
     }
-}   
+}
 
 
 
