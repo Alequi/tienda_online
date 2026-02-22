@@ -10,7 +10,7 @@ function isLoggedIn(){
 function requireLogin()
 {
     if (!isset($_SESSION['user_id'])) {
-        header("Location: ../views/auth/login.php");
+        header("Location: /views/auth/login.php");
         exit();
     };
 }
