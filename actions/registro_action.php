@@ -31,6 +31,21 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         exit();
     }
 
+    //Validar que la contraseña tenga al menos 8 caracteres
+    if(strlen($password_plano) < 8){
+        $_SESSION['error'] = "La contraseña debe tener al menos 8 caracteres.";
+        header('Location: ../views/error.php');
+        exit();
+    }
+
+    //Validar que el teléfono tenga solo números y tenga una longitud de 9 dígitos
+    if(!preg_match('/^\d{9}$/', $telefono)){
+        $_SESSION['error'] = "El teléfono debe tener 9 dígitos y solo contener números.";
+        header('Location: ../views/error.php');
+        exit();
+    }
+    
+
 
     if(!$validarDni){
         $_SESSION['error'] = "DNI no válido.";
