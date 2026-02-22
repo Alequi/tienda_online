@@ -111,7 +111,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action'])) {
 
     // Validar que se haya subido una imagen (la imagen es obligatoria para crear un producto)
     if(empty($imagen)) {
-        $_SESSION['error'] = "Debe seleccionar una imagen para el producto.";
+        $_SESSION['error'] = "Debes seleccionar una imagen para el producto.";
         header('Location: ../admin/adminProductos.php');
         exit();
     }
