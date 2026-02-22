@@ -68,6 +68,14 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['act
         exit();
     }
 
+    //Validad que el teléfono tenga solo números y tenga una longitud de 9 dígitos
+    if(!preg_match('/^\d{9}$/', $telefono)){
+        $_SESSION['error'] = "El teléfono debe tener 9 dígitos y solo contener números.";
+        $redirectUrl = ($redirect === 'panel') ? '../views/user/panel.php' : '../admin/adminUsuarios.php';
+        header('Location: ' . $redirectUrl);
+        exit();
+    }
+
     try {
         $sql_update = "UPDATE usuarios SET nombre = :nombre, apellidos = :apellidos, email = :email, telefono = :telefono, 
                        direccion = :direccion, localidad = :localidad, provincia = :provincia, rol = :rol, activo = :activo 
