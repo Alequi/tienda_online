@@ -28,6 +28,35 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('editEmailUsuario').value = email;
             document.getElementById('editRolUsuario').value = rol;
             document.getElementById('editActivoUsuario').checked = (activo == 1);
+            
+            // Obtener el DNI del usuario logueado desde el input hidden
+            const dniLogueado = document.getElementById('userLoggedDNI')?.value;
+            const rolSelect = document.getElementById('editRolUsuario');
+            const activoCheckbox = document.getElementById('editActivoUsuario');
+            const rolWarning = document.getElementById('rolWarning');
+            const activoWarning = document.getElementById('activoWarning');
+            
+            // Deshabilitar el cambio de rol y estado si es el mismo usuario y es admin
+            if (dniLogueado && dni === dniLogueado && rol === 'admin') {
+                rolSelect.disabled = true;
+                activoCheckbox.disabled = true;
+                if (rolWarning) {
+                    rolWarning.style.display = 'block';
+                }
+                if (activoWarning) {
+                    activoWarning.style.display = 'block';
+                }
+            } else {
+                rolSelect.disabled = false;
+                activoCheckbox.disabled = false;
+                if (rolWarning) {
+                    rolWarning.style.display = 'none';
+                }
+                if (activoWarning) {
+                    activoWarning.style.display = 'none';
+                }
+            }
+            
             // Mostrar el formulario de edición
             document.getElementById('datos').style.display = 'block';
             // Hacer scroll suave al formulario

@@ -18,19 +18,46 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['act
     $direccion = $_POST['direccion'] ?? '';
     $localidad = $_POST['localidad'] ?? '';
     $provincia = $_POST['provincia'] ?? '';
-    $activo = isset($_POST['activoUsuario']) ? 1 : 0;
     $redirect = $_POST['redirect'] ?? 'admin';
 
+    // Obtener el rol y estado actual del usuario que se está editando
+    $sql_get_rol = "SELECT rol, activo FROM usuarios WHERE dni = :dni";
+    $stmt_get_rol = $con->prepare($sql_get_rol);
+    $stmt_get_rol->bindParam(':dni', $id_usuario);
+    $stmt_get_rol->execute();
+    $usuario_actual = $stmt_get_rol->fetch(PDO::FETCH_ASSOC);
+    
+    // Validar que un admin no pueda cambiar su propio rol ni desactivar su cuenta
+    $dni_logueado = $_SESSION['user_id'] ?? null;
+    $es_mismo_usuario = $dni_logueado && $id_usuario === $dni_logueado;
+    $es_admin_actual = $usuario_actual['rol'] === 'admin';
+    
+    // Determinar el estado activo
+    if ($es_mismo_usuario && $es_admin_actual) {
+        // Si es el mismo admin, forzar que esté activo
+        $activo = 1;
+    } else {
+        // Para otros usuarios, usar el valor del formulario
+        $activo = isset($_POST['activoUsuario']) ? 1 : 0;
+    }
+    
     // Si no se proporciona rol, mantener el actual
     if (!isset($_POST['rol'])) {
-        $sql_get_rol = "SELECT rol FROM usuarios WHERE dni = :dni";
-        $stmt_get_rol = $con->prepare($sql_get_rol);
-        $stmt_get_rol->bindParam(':dni', $id_usuario);
-        $stmt_get_rol->execute();
-        $usuario_actual = $stmt_get_rol->fetch(PDO::FETCH_ASSOC);
         $rol = $usuario_actual['rol'];
     } else {
         $rol = $_POST['rol'];
+        
+        // Si es el mismo usuario y es admin, forzar que mantenga el rol admin
+        if ($es_mismo_usuario && $es_admin_actual) {
+            if ($rol !== 'admin') {
+                $_SESSION['error'] = "No puedes cambiar tu propio rol de administrador.";
+                $redirectUrl = ($redirect === 'panel') ? '../views/user/panel.php' : '../admin/adminUsuarios.php';
+                header('Location: ' . $redirectUrl);
+                exit();
+            }
+            // Forzar rol admin para evitar cualquier manipulación
+            $rol = 'admin';
+        }
     }
 
     $validarMail = validarMailCompleto($email);

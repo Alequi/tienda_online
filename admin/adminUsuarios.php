@@ -246,6 +246,7 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
             <div class="card-body">
               <form action="../actions/usuarios_action.php?action=edit" method="POST">
                 <input type="hidden" id="editDNI" name="dni">
+                <input type="hidden" id="userLoggedDNI" value="<?php echo $_SESSION['user_id'] ?? ''; ?>">
                 <input type="hidden" name="redirect" value="admin">
                 
                 <div class="row g-3">
@@ -284,6 +285,9 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
                       <option value="editor">Editor</option>
                       <option value="admin">Administrador</option>
                     </select>
+                    <div id="rolWarning" class="alert alert-warning mt-2" style="display: none;">
+                      <i class="bi bi-exclamation-triangle"></i> No puedes cambiar tu propio rol de administrador.
+                    </div>
                   </div>
                   <div class="col-md-6">
                     <label for="editActivoUsuario" class="form-label fw-semibold">Estado</label>
@@ -292,6 +296,9 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
                       <label class="form-check-label" for="editActivoUsuario">
                         Usuario activo
                       </label>
+                    </div>
+                    <div id="activoWarning" class="alert alert-warning mt-2" style="display: none;">
+                      <i class="bi bi-exclamation-triangle"></i> No puedes desactivar tu propia cuenta de administrador.
                     </div>
                   </div>
                 </div>
