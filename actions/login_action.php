@@ -11,6 +11,13 @@ $password = trim($_POST['password'] ?? '');
 
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    // Validar formato de email antes de consultar la BD
+    if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+        $_SESSION['error'] = "El formato del correo electrónico no es válido.";
+        header("Location: ../views/auth/login.php");
+        exit();
+    }
+
     // Buscar usuario en la base de datos
 
     try{
@@ -56,7 +63,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 } catch (PDOException $e) {
                     // Manejar error al actualizar el carrito
-                    $_SESSION['error'] = "Error al actualizar el carrito: " . $e->getMessage();
+                    $_SESSION['error'] = "Ha ocurrido un error al sincronizar el carrito. Inténtalo de nuevo.";
                     header("Location: ../views/error.php");
                     exit();
                 }
@@ -74,7 +81,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } catch (PDOException $e) {
         // Manejar error de la base de datos
-        $_SESSION['error'] = "Error en la base de datos: " . $e->getMessage();
+        $_SESSION['error'] = "Ha ocurrido un error inesperado. Inténtalo de nuevo.";
         header("Location: ../views/auth/login.php");
         exit();
     }
