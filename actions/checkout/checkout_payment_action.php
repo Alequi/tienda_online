@@ -21,6 +21,11 @@ header('Content-Type: application/json');
 $con = conectar();
 
 if($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isLoggedIn()) {
+        http_response_code(401);
+        echo json_encode(['success' => false, 'error' => 'Debes iniciar sesión para realizar un pedido.']);
+        exit();
+    }
     try {
         $data = json_decode(file_get_contents('php://input'), true);
         $payment_method_id = $data['payment_method_id'] ?? '';
