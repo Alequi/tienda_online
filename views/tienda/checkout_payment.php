@@ -5,6 +5,7 @@ session_start();
 require '../../vendor/autoload.php';
 
 require_once __DIR__ . '/../../helpers/auth.php';
+requireLogin();
 require_once __DIR__ . '/../../config/conexion.php';
 $con = conectar();
 require_once __DIR__ . '/../../actions/cart/view.php';
