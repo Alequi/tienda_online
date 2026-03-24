@@ -10,14 +10,14 @@ $con = conectar();
 
 //Edición de usuario
 if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'edit') {
-    $id_usuario = $_POST['dni'];
-    $nombre = $_POST['nombre'];
-    $apellido = $_POST['apellidos'];
-    $email = $_POST['email'];
-    $telefono = $_POST['telefono'];
-    $direccion = $_POST['direccion'] ?? '';
-    $localidad = $_POST['localidad'] ?? '';
-    $provincia = $_POST['provincia'] ?? '';
+    $id_usuario = trim($_POST['dni'] ?? '');
+    $nombre = trim($_POST['nombre'] ?? '');
+    $apellido = trim($_POST['apellidos'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $telefono = trim($_POST['telefono'] ?? '');
+    $direccion = trim($_POST['direccion'] ?? '');
+    $localidad = trim($_POST['localidad'] ?? '');
+    $provincia = trim($_POST['provincia'] ?? '');
     $redirect = $_POST['redirect'] ?? 'admin';
 
     // Obtener el rol y estado actual del usuario que se está editando
@@ -60,6 +60,14 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['act
         }
     }
 
+    // Validar campos obligatorios
+    if(empty($nombre) || empty($apellido) || empty($email) || empty($telefono)){
+        $_SESSION['error'] = "Todos los campos obligatorios deben estar rellenos.";
+        $redirectUrl = ($redirect === 'panel') ? '../views/user/panel.php' : '../admin/adminUsuarios.php';
+        header('Location: ' . $redirectUrl);
+        exit();
+    }
+
     $validarMail = validarMailCompleto($email);
     if(!$validarMail){
         $_SESSION['error'] = "Email no válido.";
@@ -68,7 +76,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['act
         exit();
     }
 
-    //Validad que el teléfono tenga solo números y tenga una longitud de 9 dígitos
+    //Validar que el teléfono tenga solo números y tenga una longitud de 9 dígitos
     if(!preg_match('/^\d{9}$/', $telefono)){
         $_SESSION['error'] = "El teléfono debe tener 9 dígitos y solo contener números.";
         $redirectUrl = ($redirect === 'panel') ? '../views/user/panel.php' : '../admin/adminUsuarios.php';
@@ -108,19 +116,25 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['act
 
 //Creación de usuario
 if($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action'])) {
-    $dni = $_POST['dni'];
-    $nombre = $_POST['nombre'];
-    $apellido = $_POST['apellidos'];
-    $email = $_POST['email'];
-    $telefono = $_POST['telefono'];
-    $direccion = $_POST['direccion'] ?? '';
-    $localidad = $_POST['localidad'] ?? '';
-    $provincia = $_POST['provincia'] ?? '';
-    $rol = $_POST['rol'];
+    $dni = trim($_POST['dni'] ?? '');
+    $nombre = trim($_POST['nombre'] ?? '');
+    $apellido = trim($_POST['apellidos'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $telefono = trim($_POST['telefono'] ?? '');
+    $direccion = trim($_POST['direccion'] ?? '');
+    $localidad = trim($_POST['localidad'] ?? '');
+    $provincia = trim($_POST['provincia'] ?? '');
+    $rol = $_POST['rol'] ?? 'registrado';
     $activo = isset($_POST['activoUsuario']) ? 1 : 0;
-    $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+    $password_plano = $_POST['password'] ?? '';
 
     // Validaciones
+
+    if(empty($nombre) || empty($apellido) || empty($dni) || empty($email) || empty($telefono) || empty($password_plano)){
+        $_SESSION['error'] = "Todos los campos obligatorios deben estar rellenos.";
+        header('Location: ../admin/adminUsuarios.php');
+        exit();
+    }
 
     $validarMail = validarMailCompleto($email);
     if(!$validarMail){
@@ -136,11 +150,14 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action'])) {
         exit();
     }
 
-    if(strlen($_POST['password']) < 6){
-        $_SESSION['error'] = "La contraseña debe tener al menos 6 caracteres.";
+    if(strlen($password_plano) < 8){
+        $_SESSION['error'] = "La contraseña debe tener al menos 8 caracteres.";
         header('Location: ../admin/adminUsuarios.php');
         exit();
     }
+
+    // Calcular hash solo tras superar todas las validaciones
+    $password = password_hash($password_plano, PASSWORD_BCRYPT);
     
 
     try {
@@ -223,8 +240,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['act
         exit();
     }
 
-    if(strlen($_POST['new_password']) < 6){
-        $_SESSION['error'] = "La contraseña debe tener al menos 6 caracteres.";
+    if(strlen($_POST['new_password']) < 8){
+        $_SESSION['error'] = "La contraseña debe tener al menos 8 caracteres.";
         $redirectUrl = ($redirect === 'admin') ? '../admin/adminUsuarios.php' : '../views/user/panel.php';
         header('Location: ' . $redirectUrl);
         exit();
