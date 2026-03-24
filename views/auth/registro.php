@@ -7,6 +7,12 @@ if (isLoggedIn()) {
     header("Location: ../../index.php");
     exit();
 }
+
+$error = null;
+if (isset($_SESSION['error'])) {
+    $error = $_SESSION['error'];
+    unset($_SESSION['error']);
+}
 ?>
 
 <!DOCTYPE html>
@@ -130,6 +136,13 @@ if (isLoggedIn()) {
 
                 <h2 class="mb-2 text-center fw-bold">Crea una cuenta</h2>
                 <p class="text-center text-body-secondary mb-4">Únete y disfruta de todas nuestras ventajas</p>
+
+                <?php if ($error): ?>
+                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i><?php echo htmlspecialchars($error); ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+                  </div>
+                <?php endif; ?>
 
                 <form method="post" action="../../actions/registro_action.php">
                   <div class="row g-3">
