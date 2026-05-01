@@ -2,6 +2,11 @@
 
 require_once __DIR__ . "/../../actions/categorias_action.php";
 
+$basePath = '';
+if (isset($_SERVER['SCRIPT_NAME']) && strpos($_SERVER['SCRIPT_NAME'], '/tienda_online/') !== false) {
+  $basePath = '/tienda_online';
+}
+
 ?>
 
 <div class="col-lg-3">
@@ -19,7 +24,7 @@ require_once __DIR__ . "/../../actions/categorias_action.php";
 
             <?php foreach ($categorias as $categoria): ?>
                 <?php if (!$categoria->activo) continue; ?>
-              <a href="/views/tienda/categorias/categoria.php?categoria=<?php echo strtolower($categoria->nombre); ?>" class="list-group-item list-group-item-action "><?php echo htmlspecialchars($categoria->nombre); ?></a>
+              <a href="<?php echo $basePath; ?>/views/tienda/categorias/categoria.php?categoria=<?php echo strtolower($categoria->nombre); ?>" class="list-group-item list-group-item-action "><?php echo htmlspecialchars($categoria->nombre); ?></a>
             <?php endforeach; ?>
 
         

@@ -21,7 +21,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['act
     $nombre = $_POST['nombreCategoria'];
     $activo = isset($_POST['activoCategoria']) ? 1 : 0;
     $descripcion = $_POST['descripcionCategoria'] ?? '';
-
     $sql_update = "UPDATE categoria SET nombre = :nombre, descripcion = :descripcion, activo = :activo WHERE codigo = :id";
     $stmt_update = $con->prepare($sql_update);
     $stmt_update->bindParam(':nombre', $nombre);
@@ -40,7 +39,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action'])) {
     $nombre = $_POST['nombreCategoria'];
     $activo = isset($_POST['activoCategoria']) ? 1 : 0;
     $descripcion = $_POST['descripcionCategoria'] ?? '';
-
     $sql_insert = "INSERT INTO categoria (nombre, descripcion, activo) VALUES (:nombre, :descripcion, :activo)";
     $stmt_insert = $con->prepare($sql_insert);
     $stmt_insert->bindParam(':nombre', $nombre);
