@@ -7,6 +7,34 @@ if (isset($_SERVER['SCRIPT_NAME']) && strpos($_SERVER['SCRIPT_NAME'], '/tienda_o
   $basePath = '/tienda_online';
 }
 
+$categoriasActivas = array_filter($categorias, function ($categoria) {
+  return (int) $categoria->activo === 1;
+});
+
+$categoriasActivasMap = [];
+foreach ($categoriasActivas as $categoria) {
+  $categoriasActivasMap[$categoria->codigo] = true;
+}
+
+$categoriasPorPadre = [];
+foreach ($categoriasActivas as $categoria) {
+  $padre = $categoria->categoriaPadre ?? null;
+  if (empty($padre) || !isset($categoriasActivasMap[$padre])) {
+    $padre = 0;
+  }
+  if (!isset($categoriasPorPadre[$padre])) {
+    $categoriasPorPadre[$padre] = [];
+  }
+  $categoriasPorPadre[$padre][] = $categoria;
+}
+
+foreach ($categoriasPorPadre as $padre => $listaCategorias) {
+  usort($listaCategorias, function ($a, $b) {
+    return strcmp($a->nombre, $b->nombre);
+  });
+  $categoriasPorPadre[$padre] = $listaCategorias;
+}
+
 ?>
 
 <div class="col-lg-3">
@@ -20,16 +48,20 @@ if (isset($_SERVER['SCRIPT_NAME']) && strpos($_SERVER['SCRIPT_NAME'], '/tienda_o
 
         <div class="collapse d-lg-block border border-top-0" id="verticalCats">
           <div class="list-group list-group-flush" style="max-height: 410px; overflow:auto;">
-            
-
-            <?php foreach ($categorias as $categoria): ?>
-                <?php if (!$categoria->activo) continue; ?>
-              <a href="<?php echo $basePath; ?>/views/tienda/categorias/categoria.php?categoria=<?php echo strtolower($categoria->nombre); ?>" class="list-group-item list-group-item-action "><?php echo htmlspecialchars($categoria->nombre); ?></a>
-            <?php endforeach; ?>
-
-        
-
-            
+            <?php if (!empty($categoriasPorPadre[0])): ?>
+              <?php foreach ($categoriasPorPadre[0] as $categoria): ?>
+                <a href="<?php echo $basePath; ?>/views/tienda/categorias/categoria.php?categoria=<?php echo strtolower($categoria->nombre); ?>" class="list-group-item list-group-item-action fw-semibold">
+                  <?php echo htmlspecialchars($categoria->nombre); ?>
+                </a>
+                <?php if (!empty($categoriasPorPadre[$categoria->codigo])): ?>
+                  <?php foreach ($categoriasPorPadre[$categoria->codigo] as $subcategoria): ?>
+                    <a href="<?php echo $basePath; ?>/views/tienda/categorias/categoria.php?categoria=<?php echo strtolower($subcategoria->nombre); ?>" class="list-group-item list-group-item-action ps-4 small">
+                      <?php echo htmlspecialchars($subcategoria->nombre); ?>
+                    </a>
+                  <?php endforeach; ?>
+                <?php endif; ?>
+              <?php endforeach; ?>
+            <?php endif; ?>
           </div>
         </div>
       </div>

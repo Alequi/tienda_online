@@ -27,6 +27,11 @@ requireEditorOrAdmin();
 
 
 $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
+
+$categoriasMap = [];
+foreach ($categorias as $categoriaItem) {
+  $categoriasMap[$categoriaItem->codigo] = $categoriaItem->nombre;
+}
 ?>
 
 <!DOCTYPE html>
@@ -135,6 +140,7 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
                     <tr>
                       <th>Código</th>
                       <th>Nombre</th>
+                      <th>Padre</th>
                       <th>Descripción</th>
                       <th>Estado</th>
                       <th class="text-end">Acciones</th>
@@ -145,6 +151,15 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
                     <tr>
                       <td><span class="badge bg-secondary"><?php echo htmlspecialchars($categoria->codigo); ?></span></td>
                       <td class="fw-semibold"><?php echo htmlspecialchars($categoria->nombre); ?></td>
+                      <td class="text-muted">
+                        <?php
+                        $nombrePadre = 'Sin padre';
+                        if (!empty($categoria->categoriaPadre) && isset($categoriasMap[$categoria->categoriaPadre])) {
+                            $nombrePadre = $categoriasMap[$categoria->categoriaPadre];
+                        }
+                        echo htmlspecialchars($nombrePadre);
+                        ?>
+                      </td>
                       <td class="text-muted"><?php echo htmlspecialchars($categoria->descripcion ?? 'Sin descripción'); ?></td>
                       <td>
                         <?php 
@@ -162,6 +177,7 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
                           data-codigo="<?php echo htmlspecialchars($categoria->codigo); ?>"
                           data-nombre="<?php echo htmlspecialchars($categoria->nombre); ?>"
                           data-descripcion="<?php echo htmlspecialchars($categoria->descripcion ?? ''); ?>"
+                          data-categoriapadre="<?php echo htmlspecialchars($categoria->categoriaPadre ?? ''); ?>"
                           data-activo="<?php echo $categoria->activo; ?>">
                           <i class="bi bi-pencil-square"></i> Editar
                         </button>
@@ -196,14 +212,29 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
                 <input type="hidden" id="editCodigo" name="codigo">
                 
                 <div class="row">
-                  <div class="col-md-6 mb-3">
+                  <div class="col-md-4 mb-3">
                     <label for="editNombreCategoria" class="form-label fw-semibold">
                       <i class="bi bi-tag"></i> Nombre de la Categoría
                     </label>
                     <input type="text" class="form-control" id="editNombreCategoria" name="nombreCategoria" required>
                   </div>
+
+                  <div class="col-md-4 mb-3">
+                    <label for="editCategoriaPadre" class="form-label fw-semibold">
+                      <i class="bi bi-diagram-3"></i> Categoría padre
+                    </label>
+                    <select class="form-select" id="editCategoriaPadre" name="categoriaPadre">
+                      <option value="">Sin padre</option>
+                      <?php foreach ($categorias as $categoriaItem): ?>
+                        <?php if (!$categoriaItem->activo) continue; ?>
+                        <option value="<?php echo htmlspecialchars($categoriaItem->codigo); ?>">
+                          <?php echo htmlspecialchars($categoriaItem->nombre); ?>
+                        </option>
+                      <?php endforeach; ?>
+                    </select>
+                  </div>
                   
-                  <div class="col-md-6 mb-3">
+                  <div class="col-md-4 mb-3">
                     <label for="editActivoCategoria" class="form-label fw-semibold">
                       <i class="bi bi-toggle-on"></i> Estado
                     </label>
@@ -253,6 +284,18 @@ $nombre_admin = $_SESSION['user_name'] ?? 'Administrador';
             <div class="mb-3">
               <label for="nombreCategoria" class="form-label"><i class="bi bi-tag"></i>Nombre de la Categoría</label>
               <input type="text" class="form-control" id="nombreCategoria" name="nombreCategoria" required>
+            </div>
+            <div class="mb-3">
+              <label for="categoriaPadre" class="form-label"><i class="bi bi-diagram-3"></i> Categoría padre</label>
+              <select class="form-select" id="categoriaPadre" name="categoriaPadre">
+                <option value="">Sin padre</option>
+                <?php foreach ($categorias as $categoriaItem): ?>
+                  <?php if (!$categoriaItem->activo) continue; ?>
+                  <option value="<?php echo htmlspecialchars($categoriaItem->codigo); ?>">
+                    <?php echo htmlspecialchars($categoriaItem->nombre); ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
             </div>
             <div class="mb-3">
               <label for="descripcionCategoria" class="form-label"><i class="bi bi-text-paragraph"></i> Descripción</label>
