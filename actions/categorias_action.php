@@ -10,7 +10,7 @@ $con = conectar();
 
 // Obtener todas las categorias
 
-$sql_categorias = "SELECT * FROM categoria";
+$sql_categorias = "SELECT * FROM categoria ORDER BY categoriaPadre ASC, nombre ASC";
 $stmt_categorias = $con->prepare($sql_categorias);
 $stmt_categorias->execute();
 $categorias = $stmt_categorias->fetchAll(PDO::FETCH_OBJ);
@@ -21,12 +21,42 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['act
     $nombre = $_POST['nombreCategoria'];
     $activo = isset($_POST['activoCategoria']) ? 1 : 0;
     $descripcion = $_POST['descripcionCategoria'] ?? '';
-    $sql_update = "UPDATE categoria SET nombre = :nombre, descripcion = :descripcion, activo = :activo WHERE codigo = :id";
+    $categoriaPadre = $_POST['categoriaPadre'] ?? null;
+
+    if ($categoriaPadre === '') {
+        $categoriaPadre = null;
+    }
+
+    if ($categoriaPadre !== null) {
+        $categoriaPadre = (int) $categoriaPadre;
+        if ($categoriaPadre === (int) $id_categoria) {
+            $_SESSION['error'] = "Una categoría no puede ser su propio padre.";
+            header('Location: ../admin/adminCategoria.php');
+            exit();
+        }
+
+        $sql_padre = "SELECT codigo FROM categoria WHERE codigo = :codigo";
+        $stmt_padre = $con->prepare($sql_padre);
+        $stmt_padre->bindParam(':codigo', $categoriaPadre, PDO::PARAM_INT);
+        $stmt_padre->execute();
+        if (!$stmt_padre->fetch(PDO::FETCH_ASSOC)) {
+            $_SESSION['error'] = "La categoría padre seleccionada no existe.";
+            header('Location: ../admin/adminCategoria.php');
+            exit();
+        }
+    }
+
+    $sql_update = "UPDATE categoria SET nombre = :nombre, descripcion = :descripcion, activo = :activo, categoriaPadre = :categoriaPadre WHERE codigo = :id";
     $stmt_update = $con->prepare($sql_update);
     $stmt_update->bindParam(':nombre', $nombre);
     $stmt_update->bindParam(':activo', $activo);
     $stmt_update->bindParam(':descripcion', $descripcion);
     $stmt_update->bindParam(':id', $id_categoria);
+    if ($categoriaPadre === null) {
+        $stmt_update->bindValue(':categoriaPadre', null, PDO::PARAM_NULL);
+    } else {
+        $stmt_update->bindValue(':categoriaPadre', $categoriaPadre, PDO::PARAM_INT);
+    }
     $stmt_update->execute();
 
     $_SESSION['success'] = "Categoría actualizada correctamente.";
@@ -39,11 +69,35 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action'])) {
     $nombre = $_POST['nombreCategoria'];
     $activo = isset($_POST['activoCategoria']) ? 1 : 0;
     $descripcion = $_POST['descripcionCategoria'] ?? '';
-    $sql_insert = "INSERT INTO categoria (nombre, descripcion, activo) VALUES (:nombre, :descripcion, :activo)";
+    $categoriaPadre = $_POST['categoriaPadre'] ?? null;
+
+    if ($categoriaPadre === '') {
+        $categoriaPadre = null;
+    }
+
+    if ($categoriaPadre !== null) {
+        $categoriaPadre = (int) $categoriaPadre;
+        $sql_padre = "SELECT codigo FROM categoria WHERE codigo = :codigo";
+        $stmt_padre = $con->prepare($sql_padre);
+        $stmt_padre->bindParam(':codigo', $categoriaPadre, PDO::PARAM_INT);
+        $stmt_padre->execute();
+        if (!$stmt_padre->fetch(PDO::FETCH_ASSOC)) {
+            $_SESSION['error'] = "La categoría padre seleccionada no existe.";
+            header('Location: ../admin/adminCategoria.php');
+            exit();
+        }
+    }
+
+    $sql_insert = "INSERT INTO categoria (nombre, descripcion, activo, categoriaPadre) VALUES (:nombre, :descripcion, :activo, :categoriaPadre)";
     $stmt_insert = $con->prepare($sql_insert);
     $stmt_insert->bindParam(':nombre', $nombre);
     $stmt_insert->bindParam(':activo', $activo);
     $stmt_insert->bindParam(':descripcion', $descripcion);
+    if ($categoriaPadre === null) {
+        $stmt_insert->bindValue(':categoriaPadre', null, PDO::PARAM_NULL);
+    } else {
+        $stmt_insert->bindValue(':categoriaPadre', $categoriaPadre, PDO::PARAM_INT);
+    }
     $stmt_insert->execute();
 
     $_SESSION['success'] = "Categoría creada correctamente.";
@@ -53,11 +107,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['action'])) {
 
 // Eliminación de categoría
 if(isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])) {
-    $id_usuario = $_GET['id'];
+    $id_categoria = $_GET['id'];
 
-    $sql_delete = "DELETE FROM categoria WHERE codigo = :id";
+    $sql_delete = "UPDATE categoria SET activo = 0 WHERE codigo = :id";
     $stmt_delete = $con->prepare($sql_delete);
-    $stmt_delete->bindParam(':id', $id_usuario);
+    $stmt_delete->bindParam(':id', $id_categoria);
     $stmt_delete->execute();
 
     $_SESSION['success'] = "Categoría eliminada correctamente.";
@@ -83,21 +137,36 @@ if (isset($_GET['categoria'])) {
         $descripcion_categoria = $categoria_actual->descripcion ?? 'Descubre nuestra selección de productos';
         $orden = $_GET['orden'] ?? '';
 
-        // Aplicar ordenamiento si se especifica
+        $sql_hijos = "SELECT codigo FROM categoria WHERE categoriaPadre = :padre AND activo = 1";
+        $stmt_hijos = $con->prepare($sql_hijos);
+        $stmt_hijos->bindValue(':padre', $categoria_actual->codigo, PDO::PARAM_INT);
+        $stmt_hijos->execute();
+        $hijos = $stmt_hijos->fetchAll(PDO::FETCH_COLUMN);
+
+        $categoriaIds = array_merge([$categoria_actual->codigo], $hijos);
+
+        $orderBy = 'fecha_creacion DESC';
         if ($orden === 'precio_asc') {
-            $sql_productos_cat = "SELECT * FROM articulos WHERE categoria = :categoria AND activo = 1 ORDER BY precio ASC";
+            $orderBy = 'precio ASC';
         } elseif ($orden === 'precio_desc') {
-            $sql_productos_cat = "SELECT * FROM articulos WHERE categoria = :categoria AND activo = 1 ORDER BY precio DESC";
+            $orderBy = 'precio DESC';
         } elseif ($orden === 'nuevo') {
-            $sql_productos_cat = "SELECT * FROM articulos WHERE categoria = :categoria AND activo = 1 ORDER BY fecha_creacion DESC";
-        } else {
-            $sql_productos_cat = "SELECT * FROM articulos WHERE categoria = :categoria AND activo = 1 ORDER BY fecha_creacion DESC";
+            $orderBy = 'fecha_creacion DESC';
         }
 
-        
-        // Obtener productos de esta categoría
+        $placeholders = [];
+        $params = [];
+        foreach ($categoriaIds as $i => $id) {
+            $key = ':cat' . $i;
+            $placeholders[] = $key;
+            $params[$key] = (int) $id;
+        }
+
+        $sql_productos_cat = "SELECT * FROM articulos WHERE categoria IN (" . implode(',', $placeholders) . ") AND activo = 1 ORDER BY $orderBy";
         $stmt_productos_cat = $con->prepare($sql_productos_cat);
-        $stmt_productos_cat->bindParam(':categoria', $categoria_actual->codigo);
+        foreach ($params as $key => $value) {
+            $stmt_productos_cat->bindValue($key, $value, PDO::PARAM_INT);
+        }
         $stmt_productos_cat->execute();
         $productos_categoria = $stmt_productos_cat->fetchAll(PDO::FETCH_OBJ);
 
