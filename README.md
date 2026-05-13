@@ -12,13 +12,13 @@
 - 📦 **Catálogo de productos** organizado por categorías
 - 🔐 **Sistema de autenticación** (registro, login, logout)
 - 👤 **Panel de usuario** personalizado con gestión de datos
-- 👨‍💼 **Panel de administración** para gestión de productos
-- 🔍 **Búsqueda de productos** por categorías
+- 👨‍💼 **Panel de administración** para gestión de productos y categorías
+- 🔍 **Búsqueda de productos**
 - 🛒 **Carrito de compras** funcional con gestión de cantidades
-- � **Sistema de pago integrado** con Stripe
+- 💳 **Sistema de pago integrado** con Stripe
 - 🚚 **Gestión completa de pedidos** con estados y seguimiento
 - 📊 **Panel de informes y estadísticas** para administradores
-- 👥 **Sistema de roles** avanzado (admin, editor, usuario)
+- 👥 **Sistema de roles** avanzado (admin, editor, registrado)
 - 📱 **Diseño responsive** compatible con dispositivos móviles
 - 🔒 **Recuperación de contraseña**
 - 📧 **Página de contacto** con formulario
@@ -29,7 +29,7 @@
 
 ### Backend
 - **PHP 7.4+** - Lenguaje de programación del servidor
-- **MySQL** - Sistema de gestión de base de datos
+- **MySQL / MariaDB** - Sistema de gestión de base de datos
 - **PDO** - Interfaz de acceso a base de datos
 
 ### Frontend
@@ -131,7 +131,7 @@ tienda_online/
 │
 ├── composer.json                 # Archivo de configuración de Composer
 ├── index.php                     # Página principal
-└── localhost_3308(1).sql        # Script de base de datos
+└── storeDB.sql                 # Script de base de datos
 ```
 
 ## 🚀 Instalación
@@ -140,7 +140,7 @@ tienda_online/
 
 - **XAMPP**, **WAMP**, **MAMP** o servidor local con:
   - PHP 7.4 o superior
-  - MySQL 5.7 o superior
+  - MySQL 5.7 o superior / MariaDB 10.4+
   - Apache
 - **Composer** (para gestión de dependencias)
 - **Cuenta de Stripe** (para pruebas de pago - opcional)
@@ -195,29 +195,31 @@ tienda_online/
 La base de datos incluye las siguientes tablas principales:
 
 - **usuarios** - Información de los usuarios registrados
-  - Campos: dni (PK), nombre, apellidos, email, telefono, direccion, localidad, provincia, password, rol
+  - Campos: dni (PK), clave, nombre, apellidos, email, telefono, direccion, localidad, provincia, rol, activo
 - **articulos** - Catálogo de productos de joyería
-  - Campos: codigo (PK), nombre, descripcion, precio, stock, imagen, categoria
-- **categorias** - Categorías de productos
-  - Campos: id, nombre, descripcion
+  - Campos: codigo (PK), nombre, descripcion, precio, stock, imagen, categoria, precio_anterior, fecha_creacion, activo
+- **categoria** - Categorías de productos (con jerarquía opcional)
+  - Campos: codigo (PK), nombre, descripcion, activo, categoriaPadre
+- **carrito** - Productos en carrito por usuario
+  - Campos: dni_usuario (PK), codigo_producto (PK), cantidad
 - **pedidos** - Órdenes de compra realizadas
-  - Campos: idPedido (PK), dniUsuario (FK), total, fecha, estado, direccion, localidad, provincia, telefono
+  - Campos: idPedido (PK), dniUsuario (FK), total, fecha, estado, activo
 - **lineapedido** - Detalle de productos en cada pedido
-  - Campos: id (PK), numPedido (FK), codArticulo (FK), cantidad, precio
+  - Campos: numPedido (PK), numLinea (PK), codArticulo (FK), cantidad, precio, descuento
 
 ### Script SQL de Ejemplo
 
-El proyecto incluye el archivo `localhost_3308(1).sql` con la estructura completa de la base de datos. Para importarlo:
+El proyecto incluye el archivo `storeDB.sql` con la estructura completa de la base de datos. Para importarlo:
 
 1. Abre phpMyAdmin
 2. Crea una nueva base de datos llamada `tienda_online`
 3. Selecciona la base de datos
 4. Ve a la pestaña "Importar"
-5. Selecciona el archivo `localhost_3308(1).sql`
+5. Selecciona el archivo `storeDB.sql`
 6. Haz clic en "Continuar"
 
 La base de datos incluirá:
-- Tabla de usuarios con roles (user/admin/editor)
+- Tabla de usuarios con roles (admin/editor/registrado/anonimo)
 - Tabla de artículos con stock y precios
 - Tabla de pedidos con estados de seguimiento
 - Tabla de líneas de pedido para detalles
@@ -295,7 +297,7 @@ Este proyecto incluye medidas de seguridad:
 - ✅ Gestión segura de sesiones PHP
 - ✅ Protección de rutas mediante autenticación (helpers/auth.php)
 - ✅ Sanitización de salida con `htmlspecialchars()`
-- ✅ Control de roles (usuario/editor/administrador)
+- ✅ Control de roles (registrado/editor/administrador/anonimo)
 - ✅ Validación de stock antes de añadir al carrito
 - ✅ Protección de rutas administrativas según rol
 
@@ -323,7 +325,7 @@ El proyecto está **completado** con todas las funcionalidades principales imple
 - [x] Proceso completo de checkout y pago con Stripe
 - [x] Generación automática de pedidos
 - [x] Página de contacto
-- [x] Sistema de roles (usuario/editor/admin)
+- [x] Sistema de roles (registrado/editor/admin/anonimo)
 - [x] Búsqueda de productos
 - [x] Diseño responsive completo
 
